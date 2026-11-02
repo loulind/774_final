@@ -177,7 +177,11 @@ def main(argv=None) -> None:
         overrides["llm"] = {"model": args.model}
     result = run(args.data, args.objective, args.out,
                  **{k: v for k, v in overrides.items() if v not in (None, False)})
-    print(f"\nreport: {result['out_dir']}/report.html")
+    print(f"\nplanner {result['planner']}; {result['steps']} steps"
+          + (f", not completed: {', '.join(result['failed'])}" if result["failed"] else "")
+          + f"; critic: {result['critic']}; LLM calls {result['llm_calls']} (${result['llm_cost_usd']:.2f}); "
+          f"{result['numbers_unmatched']} numbers unmatched; {result['seconds']:,.0f} s")
+    print(f"report: {result['out_dir']}/report.html")
 
 
 if __name__ == "__main__":

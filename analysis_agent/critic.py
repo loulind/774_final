@@ -8,6 +8,9 @@ Triggers are computed from the metrics each step reported (``StepResult.to_recor
   markers_untestable     no group has enough replicates on both sides to test markers
   unstable_groups        no clustering candidate was stable
   k_at_edge              the number of groups chosen is the largest searched
+  k_at_lower_edge        only the coarsest split was found (k = the smallest searched): undo a correction
+                         across the outer grouping (unless markers need groups that recur across it), or
+                         smooth less over spatial neighbours
   batch_undercorrected   the assessment found a batch effect but no correction was kept
   markers_one_replicate  markers flip direction when one replicate is left out (stability < bar)
   no_reliable_targets    targets could be judged but none met the reliability rule
@@ -40,7 +43,7 @@ from .tools import registry
 CONFINED_V = 0.5                      # Cramér's V of groups with the independent unit
 LEAKAGE_GAP = 0.05                    # AUROC gained by letting related samples straddle the split
 DISCOVERY = ("spatial_domains", "cluster")
-TOLERANCE = 1e-9
+MIN_GAIN = 0.01                       # smallest improvement that counts: absolute on a 0-1 scale, else relative
 
 
 @dataclass
@@ -104,6 +107,24 @@ def find_triggers(plan: AnalysisPlan, results: dict[str, dict], register: Challe
         k, edge = _metric(results, d.id, "k"), _metric(results, d.id, "k_at_edge")
         (lo, hi), _, default_max = _range(d.tool, "k_max")
         k_max = d.params.get("k_max", default_max)
+        k_min = d.params.get("k_min", _range(d.tool, "k_min")[2])
+        if edge and k is not None and k_min is not None and k <= k_min:
+            # the scope stays across the outer grouping when markers use it as the replicate (the reason it was set)
+            replicate = (markers is not None and correct is not None
+                         and markers.inputs.get("replicate") == correct.inputs.get("outer"))
+            if correct is not None and correct.params.get("within_outer") == "no" and not replicate:
+                fix = Revision(action="set_params", step=correct.id, params={"within_outer": "yes"},
+                               criterion_step=d.id, criterion="k_at_edge", goal="min", trigger="k_at_lower_edge",
+                               reason="correcting across the outer grouping may have removed structure with it")
+            elif d.tool == "spatial_domains":
+                lam = d.params.get("neighbour_weight", _range(d.tool, "neighbour_weight")[2])
+                fix = Revision(action="set_params", step=d.id, params={"neighbour_weight": round(lam / 2, 3)},
+                               criterion_step=d.id, criterion="k_at_edge", goal="min", trigger="k_at_lower_edge",
+                               reason="less neighbourhood smoothing lets finer domains separate") if lam else None
+            else:
+                fix = None
+            out.append(Trigger("k_at_lower_edge", d.id, f"{d.id} found only k={k}, the smallest number searched",
+                               fix))
         if edge and k is not None and k_max is not None and k >= k_max and hi is not None and k_max < hi:
             out.append(Trigger("k_at_edge", d.id, f"{d.id} chose k={k}, the largest searched",
                                Revision(action="set_params", step=d.id, params={"k_max": int(min(hi, k_max + 6))},
@@ -229,13 +250,18 @@ def apply_revision(plan: AnalysisPlan, rev: Revision) -> AnalysisPlan:
 
 
 def keep_revision(before, after, goal: str) -> tuple[bool, str]:
-    """Kept only when the criterion moved in its direction (a value where there was none counts)."""
+    """Kept only when the criterion moved in its direction by more than noise (``MIN_GAIN``:
+    absolute for values on a 0-1 scale, relative otherwise); a value where there was none counts."""
     if after is None or isinstance(after, bool) and goal == "max" and not after:
         return False, f"the criterion is {after} after the revision"
     if before is None:
         return True, f"the criterion now has a value ({after}) where it had none"
-    better = float(after) > float(before) + TOLERANCE if goal == "max" else float(after) < float(before) - TOLERANCE
-    return better, f"{before} -> {after} ({'better' if better else 'not better'}, goal {goal})"
+    b, a = float(before), float(after)
+    margin = MIN_GAIN if 0 <= min(a, b) and max(a, b) <= 1 else MIN_GAIN * max(abs(b), 1e-9)
+    gain = a - b if goal == "max" else b - a
+    better = gain > margin
+    return better, (f"{before:.4g} -> {after:.4g} ({'better' if better else 'not better'} by more than {margin:.3g}, "
+                    f"goal {goal})")
 
 
 def critique(plan: AnalysisPlan, results: dict[str, dict], objective: Objective, register: ChallengeRegister,

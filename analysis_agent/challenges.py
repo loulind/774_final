@@ -541,6 +541,98 @@ def _pretraining(b: _Builder, p: DataProfile) -> None:
         b.absent("pretraining_overlap", "No images or texts for pretrained encoders.")
 
 
+# ---------------------------------------------------------------------------
+# after the run
+# ---------------------------------------------------------------------------
+
+def update_after_run(reg: ChallengeRegister, plan, records: dict[str, dict]) -> ChallengeRegister:
+    """How each challenge was handled (by which steps, with their key numbers) and what risk
+    remains; plus challenges only the results reveal (groups that follow the independent unit,
+    pretrained encoders that may have seen the evaluation pairs)."""
+    from .summaries import headline
+
+    out = reg.model_copy(deep=True)
+    ok = {sid for sid, r in records.items() if not r.get("error") and not r.get("skipped")}
+    steps = {s.id: s for s in plan.steps}
+    accepted = {a.challenge: a.reason for a in plan.accepted}
+    for c in out.entries:
+        if c.status != "detected":
+            continue
+        c.handled_by = [s.id for s in plan.steps if c.id in s.addresses and s.id in ok]
+        if c.handled_by:
+            c.handling = "; ".join(f"{sid} ({steps[sid].tool}): {headline(steps[sid].tool, records[sid]['metrics'], 3)}"
+                                   for sid in c.handled_by[:4])
+            c.residual_risk = _residual(c, plan, records)
+        else:
+            failed = [s.id for s in plan.steps if c.id in s.addresses and s.id not in ok]
+            c.residual_risk = ("not handled: " + (accepted.get(c.id) or ("its steps failed or were skipped: "
+                                                                         + ", ".join(failed) if failed
+                                                                         else "no step of the plan applies")))
+    for s in plan.steps:
+        m = (records.get(s.id) or {}).get("metrics") or {}
+        v = m.get("cramers_v_groups")
+        if s.tool in ("spatial_domains", "cluster") and v is not None and v >= 0.5:
+            grp = s.inputs.get("groups", "the groups")
+            out.entries.append(Challenge(
+                id=f"batch_confounding:{s.id}", type="batch_confounding", subject=[grp], stage="execution",
+                summary=f"The groups found by {s.id} follow {grp} (Cramér's V {v:.2f}): they mix shared structure "
+                        "with differences between those levels.", status="detected",
+                severity="high" if v >= 0.7 else "medium",
+                evidence=[Evidence(metric="Cramér's V of discovered groups with the grouping", value=v,
+                                   rule="medium >= 0.5, high >= 0.7", source=f"results[{s.id}]")],
+                affects=list(CHALLENGE_AFFECTS["batch_confounding"]), relevant=True,
+                residual_risk="markers and histology comparisons partly describe these levels"))
+        z = m.get("zero_shot_recall_at_10")
+        if s.tool == "multimodal_features" and z is not None and z >= 0.5:
+            out.entries.append(Challenge(
+                id=f"pretraining_overlap:{s.id}", type="pretraining_overlap", subject=list(s.inputs.values())[:2],
+                stage="execution", summary=f"Zero-shot retrieval reaches recall@10 {z:.2f} on held-out pairs: the "
+                                           "encoder may have been pretrained on these or very similar pairs.",
+                status="detected", severity="medium",
+                evidence=[Evidence(metric="zero-shot recall@10 on held-out pairs", value=z, rule="flag >= 0.5",
+                                   source=f"results[{s.id}]")],
+                affects=list(CHALLENGE_AFFECTS["pretraining_overlap"]), relevant=True,
+                residual_risk="zero-shot and retrieval scores may be optimistic"))
+    return out
+
+
+def _residual(c: Challenge, plan, records: dict[str, dict]) -> str:
+    def m(tool: str, key: str):
+        for s in plan.steps:
+            if s.tool == tool and s.id in c.handled_by:
+                v = ((records.get(s.id) or {}).get("metrics") or {}).get(key)
+                if v is not None:
+                    return v
+        return None
+
+    t = c.type
+    if t == "batch_effect" and m("batch_correct", "mixing") is not None:
+        mix = m("batch_correct", "mixing")
+        return (f"mixing after correction {_fmt(mix)} (before {_fmt(m('batch_correct', 'mixing_uncorrected'))})"
+                + ("; groups still separate" if mix < 0.8 else "; low"))
+    if t == "depth_variation" and m("normalize_counts", "depth_corr_pc1_after") is not None:
+        return f"|rho(PC1, depth)| after normalisation {_fmt(m('normalize_counts', 'depth_corr_pc1_after'))}"
+    if t == "double_dipping":
+        return "low: markers are tested on the held-out half of the count split"
+    if t == "nested_sampling":
+        n = m("differential_expression", "n_replicates_min")
+        return (f"markers rest on {n} replicates per group" if n is not None
+                else "folds and comparisons keep the independent unit whole")
+    if t == "multiple_testing":
+        return "low: Benjamini-Hochberg FDR within every family of tests"
+    if t == "split_leakage" and m("predict_targets", "n_set_aside") is not None:
+        return (f"{m('predict_targets', 'n_set_aside')} fitting samples set aside; a fit with them gains "
+                f"{_fmt(m('predict_targets', 'leakage_gap_median'))} median AUROC")
+    if t == "class_imbalance" and m("predict_targets", "n_too_rare_to_assess") is not None:
+        return f"{m('predict_targets', 'n_too_rare_to_assess')} modelled targets too rare to assess"
+    if t == "near_duplicates" and m("near_duplicates", "fraction_in_clusters") is not None:
+        return (f"{_fmt(m('near_duplicates', 'fraction_in_clusters'))} of images in duplicate clusters, kept "
+                "together in folds and splits")
+    if t == "label_noise" and m("label_agreement", "kappa_micro") is not None:
+        return f"kappa between sources {_fmt(m('label_agreement', 'kappa_micro'))}; the rest is unmeasured"
+    return "handled; see the steps' results"
+
+
 def _col(p: DataProfile, artifact: str | None) -> str:
     g = next((g for g in p.groups if g.artifact == artifact), None)
     return g.column if g is not None else (artifact or "group")

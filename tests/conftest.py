@@ -1,9 +1,13 @@
 """Shared synthetic datasets: a spatial AnnData with painted spots and an image-text table."""
 
+import os
+
 import numpy as np
 import pandas as pd
 import pytest
 import scipy.sparse as sp
+
+os.environ.setdefault("HF_HUB_OFFLINE", "1")          # tests never reach the model hub
 
 # --- synthetic spatial AnnData: 4 slides, 3 patients, painted spots -------------------
 
@@ -86,20 +90,20 @@ def _profile(path, tmp):
     return profile_dataset(load_path(path), config=cfg, budget=cfg.budget("cpu"), cache_dir=tmp, log=lambda m: None)
 
 
-def _tissue(d, planted: bool):
+def _tissue(d, planted: bool, side: int = 20):
     """Six slides of three patients on 20 x 20 grids. Planted: three stripe domains, depth that
     varies by spot and by slide, a slide effect inside every patient, 6% failed spots, labels on
     one slide per patient and a rare class. Clean: none of these."""
     import anndata as ad
 
     rng = np.random.default_rng(0)
-    grid = np.array([(i, j) for i in range(20) for j in range(20)], float) * 100
+    grid = np.array([(i, j) for i in range(side) for j in range(side)], float) * 100
     G = 200
     base = rng.lognormal(np.log(5), 0.5, G)
     programs = rng.normal(0, 1, (3, G))
     obs, X, xy = [], [], []
     for k, (slide, patient) in enumerate(SLIDES):
-        stripe = (grid[:, 0] // 700).astype(int)
+        stripe = np.minimum((grid[:, 0] // (100 * side / 3)).astype(int), 2)
         mu = np.tile(base, (len(grid), 1))
         if planted:
             mu *= np.exp(0.8 * programs[stripe])
