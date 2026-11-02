@@ -47,14 +47,17 @@ def _components_for(ratio: np.ndarray, share: float) -> int | None:
 def _run_pca(ctx, inputs, p: PCAParams) -> StepResult:
     a = inputs["matrix"]
     X = dense(a.data)
-    scale = p.scale == "yes" or (p.scale == "auto" and a.kind == "normalized")
+    prescaled = bool(a.meta.get("already_scaled"))
+    scale = p.scale == "yes" or (p.scale == "auto" and a.kind == "normalized" and not prescaled)
     ctx.decide("standardise features before PCA", "yes" if scale else "no",
                "Expression-type features have very different variances; standardising (clipped at "
                "10 s.d.) lets every feature contribute." if scale else
-               "Embedding dimensions are already on a common scale; standardising would inflate "
-               "low-variance noise dimensions.",
+               (f"The input ({a.meta.get('method')}) is on a common scale by construction; standardising would "
+                "give noise features the weight of variable ones." if prescaled else
+                "Embedding dimensions are already on a common scale; standardising would inflate "
+                "low-variance noise dimensions."),
                [("no" if scale else "yes", "rejected for the reason given")],
-               {"input_kind": a.kind, "setting": p.scale})
+               {"input_kind": a.kind, "setting": p.scale, "already_scaled": prescaled})
     Xs = agent.standardize(X) if scale else (X - X.mean(0)).astype(np.float32)
     lo, hi = min(p.min_components, p.max_components), max(p.min_components, p.max_components)
     hi = int(min(hi, min(Xs.shape) - 1))

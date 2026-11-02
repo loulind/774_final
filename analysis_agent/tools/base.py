@@ -559,7 +559,42 @@ def dense(X) -> np.ndarray:
     return np.asarray(X.toarray() if sp.issparse(X) else X, dtype=np.float32)
 
 
+def shared_rows(*artifacts: Artifact | None) -> np.ndarray:
+    """The dataset rows every given per-sample artifact has (``None`` entries are skipped)."""
+    rows = None
+    for a in artifacts:
+        if a is not None and a.rows is not None:
+            rows = a.rows if rows is None else np.intersect1d(rows, a.rows, assume_unique=True)
+    if rows is None:
+        raise ValueError("shared_rows needs at least one per-sample artifact")
+    return rows
+
+
+def values_on(rows: np.ndarray, art: Artifact | None, fill: str = "") -> np.ndarray | None:
+    """An optional artifact's values as strings for ``rows``; ``fill`` where it has none."""
+    if art is None:
+        return None
+    out = np.full(len(rows), fill, object)
+    common = np.intersect1d(rows, art.rows, assume_unique=True)
+    out[np.searchsorted(rows, common)] = np.asarray(art.take(common)).astype(str)
+    return out
+
+
 def check_time(ctx: StepContext, what: str) -> None:
     """Raise when the step has used its time budget (checked between expensive units)."""
     if ctx.seconds_left() <= 0:
         raise TimeoutError(f"{what}: step time budget of {ctx.budget.step_seconds:.0f}s used up")
+
+
+def label_matrix(target: Artifact, rows: np.ndarray) -> tuple[sp.csr_matrix, list[str], np.ndarray]:
+    """(samples x labels boolean matrix, label names, annotated mask) of a labels or multilabel
+    artifact for ``rows`` (single labels become one column per class)."""
+    if target.kind == "multilabel":
+        pos = target.locate(rows)
+        ann = np.asarray(target.meta.get("annotated", np.ones(target.n, bool)))[pos]
+        return sp.csr_matrix(target.data[pos]).astype(bool), list(target.meta["labels"]), ann
+    y = np.asarray(target.take(rows)).astype(str)
+    names = sorted(set(y))
+    M = sp.csr_matrix((np.ones(len(y), bool), (np.arange(len(y)), np.searchsorted(names, y))),
+                      shape=(len(y), len(names)))
+    return M, names, np.ones(len(y), bool)

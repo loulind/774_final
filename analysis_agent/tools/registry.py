@@ -19,6 +19,16 @@ TOOL_MODULES = (
     "analysis_agent.agents.dimreduce.adapter",
     "analysis_agent.agents.generative.adapter",
     "analysis_agent.agents.multimodal.adapter",
+    "analysis_agent.tools.qc",
+    "analysis_agent.tools.text",
+    "analysis_agent.tools.normalize",
+    "analysis_agent.tools.batch",
+    "analysis_agent.tools.cluster",
+    "analysis_agent.tools.spatial",
+    "analysis_agent.tools.association",
+    "analysis_agent.tools.de",
+    "analysis_agent.tools.predict",
+    "analysis_agent.tools.quality",
 )
 _loaded = False
 
