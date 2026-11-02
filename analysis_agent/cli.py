@@ -47,6 +47,8 @@ def main(argv=None) -> None:
     pl.add_argument("--objective", required=True, help="free-text objective, in quotes")
     pl.add_argument("--out", help="directory for the objective, register, plan, validation and decision log")
     pl.add_argument("--quick", action="store_true", help="quick-mode budgets")
+    pl.add_argument("--no-llm", action="store_true", help="the rule-based plan only")
+    pl.add_argument("--replay", help="LLM cache directory, transcript or plan directory to replay")
     pl.add_argument("--label-column")
     pl.add_argument("--group-column")
     sc = sub.add_parser("schema", help="JSON schemas of the profile, register, objective and plan")
@@ -117,8 +119,9 @@ def main(argv=None) -> None:
         from .data.loaders import load_path
         from .decision_log import DecisionLog
         from .hardware import detect
+        from .llm import make_client
         from .objective import interpret, objective_decisions
-        from .planner import plan_analysis, render_plan_markdown
+        from .planner import choose_plan, plan_analysis, render_plan_markdown
         from .profiler import profile_dataset
 
         cfg = load_config(quick=args.quick)
@@ -127,18 +130,27 @@ def main(argv=None) -> None:
         prof = profile_dataset(ds, config=cfg, budget=budget, cache_dir=Path(cfg.cache_dir))
         obj = interpret(args.objective, prof, cfg.criteria)
         reg = assess(prof, obj.types())
-        plan, report, decisions = plan_analysis(prof, reg, obj, budget)
-        md = render_plan_markdown(plan, report, decisions)
-        if args.out:
-            out = Path(args.out)
+        proposal, _, decisions = plan_analysis(prof, reg, obj, budget)
+        out = Path(args.out) if args.out else None
+        if out is not None:
             out.mkdir(parents=True, exist_ok=True)
+        log = DecisionLog(out / "decision_log.json" if out else None)
+        log.extend(objective_decisions(obj) + decisions)
+        client = make_client(cfg.llm, (out or Path(cfg.runs_dir) / "plan") / "llm_cache", args.replay,
+                             enabled=not args.no_llm)
+        plan, report, obj, reg = choose_plan(prof, reg, obj, budget, proposal, decisions, client, log)
+        md = render_plan_markdown(plan, report, [d for d in log.entries if d.step in ("plan", "validator")])
+        if out is not None:
             for name, model in (("profile", prof), ("objective", obj), ("challenge_register", reg),
                                 ("analysis_plan", plan), ("validation", report)):
                 (out / f"{name}.json").write_text(model.model_dump_json(indent=2) + "\n")
             (out / "challenge_register.md").write_text(render_markdown(reg))
             (out / "analysis_plan.md").write_text(md)
-            DecisionLog(out / "decision_log.json").extend(objective_decisions(obj) + decisions)
+            summary = {k: v for k, v in client.summary().items() if k != "calls"}
+            (out / "llm_transcript.json").write_text(json.dumps({"summary": summary, "calls": client.records},
+                                                                indent=1, default=str) + "\n")
         print(md)
+        print(f"planner: {plan.source}; LLM calls {len(client.calls)}, cost ${client.spent_usd:.2f}")
         return
 
     if args.cmd == "schema":

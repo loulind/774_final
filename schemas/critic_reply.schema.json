@@ -1,0 +1,257 @@
+{
+  "$defs": {
+    "Alternative": {
+      "properties": {
+        "option": {
+          "title": "Option",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "option",
+        "reason"
+      ],
+      "title": "Alternative",
+      "type": "object"
+    },
+    "PlanStep": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        },
+        "inputs": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Inputs",
+          "type": "object"
+        },
+        "params": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Params",
+          "type": "object"
+        },
+        "purpose": {
+          "default": "",
+          "title": "Purpose",
+          "type": "string"
+        },
+        "answers": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Answers",
+          "type": "array"
+        },
+        "addresses": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Addresses",
+          "type": "array"
+        },
+        "alternatives_rejected": {
+          "items": {
+            "$ref": "#/$defs/Alternative"
+          },
+          "title": "Alternatives Rejected",
+          "type": "array"
+        },
+        "criteria": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Criteria",
+          "type": "array"
+        },
+        "validation_only": {
+          "default": false,
+          "title": "Validation Only",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "tool"
+      ],
+      "title": "PlanStep",
+      "type": "object"
+    },
+    "Revision": {
+      "description": "One change to a plan that ran: new parameters for a step, another tool for it, or an\nadded step; kept only if ``criterion`` of ``criterion_step`` improves.",
+      "properties": {
+        "action": {
+          "enum": [
+            "set_params",
+            "swap_tool",
+            "add_step"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "step": {
+          "title": "Step",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Params",
+          "type": "object"
+        },
+        "tool": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tool"
+        },
+        "new_step": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PlanStep"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "criterion_step": {
+          "title": "Criterion Step",
+          "type": "string"
+        },
+        "criterion": {
+          "title": "Criterion",
+          "type": "string"
+        },
+        "goal": {
+          "enum": [
+            "max",
+            "min"
+          ],
+          "title": "Goal",
+          "type": "string"
+        },
+        "trigger": {
+          "default": "",
+          "title": "Trigger",
+          "type": "string"
+        },
+        "reason": {
+          "default": "",
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "step",
+        "criterion_step",
+        "criterion",
+        "goal"
+      ],
+      "title": "Revision",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "assessment": {
+      "title": "Assessment",
+      "type": "string"
+    },
+    "revise": {
+      "title": "Revise",
+      "type": "boolean"
+    },
+    "revision": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Revision"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "alternatives_rejected": {
+      "items": {
+        "$ref": "#/$defs/Alternative"
+      },
+      "title": "Alternatives Rejected",
+      "type": "array"
+    }
+  },
+  "required": [
+    "assessment",
+    "revise"
+  ],
+  "title": "CriticReply",
+  "type": "object"
+}

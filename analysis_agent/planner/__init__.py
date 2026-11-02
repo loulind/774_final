@@ -11,6 +11,7 @@ from __future__ import annotations
 from ..config import Budget
 from ..schema import AnalysisPlan, ChallengeRegister, DataProfile, Decision, Objective, ValidationReport
 from .heuristic import heuristic_plan
+from .llm import choose_plan
 from .validator import validate
 
 

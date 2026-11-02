@@ -1,0 +1,244 @@
+{
+  "$defs": {
+    "AcceptedChallenge": {
+      "properties": {
+        "challenge": {
+          "title": "Challenge",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "challenge",
+        "reason"
+      ],
+      "title": "AcceptedChallenge",
+      "type": "object"
+    },
+    "Alternative": {
+      "properties": {
+        "option": {
+          "title": "Option",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "option",
+        "reason"
+      ],
+      "title": "Alternative",
+      "type": "object"
+    },
+    "AnalysisPlan": {
+      "properties": {
+        "objective": {
+          "title": "Objective",
+          "type": "string"
+        },
+        "questions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Questions",
+          "type": "array"
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/PlanStep"
+          },
+          "title": "Steps",
+          "type": "array"
+        },
+        "accepted": {
+          "items": {
+            "$ref": "#/$defs/AcceptedChallenge"
+          },
+          "title": "Accepted",
+          "type": "array"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "source": {
+          "default": "heuristic",
+          "enum": [
+            "heuristic",
+            "llm",
+            "repaired"
+          ],
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "objective"
+      ],
+      "title": "AnalysisPlan",
+      "type": "object"
+    },
+    "DecisionDraft": {
+      "properties": {
+        "step": {
+          "default": "plan",
+          "title": "Step",
+          "type": "string"
+        },
+        "decision": {
+          "title": "Decision",
+          "type": "string"
+        },
+        "chosen": {
+          "title": "Chosen",
+          "type": "string"
+        },
+        "rationale": {
+          "title": "Rationale",
+          "type": "string"
+        },
+        "alternatives_rejected": {
+          "items": {
+            "$ref": "#/$defs/Alternative"
+          },
+          "title": "Alternatives Rejected",
+          "type": "array"
+        }
+      },
+      "required": [
+        "decision",
+        "chosen",
+        "rationale"
+      ],
+      "title": "DecisionDraft",
+      "type": "object"
+    },
+    "PlanStep": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        },
+        "inputs": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Inputs",
+          "type": "object"
+        },
+        "params": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Params",
+          "type": "object"
+        },
+        "purpose": {
+          "default": "",
+          "title": "Purpose",
+          "type": "string"
+        },
+        "answers": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Answers",
+          "type": "array"
+        },
+        "addresses": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Addresses",
+          "type": "array"
+        },
+        "alternatives_rejected": {
+          "items": {
+            "$ref": "#/$defs/Alternative"
+          },
+          "title": "Alternatives Rejected",
+          "type": "array"
+        },
+        "criteria": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Criteria",
+          "type": "array"
+        },
+        "validation_only": {
+          "default": false,
+          "title": "Validation Only",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "tool"
+      ],
+      "title": "PlanStep",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "plan": {
+      "$ref": "#/$defs/AnalysisPlan"
+    },
+    "decisions": {
+      "items": {
+        "$ref": "#/$defs/DecisionDraft"
+      },
+      "title": "Decisions",
+      "type": "array"
+    },
+    "added_questions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Added Questions",
+      "type": "array"
+    }
+  },
+  "required": [
+    "plan"
+  ],
+  "title": "PlannerReply",
+  "type": "object"
+}

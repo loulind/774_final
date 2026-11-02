@@ -384,9 +384,60 @@ class ValidationReport(BaseModel):
         return [i for i in self.issues if i.severity == "error" and not i.repaired]
 
 
+# ---------------------------------------------------------------------------
+# LLM replies (new in Project 4): what the planner, critic and writer must return
+# ---------------------------------------------------------------------------
+
+class DecisionDraft(BaseModel):
+    step: str = "plan"
+    decision: str
+    chosen: str
+    rationale: str
+    alternatives_rejected: list[Alternative] = Field(default_factory=list)
+
+
+class PlannerReply(BaseModel):
+    plan: AnalysisPlan
+    decisions: list[DecisionDraft] = Field(default_factory=list)
+    added_questions: list[str] = Field(default_factory=list)   # question types the rules missed
+
+
+class Revision(BaseModel):
+    """One change to a plan that ran: new parameters for a step, another tool for it, or an
+    added step; kept only if ``criterion`` of ``criterion_step`` improves."""
+    action: Literal["set_params", "swap_tool", "add_step"]
+    step: str                                     # the step changed, or the step the new one follows
+    params: dict[str, str | int | float | bool | list | dict | None] = Field(default_factory=dict)
+    tool: str | None = None                       # swap_tool
+    new_step: PlanStep | None = None              # add_step
+    criterion_step: str
+    criterion: str                                # a label-free, non-test criterion of that step
+    goal: Literal["max", "min"]
+    trigger: str = ""
+    reason: str = ""
+
+
+class CriticReply(BaseModel):
+    assessment: str
+    revise: bool
+    revision: Revision | None = None
+    alternatives_rejected: list[Alternative] = Field(default_factory=list)
+
+
+class WriterReply(BaseModel):
+    executive_summary: str
+    data_and_challenges: str
+    plan_explained: str
+    results_interpretation: str
+    critic_and_revision: str
+    limitations: str
+
+
 # JSON schemas written to schemas/ (``bioagent schema --write``); a test keeps them in step.
 SCHEMA_MODELS: dict[str, type[BaseModel]] = {"data_profile": DataProfile, "challenge_register": ChallengeRegister,
-                                             "objective": Objective, "analysis_plan": AnalysisPlan}
+                                             "objective": Objective, "analysis_plan": AnalysisPlan,
+                                             "planner_reply": PlannerReply, "critic_reply": CriticReply,
+                                             "writer_reply": WriterReply}
 
 
 def json_schemas() -> dict[str, dict]:

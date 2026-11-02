@@ -1,0 +1,38 @@
+{
+  "properties": {
+    "executive_summary": {
+      "title": "Executive Summary",
+      "type": "string"
+    },
+    "data_and_challenges": {
+      "title": "Data And Challenges",
+      "type": "string"
+    },
+    "plan_explained": {
+      "title": "Plan Explained",
+      "type": "string"
+    },
+    "results_interpretation": {
+      "title": "Results Interpretation",
+      "type": "string"
+    },
+    "critic_and_revision": {
+      "title": "Critic And Revision",
+      "type": "string"
+    },
+    "limitations": {
+      "title": "Limitations",
+      "type": "string"
+    }
+  },
+  "required": [
+    "executive_summary",
+    "data_and_challenges",
+    "plan_explained",
+    "results_interpretation",
+    "critic_and_revision",
+    "limitations"
+  ],
+  "title": "WriterReply",
+  "type": "object"
+}
