@@ -112,7 +112,7 @@ def profile_dataset(ds, ws: Workspace | None = None, config: RunConfig | None = 
         grp = ws.get(a.meta["library"]) if a.meta.get("library") in ws else \
             (min(groups, key=lambda g: g.meta.get("n_levels") or 0) if groups else None)
         log(f"  profiling {a.name}")
-        prof.images.append(image_profile(a, grp, split, cache_dir, rng, log))
+        prof.images.append(image_profile(a, grp, split, cache_dir, rng, log, cfg.seed))
     for a in of("text"):
         prof.texts.append(text_profile(a, split))
     for a in of("tabular"):

@@ -1,0 +1,1106 @@
+{
+ "questions": [
+  "structure_discovery",
+  "spatial_structure",
+  "cross_modal_association",
+  "differential_analysis",
+  "batch_assessment",
+  "visualization"
+ ],
+ "thresholds": {
+  "qc_flagged": {
+   "metric": "share of samples failing the default count-QC rule",
+   "low": 0.005,
+   "medium": 0.03,
+   "high": 0.1,
+   "higher_is_worse": true
+  },
+  "unusable_images": {
+   "metric": "share of unreadable, tiny, strip-shaped or blank images",
+   "low": 0.001,
+   "medium": 0.01,
+   "high": 0.05,
+   "higher_is_worse": true
+  },
+  "library_iqr": {
+   "metric": "interquartile range of log2 library size",
+   "low": 0.5,
+   "medium": 1.0,
+   "high": 2.0,
+   "higher_is_worse": true
+  },
+  "depth_pc1": {
+   "metric": "|Spearman rho| of PC1 with log depth after library-size scaling",
+   "low": 0.1,
+   "medium": 0.3,
+   "high": 0.5,
+   "higher_is_worse": true
+  },
+  "features_per_sample": {
+   "metric": "features per sample (p / n)",
+   "low": 0.1,
+   "medium": 1.0,
+   "high": 10.0,
+   "higher_is_worse": true
+  },
+  "sparsity": {
+   "metric": "share of zero entries",
+   "low": 0.5,
+   "medium": 0.9,
+   "high": 0.99,
+   "higher_is_worse": true
+  },
+  "group_silhouette": {
+   "metric": "silhouette width by group",
+   "low": 0.02,
+   "medium": 0.05,
+   "high": 0.15,
+   "higher_is_worse": true
+  },
+  "group_mixing": {
+   "metric": "neighbour mixing of groups (1 = as mixed as overall)",
+   "low": 0.9,
+   "medium": 0.8,
+   "high": 0.5,
+   "higher_is_worse": false
+  },
+  "colour_share": {
+   "metric": "between-group share of image colour variance",
+   "low": 0.05,
+   "medium": 0.2,
+   "high": 0.5,
+   "higher_is_worse": true
+  },
+  "cramers_v": {
+   "metric": "Cram\u00e9r's V between group and label",
+   "low": 0.1,
+   "medium": 0.3,
+   "high": 0.5,
+   "higher_is_worse": true
+  },
+  "samples_per_unit": {
+   "metric": "samples per independent unit (coarsest grouping)",
+   "low": 1.2,
+   "medium": 2.0,
+   "high": 10.0,
+   "higher_is_worse": true
+  },
+  "autocorrelated": {
+   "metric": "share of variable features with significant Moran's I",
+   "low": 0.05,
+   "medium": 0.2,
+   "high": 0.5,
+   "higher_is_worse": true
+  },
+  "annotated": {
+   "metric": "share of samples with a label",
+   "low": 0.99,
+   "medium": 0.5,
+   "high": 0.1,
+   "higher_is_worse": false
+  },
+  "class_ratio": {
+   "metric": "largest / smallest class size",
+   "low": 3.0,
+   "medium": 10.0,
+   "high": 50.0,
+   "higher_is_worse": true
+  },
+  "too_rare": {
+   "metric": "share of labels too rare to assess",
+   "low": 0.1,
+   "medium": 0.5,
+   "high": 0.9,
+   "higher_is_worse": true
+  },
+  "kappa": {
+   "metric": "Cohen's kappa between label sources",
+   "low": 0.95,
+   "medium": 0.8,
+   "high": 0.6,
+   "higher_is_worse": false
+  },
+  "duplicates": {
+   "metric": "share of images in a near-duplicate pair",
+   "low": 0.005,
+   "medium": 0.02,
+   "high": 0.1,
+   "higher_is_worse": true
+  },
+  "group_overlap": {
+   "metric": "share of a held-out split whose group also occurs in another split",
+   "low": 0.001,
+   "medium": 0.05,
+   "high": 0.2,
+   "higher_is_worse": true
+  },
+  "text_flagged": {
+   "metric": "share of texts empty, very short, repeated, boilerplate or referring to panels",
+   "low": 0.01,
+   "medium": 0.05,
+   "high": 0.2,
+   "higher_is_worse": true
+  },
+  "missing": {
+   "metric": "share of samples without the modality",
+   "low": 0.01,
+   "medium": 0.1,
+   "high": 0.3,
+   "higher_is_worse": true
+  },
+  "size_spread": {
+   "metric": "Q3 / Q1 of the shorter image side",
+   "low": 1.5,
+   "medium": 2.0,
+   "high": 4.0,
+   "higher_is_worse": true
+  },
+  "colour_mix": {
+   "metric": "share of the minority colour mode (greyscale vs colour)",
+   "low": 0.05,
+   "medium": 0.2,
+   "high": 0.4,
+   "higher_is_worse": true
+  },
+  "hypotheses": {
+   "metric": "hypotheses the questions imply",
+   "low": 2.0,
+   "medium": 20.0,
+   "high": 1000.0,
+   "higher_is_worse": true
+  },
+  "compute_share": {
+   "metric": "largest declared tool cost / step budget",
+   "low": 0.25,
+   "medium": 0.5,
+   "high": 1.0,
+   "higher_is_worse": true
+  }
+ },
+ "entries": [
+  {
+   "id": "low_quality_samples:counts.expression",
+   "type": "low_quality_samples",
+   "subject": [
+    "counts.expression"
+   ],
+   "summary": "1.5% of samples in counts.expression fail the default quality rule (3 MADs and 2-fold below the median depth or detected features, within each library); 0 are empty.",
+   "status": "detected",
+   "severity": "low",
+   "evidence": [
+    {
+     "metric": "share of samples failing the default count-QC rule",
+     "value": 0.014832219693075849,
+     "rule": "low >= 0.005, medium >= 0.03, high >= 0.1",
+     "source": "matrices[counts.expression]"
+    },
+    {
+     "metric": "empty samples",
+     "value": 0,
+     "rule": "",
+     "source": "matrices[counts.expression]"
+    }
+   ],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "cross_modal_association",
+    "differential_analysis",
+    "batch_assessment",
+    "predictive_modelling",
+    "representation_learning",
+    "generative_modelling",
+    "data_quality_audit",
+    "visualization"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "generative_density",
+    "qc_counts",
+    "qc_images"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "qc"
+   ],
+   "handling": "qc (qc_counts): n removed 202, fraction removed 0.0148, n features dropped 0",
+   "residual_risk": "handled; see the steps' results"
+  },
+  {
+   "id": "low_quality_samples:images.spot_patches",
+   "type": "low_quality_samples",
+   "subject": [
+    "images.spot_patches"
+   ],
+   "summary": "0.0% of the 240 measured images in images.spot_patches are unreadable, tiny, strip-shaped or blank.",
+   "status": "not_detected",
+   "severity": "none",
+   "evidence": [
+    {
+     "metric": "share of unreadable, tiny, strip-shaped or blank images",
+     "value": 0.0,
+     "rule": "low >= 0.001, medium >= 0.01, high >= 0.05",
+     "source": "images[images.spot_patches]"
+    },
+    {
+     "metric": "unreadable images",
+     "value": 0,
+     "rule": "",
+     "source": "images[images.spot_patches]"
+    },
+    {
+     "metric": "tiny images",
+     "value": 0,
+     "rule": "",
+     "source": "images[images.spot_patches]"
+    },
+    {
+     "metric": "extreme_aspect images",
+     "value": 0,
+     "rule": "",
+     "source": "images[images.spot_patches]"
+    },
+    {
+     "metric": "blank images",
+     "value": 0,
+     "rule": "",
+     "source": "images[images.spot_patches]"
+    }
+   ],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "cross_modal_association",
+    "differential_analysis",
+    "batch_assessment",
+    "predictive_modelling",
+    "representation_learning",
+    "generative_modelling",
+    "data_quality_audit",
+    "visualization"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "generative_density",
+    "qc_counts",
+    "qc_images"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "depth_variation:counts.expression",
+   "type": "depth_variation",
+   "subject": [
+    "counts.expression"
+   ],
+   "summary": "Library sizes in counts.expression span an interquartile range of 1.86 on the log2 scale; per-library medians from 636 to 12,194, and PC1 still tracks depth after library-size scaling (|rho| 0.766).",
+   "status": "detected",
+   "severity": "high",
+   "evidence": [
+    {
+     "metric": "interquartile range of log2 library size",
+     "value": 1.8625868678443993,
+     "rule": "low >= 0.5, medium >= 1, high >= 2",
+     "source": "matrices[counts.expression]"
+    },
+    {
+     "metric": "|Spearman rho| of PC1 with log depth after library-size scaling",
+     "value": 0.766178235129092,
+     "rule": "low >= 0.1, medium >= 0.3, high >= 0.5",
+     "source": "matrices[counts.expression]"
+    },
+    {
+     "metric": "|rho(PC1, log depth)| on log1p of raw counts",
+     "value": 0.9938460419481758,
+     "rule": "",
+     "source": "matrices[counts.expression]"
+    }
+   ],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "differential_analysis",
+    "batch_assessment",
+    "representation_learning",
+    "visualization"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "generative_batch_vae",
+    "normalize_counts"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "norm",
+    "batch_vae",
+    "norm_all"
+   ],
+   "handling": "norm (normalize_counts): method log, depth corr pc1 before 0.98, depth corr pc1 after 0.524; batch_vae (generative_batch_vae): model nb_vae, val neg elbo per gene 0.43, epochs run 150; norm_all (normalize_counts): method pearson_residuals, depth corr pc1 before 0.987, depth corr pc1 after 0.428",
+   "residual_risk": "|rho(PC1, depth)| after normalisation 0.524"
+  },
+  {
+   "id": "high_dimensionality:counts.expression",
+   "type": "high_dimensionality",
+   "subject": [
+    "counts.expression"
+   ],
+   "summary": "counts.expression has 11,871 features for 13,619 samples (0.872 per sample) and 83% zeros; 50 components hold 0.236 of the variance of the most variable features.",
+   "status": "detected",
+   "severity": "low",
+   "evidence": [
+    {
+     "metric": "features per sample (p / n)",
+     "value": 0.8716499008737792,
+     "rule": "low >= 0.1, medium >= 1, high >= 10",
+     "source": "matrices[counts.expression]"
+    },
+    {
+     "metric": "share of zero entries",
+     "value": 0.827092668216269,
+     "rule": "low >= 0.5, medium >= 0.9, high >= 0.99",
+     "source": "matrices[counts.expression]"
+    },
+    {
+     "metric": "share of variance in 50 principal components",
+     "value": 0.23629291491427007,
+     "rule": "",
+     "source": "matrices[counts.expression]"
+    }
+   ],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "predictive_modelling",
+    "representation_learning",
+    "generative_modelling",
+    "visualization"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "dimreduce_map",
+    "dimreduce_pca",
+    "generative_batch_vae",
+    "multimodal_features",
+    "normalize_counts"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "norm",
+    "pca",
+    "batch_vae",
+    "norm_all",
+    "map"
+   ],
+   "handling": "norm (normalize_counts): method log, depth corr pc1 before 0.98, depth corr pc1 after 0.524; pca (dimreduce_pca): n components 50, variance explained 0.117; batch_vae (generative_batch_vae): model nb_vae, val neg elbo per gene 0.43, epochs run 150; norm_all (normalize_counts): method pearson_residuals, depth corr pc1 before 0.987, depth corr pc1 after 0.428",
+   "residual_risk": "handled; see the steps' results"
+  },
+  {
+   "id": "batch_effect:groups.patient,counts.expression",
+   "type": "batch_effect",
+   "subject": [
+    "groups.patient",
+    "counts.expression"
+   ],
+   "summary": "Samples separate by patient (silhouette 0.375, neighbour mixing 0.00412, 0.664 of the variance between patients); patient differences mix biology and technical effects.",
+   "status": "detected",
+   "severity": "high",
+   "evidence": [
+    {
+     "metric": "silhouette by patient",
+     "value": 0.37544846138094046,
+     "rule": "low >= 0.02, medium >= 0.05, high >= 0.15",
+     "source": "group_structure[counts.expression, groups.patient]"
+    },
+    {
+     "metric": "neighbour mixing of patients",
+     "value": 0.004117524659216732,
+     "rule": "low <= 0.9, medium <= 0.8, high <= 0.5",
+     "source": "group_structure[counts.expression, groups.patient]"
+    },
+    {
+     "metric": "variance share between patients",
+     "value": 0.6642541242052786,
+     "rule": "",
+     "source": "group_structure[counts.expression, groups.patient]"
+    }
+   ],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "cross_modal_association",
+    "differential_analysis",
+    "batch_assessment",
+    "predictive_modelling",
+    "representation_learning"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "batch_assess",
+    "batch_correct",
+    "generative_batch_vae",
+    "multimodal_features"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "batch_assess",
+    "batch_correct"
+   ],
+   "handling": "batch_assess (batch_assess): batch effect weak, within outer batch silhouette 0.000344, within outer mixing 0.774; batch_correct (batch_correct): method combat, within outer False, mixing 0.707",
+   "residual_risk": "mixing after correction 0.707 (before 0.319); groups still separate"
+  },
+  {
+   "id": "batch_effect:groups.slide,counts.expression",
+   "type": "batch_effect",
+   "subject": [
+    "groups.slide",
+    "counts.expression"
+   ],
+   "summary": "Within each patient, samples separate by slide (silhouette 0.0324, neighbour mixing 0.667); slides inside one patient explain 0.0526 of the variance, patients 0.664.",
+   "status": "detected",
+   "severity": "medium",
+   "evidence": [
+    {
+     "metric": "silhouette by slide within patient",
+     "value": 0.03237932301199735,
+     "rule": "low >= 0.02, medium >= 0.05, high >= 0.15",
+     "source": "group_structure[counts.expression, groups.slide]"
+    },
+    {
+     "metric": "neighbour mixing of slides within patient",
+     "value": 0.6670816520986753,
+     "rule": "low <= 0.9, medium <= 0.8, high <= 0.5",
+     "source": "group_structure[counts.expression, groups.slide]"
+    },
+    {
+     "metric": "variance share between slides of one patient",
+     "value": 0.05260457935869479,
+     "rule": "",
+     "source": "group_structure[counts.expression, groups.slide]"
+    },
+    {
+     "metric": "variance share between patients",
+     "value": 0.6642541242052777,
+     "rule": "",
+     "source": "group_structure[counts.expression, groups.slide]"
+    }
+   ],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "cross_modal_association",
+    "differential_analysis",
+    "batch_assessment",
+    "predictive_modelling",
+    "representation_learning"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "batch_assess",
+    "batch_correct",
+    "generative_batch_vae",
+    "multimodal_features"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "batch_assess",
+    "batch_vae",
+    "batch_correct"
+   ],
+   "handling": "batch_assess (batch_assess): batch effect weak, within outer batch silhouette 0.000344, within outer mixing 0.774; batch_vae (generative_batch_vae): model nb_vae, val neg elbo per gene 0.43, epochs run 150; batch_correct (batch_correct): method combat, within outer False, mixing 0.707",
+   "residual_risk": "mixing after correction 0.707 (before 0.319); groups still separate"
+  },
+  {
+   "id": "batch_effect:groups.slide,images.spot_patches",
+   "type": "batch_effect",
+   "subject": [
+    "groups.slide",
+    "images.spot_patches"
+   ],
+   "summary": "Mean image colour differs between slide levels (between-group share 0.126), as staining or scanning batches do.",
+   "status": "detected",
+   "severity": "low",
+   "evidence": [
+    {
+     "metric": "between-group share of image colour variance",
+     "value": 0.1260505507801139,
+     "rule": "low >= 0.05, medium >= 0.2, high >= 0.5",
+     "source": "images[images.spot_patches]"
+    }
+   ],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "cross_modal_association",
+    "differential_analysis",
+    "batch_assessment",
+    "predictive_modelling",
+    "representation_learning"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "batch_assess",
+    "batch_correct",
+    "generative_batch_vae",
+    "multimodal_features"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "features"
+   ],
+   "handling": "features (multimodal_features): image encoder phikon, screen score 0.075, screen chance 0.02",
+   "residual_risk": "handled; see the steps' results"
+  },
+  {
+   "id": "batch_confounding:groups.patient,labels.label",
+   "type": "batch_confounding",
+   "subject": [
+    "groups.patient",
+    "labels.label"
+   ],
+   "summary": "Label 'label' is associated with patient (Cram\u00e9r's V 0.369): a correction or comparison across patients also touches the labelled biology.",
+   "status": "detected",
+   "severity": "medium",
+   "evidence": [
+    {
+     "metric": "Cram\u00e9r's V between group and label",
+     "value": 0.3694246880625486,
+     "rule": "low >= 0.1, medium >= 0.3, high >= 0.5",
+     "source": "labels[labels.label]"
+    }
+   ],
+   "affects": [
+    "structure_discovery",
+    "differential_analysis",
+    "batch_assessment",
+    "predictive_modelling"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "batch_assess"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "batch_assess"
+   ],
+   "handling": "batch_assess (batch_assess): batch effect weak, within outer batch silhouette 0.000344, within outer mixing 0.774",
+   "residual_risk": "handled; see the steps' results"
+  },
+  {
+   "id": "nested_sampling:groups.patient",
+   "type": "nested_sampling",
+   "subject": [
+    "groups.patient"
+   ],
+   "summary": "The 13,620 samples come from 8 patient levels (1,702 per level, with slide nested inside); 100% of samples share their patient with others, so the independent unit is the patient.",
+   "status": "detected",
+   "severity": "high",
+   "evidence": [
+    {
+     "metric": "samples per independent unit (coarsest grouping)",
+     "value": 1702.5,
+     "rule": "low >= 1.2, medium >= 2, high >= 10",
+     "source": "groups[groups.patient]"
+    },
+    {
+     "metric": "patient levels",
+     "value": 8,
+     "rule": "",
+     "source": "groups[groups.patient]"
+    },
+    {
+     "metric": "share of samples sharing their patient",
+     "value": 1.0,
+     "rule": "",
+     "source": "groups[groups.patient]"
+    }
+   ],
+   "affects": [
+    "differential_analysis",
+    "predictive_modelling",
+    "cross_modal_association",
+    "batch_assessment"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "batch_assess",
+    "differential_expression",
+    "multimodal_predictability",
+    "predict_targets"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "batch_assess",
+    "histology",
+    "markers"
+   ],
+   "handling": "batch_assess (batch_assess): batch effect weak, within outer batch silhouette 0.000344, within outer mixing 0.774; histology (multimodal_predictability): balanced accuracy image 0.358, balanced accuracy other 0.664, balanced accuracy both 0.559; markers (differential_expression): testable True, n markers 699, n markers naive 941",
+   "residual_risk": "markers rest on 8 replicates per group"
+  },
+  {
+   "id": "double_dipping:counts.expression",
+   "type": "double_dipping",
+   "subject": [
+    "counts.expression"
+   ],
+   "summary": "Groups found in counts.expression and then tested for marker features on the same counts would be tested on the data that defined them, inflating significance.",
+   "status": "detected",
+   "severity": "high",
+   "evidence": [
+    {
+     "metric": "questions implying discovery then testing",
+     "value": "differential_analysis, structure_discovery, spatial_structure",
+     "rule": "",
+     "source": "objective"
+    }
+   ],
+   "affects": [
+    "differential_analysis"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "count_split"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "split"
+   ],
+   "handling": "split (count_split): method poisson, median dependence binomial 0.0494, fit count share 0.5",
+   "residual_risk": "low: markers are tested on the held-out half of the count split"
+  },
+  {
+   "id": "spatial_autocorrelation:coords.spatial,counts.expression",
+   "type": "spatial_autocorrelation",
+   "subject": [
+    "coords.spatial",
+    "counts.expression"
+   ],
+   "summary": "100% of the 100 most variable features of counts.expression are spatially autocorrelated within libraries (median Moran's I 0.134): neighbouring samples are not independent.",
+   "status": "detected",
+   "severity": "high",
+   "evidence": [
+    {
+     "metric": "share of variable features with significant Moran's I",
+     "value": 1.0,
+     "rule": "low >= 0.05, medium >= 0.2, high >= 0.5",
+     "source": "spatial[coords.spatial]"
+    },
+    {
+     "metric": "median Moran's I",
+     "value": 0.13436859782258737,
+     "rule": "",
+     "source": "spatial[coords.spatial]"
+    }
+   ],
+   "affects": [
+    "spatial_structure",
+    "structure_discovery",
+    "differential_analysis",
+    "predictive_modelling"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "spatial_domains",
+    "spatial_svg"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "domains",
+    "svg"
+   ],
+   "handling": "domains (spatial_domains): method kmeans, k 5, stability 0.838; svg (spatial_svg): n significant 5,840, n tested 10,000, permuted p05 fraction 0.055",
+   "residual_risk": "handled; see the steps' results"
+  },
+  {
+   "id": "partial_labels:labels.label",
+   "type": "partial_labels",
+   "subject": [
+    "labels.label"
+   ],
+   "summary": "23% of samples carry 'label' (slide: 8 of 36 levels labelled).",
+   "status": "detected",
+   "severity": "medium",
+   "evidence": [
+    {
+     "metric": "share of samples with a label",
+     "value": 0.23179148311306902,
+     "rule": "low <= 0.99, medium <= 0.5, high <= 0.1",
+     "source": "labels[labels.label]"
+    },
+    {
+     "metric": "slide levels labelled",
+     "value": "8 of 36",
+     "rule": "",
+     "source": "labels[labels.label]"
+    },
+    {
+     "metric": "patient levels labelled",
+     "value": "8 of 8",
+     "rule": "",
+     "source": "labels[labels.label]"
+    }
+   ],
+   "affects": [
+    "predictive_modelling",
+    "structure_discovery",
+    "cross_modal_association"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "label_association"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "validate_label"
+   ],
+   "handling": "validate_label (label_association): ari 0.066, nmi 0.123, purity 0.559",
+   "residual_risk": "handled; see the steps' results"
+  },
+  {
+   "id": "class_imbalance:labels.label",
+   "type": "class_imbalance",
+   "subject": [
+    "labels.label"
+   ],
+   "summary": "'label' has 6 classes, the largest 18.1 times the smallest; 6 have the support to be modelled and judged (0% are too rare to assess).",
+   "status": "detected",
+   "severity": "medium",
+   "evidence": [
+    {
+     "metric": "largest / smallest class size",
+     "value": 18.123711340206185,
+     "rule": "low >= 3, medium >= 10, high >= 50",
+     "source": "labels[labels.label]"
+    },
+    {
+     "metric": "share of labels too rare to assess",
+     "value": 0.0,
+     "rule": "low >= 0.1, medium >= 0.5, high >= 0.9",
+     "source": "labels[labels.label]"
+    },
+    {
+     "metric": "labels with support to model and judge",
+     "value": 6,
+     "rule": "",
+     "source": "labels[labels.label]"
+    }
+   ],
+   "affects": [
+    "predictive_modelling",
+    "data_quality_audit"
+   ],
+   "relevant": false,
+   "mitigations": [
+    "label_imbalance",
+    "multimodal_predictability",
+    "predict_targets"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "histology"
+   ],
+   "handling": "histology (multimodal_predictability): balanced accuracy image 0.358, balanced accuracy other 0.664, balanced accuracy both 0.559",
+   "residual_risk": "handled; see the steps' results"
+  },
+  {
+   "id": "label_noise:labels.label",
+   "type": "label_noise",
+   "subject": [
+    "labels.label"
+   ],
+   "summary": "Noise in 'label' is not measurable from the profile: no second label source or text to check it against.",
+   "status": "not_measurable",
+   "severity": "none",
+   "evidence": [],
+   "affects": [
+    "predictive_modelling",
+    "data_quality_audit"
+   ],
+   "relevant": false,
+   "mitigations": [
+    "caption_label_consistency",
+    "label_agreement",
+    "multimodal_agreement"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "near_duplicates:images.spot_patches",
+   "type": "near_duplicates",
+   "subject": [
+    "images.spot_patches"
+   ],
+   "summary": "images.spot_patches are cut from larger images, so copies are not expected and not hashed.",
+   "status": "not_applicable",
+   "severity": "none",
+   "evidence": [],
+   "affects": [
+    "predictive_modelling",
+    "cross_modal_association",
+    "data_quality_audit"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "near_duplicates",
+    "predict_targets"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "split_leakage",
+   "type": "split_leakage",
+   "subject": [],
+   "summary": "No predefined split: the agent makes grouped splits itself.",
+   "status": "not_applicable",
+   "severity": "none",
+   "evidence": [],
+   "affects": [
+    "predictive_modelling",
+    "cross_modal_association",
+    "data_quality_audit"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "near_duplicates",
+    "predict_targets"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "text_noise",
+   "type": "text_noise",
+   "subject": [],
+   "summary": "No text.",
+   "status": "not_applicable",
+   "severity": "none",
+   "evidence": [],
+   "affects": [
+    "cross_modal_association",
+    "predictive_modelling",
+    "data_quality_audit"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "caption_label_consistency",
+    "multimodal_agreement",
+    "qc_text"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "missing_data:expression",
+   "type": "missing_data",
+   "subject": [
+    "expression"
+   ],
+   "summary": "1 of 13,620 samples (0.0%) have no expression.",
+   "status": "not_detected",
+   "severity": "none",
+   "evidence": [
+    {
+     "metric": "share of samples without the modality",
+     "value": 7.342143906019505e-05,
+     "rule": "low >= 0.01, medium >= 0.1, high >= 0.3",
+     "source": "modalities[expression]"
+    }
+   ],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "cross_modal_association",
+    "differential_analysis",
+    "batch_assessment",
+    "predictive_modelling",
+    "representation_learning",
+    "generative_modelling",
+    "data_quality_audit"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "generative_impute"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "image_heterogeneity:images.spot_patches",
+   "type": "image_heterogeneity",
+   "subject": [
+    "images.spot_patches"
+   ],
+   "summary": "In images.spot_patches sizes are uniform (median 145 x 145 px) and 0% of 240 sampled images are greyscale, the rest colour.",
+   "status": "not_detected",
+   "severity": "none",
+   "evidence": [
+    {
+     "metric": "Q3 / Q1 of the shorter image side",
+     "value": 1.0017241379310344,
+     "rule": "low >= 1.5, medium >= 2, high >= 4",
+     "source": "images[images.spot_patches]"
+    },
+    {
+     "metric": "share of the minority colour mode (greyscale vs colour)",
+     "value": 0.0,
+     "rule": "low >= 0.05, medium >= 0.2, high >= 0.4",
+     "source": "images[images.spot_patches]"
+    }
+   ],
+   "affects": [
+    "cross_modal_association",
+    "predictive_modelling",
+    "representation_learning",
+    "structure_discovery",
+    "data_quality_audit"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "generative_density",
+    "multimodal_features",
+    "qc_images"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "multiple_testing",
+   "type": "multiple_testing",
+   "subject": [],
+   "summary": "9,514 features compared between groups; 9,514 features tested for spatial patterns: without error control, false positives are expected among them.",
+   "status": "detected",
+   "severity": "high",
+   "evidence": [
+    {
+     "metric": "hypotheses the questions imply: features compared between groups",
+     "value": 9514,
+     "rule": "low >= 2, medium >= 20, high >= 1000",
+     "source": "profile"
+    },
+    {
+     "metric": "hypotheses the questions imply: features tested for spatial patterns",
+     "value": 9514,
+     "rule": "low >= 2, medium >= 20, high >= 1000",
+     "source": "profile"
+    }
+   ],
+   "affects": [
+    "differential_analysis",
+    "spatial_structure",
+    "predictive_modelling"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "differential_expression",
+    "predict_targets",
+    "spatial_enrichment",
+    "spatial_svg"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "svg",
+    "enrichment",
+    "markers"
+   ],
+   "handling": "svg (spatial_svg): n significant 5,840, n tested 10,000, permuted p05 fraction 0.055; enrichment (spatial_enrichment): n enriched 5, n depleted 10, self enrichment median z 110; markers (differential_expression): testable True, n markers 699, n markers naive 941",
+   "residual_risk": "low: Benjamini-Hochberg FDR within every family of tests"
+  },
+  {
+   "id": "compute",
+   "type": "compute",
+   "subject": [],
+   "summary": "The most expensive tool on these data, multimodal_features, is estimated at 875 s, 24% of the 3,600 s step budget on mps.",
+   "status": "not_detected",
+   "severity": "none",
+   "evidence": [
+    {
+     "metric": "largest declared tool cost / step budget",
+     "value": 0.24300000000000002,
+     "rule": "low >= 0.25, medium >= 0.5, high >= 1",
+     "source": "compute"
+    },
+    {
+     "metric": "estimated seconds: multimodal_features",
+     "value": 874.8,
+     "rule": "",
+     "source": "compute"
+    },
+    {
+     "metric": "estimated seconds: generative_density",
+     "value": 732.0,
+     "rule": "",
+     "source": "compute"
+    },
+    {
+     "metric": "estimated seconds: multimodal_agreement",
+     "value": 731.4,
+     "rule": "",
+     "source": "compute"
+    },
+    {
+     "metric": "estimated seconds: generative_batch_vae",
+     "value": 270.0,
+     "rule": "",
+     "source": "compute"
+    }
+   ],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "cross_modal_association",
+    "differential_analysis",
+    "batch_assessment",
+    "predictive_modelling",
+    "representation_learning",
+    "generative_modelling",
+    "data_quality_audit",
+    "visualization"
+   ],
+   "relevant": true,
+   "mitigations": [],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "pretraining_overlap:images.spot_patches",
+   "type": "pretraining_overlap",
+   "subject": [
+    "images.spot_patches"
+   ],
+   "summary": "Pretrained encoders may have seen these images or texts; this is judged after encoder screening, from zero-shot retrieval far above what the training split supports.",
+   "status": "not_measurable",
+   "severity": "none",
+   "evidence": [],
+   "affects": [
+    "cross_modal_association",
+    "predictive_modelling"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "multimodal_features"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  }
+ ]
+}

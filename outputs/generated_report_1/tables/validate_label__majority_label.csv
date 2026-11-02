@@ -1,0 +1,6 @@
+found,n,majority_label,majority_share
+C1,826,invasive cancer,0.40314769975786924
+C2,714,invasive cancer,0.469187675070028
+C3,736,invasive cancer,0.8505434782608695
+C4,493,invasive cancer,0.5882352941176471
+C5,354,invasive cancer,0.4548022598870056

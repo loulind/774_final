@@ -309,12 +309,18 @@ def report_markdown(run: dict, record: dict, prose: dict, figs: dict, tables: di
         lines += ["", "Accepted limitations:"] + [f"- {a.challenge}: {a.reason}" for a in plan.accepted]
     lines += ["", "## Results", "", sec["results_interpretation"], ""]
     records = run["records"]
+    shown: dict[str, str] = {}                                # step -> section it is reported in
     for q in obj.questions:
         sids = [s.id for s in plan.steps if q.type in s.answers]
         if not sids:
             continue
-        lines += [f"### {q.type.replace('_', ' ').capitalize()}", ""]
+        title = q.type.replace("_", " ").capitalize()
+        lines += [f"### {title}", ""]
         for sid in sids:
+            if sid in shown:
+                lines += [f"- **{sid}**: reported under {shown[sid]} above."]
+                continue
+            shown[sid] = title
             r = records.get(sid) or {}
             tool = next(s.tool for s in plan.steps if s.id == sid)
             if r.get("error") or r.get("skipped"):

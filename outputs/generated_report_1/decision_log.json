@@ -1,0 +1,1437 @@
+[
+  {
+    "step": "system",
+    "decision": "hardware",
+    "chosen": "mps",
+    "rationale": "{'device': 'mps', 'device_name': 'Apple GPU (MPS) on arm64', 'cpu': 'arm', 'n_cpu': 10, 'memory_gb': 17.2, 'disk_free_gb': 24.2, 'torch_version': '2.15.0'}; full budgets",
+    "alternatives_rejected": [],
+    "evidence": {},
+    "source": "system"
+  },
+  {
+    "step": "objective",
+    "decision": "question: structure_discovery",
+    "chosen": "identify spatial domains",
+    "rationale": "cue 'domains'; targets features: counts.expression",
+    "alternatives_rejected": [],
+    "evidence": {
+      "targets": {
+        "features": [
+          "counts.expression"
+        ]
+      },
+      "challenges": []
+    },
+    "source": "heuristic"
+  },
+  {
+    "step": "objective",
+    "decision": "question: spatial_structure",
+    "chosen": "Characterize spatial tissue heterogeneity",
+    "rationale": "cue 'spatial'; targets coords: coords.spatial; features: counts.expression",
+    "alternatives_rejected": [],
+    "evidence": {
+      "targets": {
+        "coords": [
+          "coords.spatial"
+        ],
+        "features": [
+          "counts.expression"
+        ]
+      },
+      "challenges": []
+    },
+    "source": "heuristic"
+  },
+  {
+    "step": "objective",
+    "decision": "question: cross_modal_association",
+    "chosen": "relate them to histology",
+    "rationale": "cue 'relate'; targets modalities: images.spot_patches; structure: discovered",
+    "alternatives_rejected": [],
+    "evidence": {
+      "targets": {
+        "modalities": [
+          "images.spot_patches"
+        ],
+        "structure": [
+          "discovered"
+        ]
+      },
+      "challenges": []
+    },
+    "source": "heuristic"
+  },
+  {
+    "step": "objective",
+    "decision": "question: differential_analysis",
+    "chosen": "find marker genes",
+    "rationale": "cue 'marker'; targets features: counts.expression; groups: discovered",
+    "alternatives_rejected": [],
+    "evidence": {
+      "targets": {
+        "features": [
+          "counts.expression"
+        ],
+        "groups": [
+          "discovered"
+        ]
+      },
+      "challenges": []
+    },
+    "source": "heuristic"
+  },
+  {
+    "step": "objective",
+    "decision": "question: batch_assessment",
+    "chosen": "assess slide-level batch effects",
+    "rationale": "cue 'batch'; targets batch: groups.slide; outer: groups.patient",
+    "alternatives_rejected": [],
+    "evidence": {
+      "targets": {
+        "batch": [
+          "groups.slide"
+        ],
+        "outer": [
+          "groups.patient"
+        ]
+      },
+      "challenges": []
+    },
+    "source": "heuristic"
+  },
+  {
+    "step": "objective",
+    "decision": "question: visualization",
+    "chosen": "implied",
+    "rationale": "every report shows maps; targets features: counts.expression",
+    "alternatives_rejected": [],
+    "evidence": {
+      "targets": {
+        "features": [
+          "counts.expression"
+        ]
+      },
+      "challenges": []
+    },
+    "source": "heuristic"
+  },
+  {
+    "step": "challenges",
+    "decision": "challenge register",
+    "chosen": "12 relevant challenges, 6 high",
+    "rationale": "depth_variation:counts.expression; batch_effect:groups.patient,counts.expression; nested_sampling:groups.patient; double_dipping:counts.expression; spatial_autocorrelation:coords.spatial,counts.expression; multiple_testing",
+    "alternatives_rejected": [],
+    "evidence": {
+      "detected": [
+        "low_quality_samples:counts.expression",
+        "depth_variation:counts.expression",
+        "high_dimensionality:counts.expression",
+        "batch_effect:groups.patient,counts.expression",
+        "batch_effect:groups.slide,counts.expression",
+        "batch_effect:groups.slide,images.spot_patches",
+        "batch_confounding:groups.patient,labels.label",
+        "nested_sampling:groups.patient",
+        "double_dipping:counts.expression",
+        "spatial_autocorrelation:coords.spatial,counts.expression",
+        "partial_labels:labels.label",
+        "class_imbalance:labels.label",
+        "multiple_testing"
+      ]
+    },
+    "source": "heuristic"
+  },
+  {
+    "step": "plan",
+    "decision": "count splitting",
+    "chosen": "yes",
+    "rationale": "The objective asks to discover groups and to test markers between them; count splitting (data thinning) makes the two independent.",
+    "alternatives_rejected": [
+      {
+        "option": "no splitting",
+        "reason": "markers would be tested on the data that defined the groups"
+      }
+    ],
+    "evidence": {},
+    "source": "heuristic"
+  },
+  {
+    "step": "plan",
+    "decision": "batch correction scope",
+    "chosen": "across all slides (also removing patient differences)",
+    "rationale": "Markers are tested with the patient as the replicate, so discovered groups must recur across patients; patient differences dominate the data (high in the register) and a correction inside each patient would keep them, leaving groups confined to single patients. Slide effects within patients are still measured by the batch assessment.",
+    "alternatives_rejected": [
+      {
+        "option": "correct within each patient",
+        "reason": "keeps patient differences; groups could be confined to single patients and markers untestable"
+      }
+    ],
+    "evidence": {
+      "silhouette by patient": 0.37544846138094046,
+      "neighbour mixing of patients": 0.004117524659216732,
+      "variance share between patients": 0.6642541242052786
+    },
+    "source": "heuristic"
+  },
+  {
+    "step": "plan",
+    "decision": "test unit for markers",
+    "chosen": "patient",
+    "rationale": "Samples are nested in patients (8 levels); the independent unit is the coarsest grouping.",
+    "alternatives_rejected": [
+      {
+        "option": "the sample",
+        "reason": "pseudoreplication"
+      }
+    ],
+    "evidence": {},
+    "source": "heuristic"
+  },
+  {
+    "step": "plan",
+    "decision": "challenge handling",
+    "chosen": "12 of 12 relevant challenges handled by steps; 0 accepted",
+    "rationale": "Each relevant challenge is matched to the steps whose tool addresses its type and whose inputs derive from its data; every high-severity one (6) must be handled or accepted.",
+    "alternatives_rejected": [],
+    "evidence": {
+      "handled_by": {
+        "low_quality_samples:counts.expression": [
+          "qc"
+        ],
+        "depth_variation:counts.expression": [
+          "norm",
+          "batch_vae"
+        ],
+        "high_dimensionality:counts.expression": [
+          "norm",
+          "pca",
+          "batch_vae",
+          "map"
+        ],
+        "batch_effect:groups.patient,counts.expression": [
+          "batch_assess",
+          "batch_correct"
+        ],
+        "batch_effect:groups.slide,counts.expression": [
+          "batch_assess",
+          "batch_vae",
+          "batch_correct"
+        ],
+        "batch_effect:groups.slide,images.spot_patches": [
+          "features"
+        ],
+        "batch_confounding:groups.patient,labels.label": [
+          "batch_assess"
+        ],
+        "nested_sampling:groups.patient": [
+          "batch_assess",
+          "histology",
+          "markers"
+        ],
+        "double_dipping:counts.expression": [
+          "split"
+        ],
+        "spatial_autocorrelation:coords.spatial,counts.expression": [
+          "domains",
+          "svg"
+        ],
+        "partial_labels:labels.label": [
+          "validate_label"
+        ],
+        "multiple_testing": [
+          "svg",
+          "enrichment",
+          "markers"
+        ]
+      }
+    },
+    "source": "heuristic"
+  },
+  {
+    "step": "plan",
+    "decision": "input to the spatially-variable-gene test",
+    "chosen": "add norm_all (normalize_counts on @qc.counts, n_features 10000, batch-aware) and run spatial_svg on its output instead of raw counts",
+    "rationale": "depth_variation is high: log2 library-size IQR 1.86, per-slide medians 636 to 12,194, PC1 tracks depth with |rho| 0.994 on raw counts and still 0.766 after scaling. Library size is spatially structured within tissue, so Moran's I on raw counts would mark depth patterns as spatially variable genes across all ~9,514 detected features. n_features 10000 keeps essentially every feature detected in at least 5% of spots, so the multiple-testing family stays the full set. SVG does not use discovered groups, so using all counts creates no double dipping.",
+    "alternatives_rejected": [
+      {
+        "option": "keep spatial_svg on @qc.counts",
+        "reason": "depth confounding of the spatial statistic"
+      },
+      {
+        "option": "use @norm.normalized",
+        "reason": "it has only 2,000 features, from half the counts"
+      }
+    ],
+    "evidence": {},
+    "source": "llm"
+  },
+  {
+    "step": "histology",
+    "decision": "how to read the histology predictability step",
+    "chosen": "keep the step as proposed, and interpret only the image-alone metrics against chance",
+    "rationale": "Domains were derived from @batch_correct.embedding, so predicting them from that same embedding is circular. Grouping by patient (8 levels, 1,702 spots each) keeps the independent unit whole. The pathologist 'label' (23% annotated, 6 classes) is used only through label_association, as validation.",
+    "alternatives_rejected": [
+      {
+        "option": "drop the 'other' input",
+        "reason": "it is still a useful ceiling for the report, and costs little"
+      }
+    ],
+    "evidence": {},
+    "source": "llm"
+  },
+  {
+    "step": "plan",
+    "decision": "planner used",
+    "chosen": "llm",
+    "rationale": "LLM revised the rule-based plan: added step norm_all (normalize_counts); svg.inputs: {'matrix': '@qc.counts', 'coords': 'coords.spatial', 'library': 'groups.slide'} -> {'matrix': '@norm_all.normalized', 'coords': 'coords.spatial', 'library': 'groups.slide'}",
+    "alternatives_rejected": [],
+    "evidence": {
+      "llm_model": "claude-opus-5-5",
+      "n_changes": 2,
+      "changes": [
+        "added step norm_all (normalize_counts)",
+        "svg.inputs: {'matrix': '@qc.counts', 'coords': 'coords.spatial', 'library': 'groups.slide'} -> {'matrix': '@norm_all.normalized', 'coords': 'coords.spatial', 'library': 'groups.slide'}"
+      ]
+    },
+    "source": "llm"
+  },
+  {
+    "step": "qc",
+    "decision": "count QC thresholds",
+    "chosen": "per slide",
+    "rationale": "Depth differs between slide levels (median library size from 636 to 12,194), so each slide gets its own 3-MAD lower threshold (and at least 2-fold below its median) on log library size and log detected features.",
+    "alternatives_rejected": [
+      {
+        "option": "global thresholds",
+        "reason": "would remove whole low-depth libraries"
+      }
+    ],
+    "evidence": {
+      "thresholds": [
+        {
+          "library": "F3",
+          "n": 712,
+          "min_library_size": 1217.5988489382623,
+          "min_detected": 939.4075861957836,
+          "median_library_size": 3611.0,
+          "flagged": 10
+        },
+        {
+          "library": "F2",
+          "n": 695,
+          "min_library_size": 1019.8074961179713,
+          "min_detected": 855.7945252101078,
+          "median_library_size": 3492.0,
+          "flagged": 11
+        },
+        {
+          "library": "F1",
+          "n": 691,
+          "min_library_size": 1124.8743450887418,
+          "min_detected": 862.4436109947502,
+          "median_library_size": 3346.0,
+          "flagged": 10
+        },
+        {
+          "library": "H1",
+          "n": 613,
+          "min_library_size": 170.83837337615765,
+          "min_detected": 125.13534708807941,
+          "median_library_size": 1273.0,
+          "flagged": 1
+        },
+        {
+          "library": "H2",
+          "n": 603,
+          "min_library_size": 127.29897485976824,
+          "min_detected": 97.96604355857811,
+          "median_library_size": 1526.0,
+          "flagged": 0
+        },
+        {
+          "library": "E1",
+          "n": 587,
+          "min_library_size": 363.38279917862303,
+          "min_detected": 234.91335568314133,
+          "median_library_size": 1909.0,
+          "flagged": 0
+        },
+        {
+          "library": "E2",
+          "n": 572,
+          "min_library_size": 887.8610118869856,
+          "min_detected": 471.44219203683036,
+          "median_library_size": 3156.5,
+          "flagged": 2
+        },
+        {
+          "library": "E3",
+          "n": 570,
+          "min_library_size": 754.2475714861756,
+          "min_detected": 416.1414093591656,
+          "median_library_size": 3129.5,
+          "flagged": 3
+        },
+        {
+          "library": "H3",
+          "n": 510,
+          "min_library_size": 155.87977573661468,
+          "min_detected": 120.18707221898349,
+          "median_library_size": 1040.5,
+          "flagged": 0
+        },
+        {
+          "library": "G2",
+          "n": 467,
+          "min_library_size": 156.8500291298268,
+          "min_detected": 140.9120183341518,
+          "median_library_size": 1806.0,
+          "flagged": 0
+        },
+        {
+          "library": "G3",
+          "n": 463,
+          "min_library_size": 83.01065188271852,
+          "min_detected": 90.74537962070134,
+          "median_library_size": 1449.0,
+          "flagged": 0
+        },
+        {
+          "library": "G1",
+          "n": 441,
+          "min_library_size": 168.32259834659848,
+          "min_detected": 140.85756399248794,
+          "median_library_size": 1555.0,
+          "flagged": 0
+        },
+        {
+          "library": "A6",
+          "n": 360,
+          "min_library_size": 646.1937894197774,
+          "min_detected": 780.1903522827528,
+          "median_library_size": 5880.0,
+          "flagged": 12
+        },
+        {
+          "library": "A3",
+          "n": 359,
+          "min_library_size": 2026.7568648655229,
+          "min_detected": 1414.7856420818728,
+          "median_library_size": 6738.0,
+          "flagged": 22
+        },
+        {
+          "library": "A1",
+          "n": 346,
+          "min_library_size": 1051.7305276950976,
+          "min_detected": 892.147156138164,
+          "median_library_size": 4224.0,
+          "flagged": 14
+        },
+        {
+          "library": "A4",
+          "n": 343,
+          "min_library_size": 1539.7677493000251,
+          "min_detected": 1272.5805328578194,
+          "median_library_size": 6478.0,
+          "flagged": 4
+        },
+        {
+          "library": "A5",
+          "n": 332,
+          "min_library_size": 2424.5023802168644,
+          "min_detected": 1537.4992687681063,
+          "median_library_size": 6837.0,
+          "flagged": 16
+        },
+        {
+          "library": "A2",
+          "n": 325,
+          "min_library_size": 2755.0905754567098,
+          "min_detected": 1800.5000000000005,
+          "median_library_size": 7823.0,
+          "flagged": 15
+        },
+        {
+          "library": "D6",
+          "n": 315,
+          "min_library_size": 495.00828274657044,
+          "min_detected": 440.40749891967397,
+          "median_library_size": 4687.0,
+          "flagged": 1
+        },
+        {
+          "library": "D1",
+          "n": 306,
+          "min_library_size": 894.9868547565997,
+          "min_detected": 891.4457585206126,
+          "median_library_size": 6710.0,
+          "flagged": 3
+        },
+        {
+          "library": "D5",
+          "n": 305,
+          "min_library_size": 712.0219527244102,
+          "min_detected": 594.1286597463484,
+          "median_library_size": 4880.0,
+          "flagged": 1
+        },
+        {
+          "library": "D2",
+          "n": 303,
+          "min_library_size": 635.0652740216659,
+          "min_detected": 573.3135754603479,
+          "median_library_size": 4472.0,
+          "flagged": 4
+        },
+        {
+          "library": "D4",
+          "n": 302,
+          "min_library_size": 211.0912941775592,
+          "min_detected": 262.09154996321126,
+          "median_library_size": 4266.5,
+          "flagged": 3
+        },
+        {
+          "library": "D3",
+          "n": 301,
+          "min_library_size": 651.8006101981258,
+          "min_detected": 576.8516104002289,
+          "median_library_size": 4812.0,
+          "flagged": 1
+        },
+        {
+          "library": "B3",
+          "n": 298,
+          "min_library_size": 34.5333917336071,
+          "min_detected": 38.04854822251872,
+          "median_library_size": 850.5,
+          "flagged": 1
+        },
+        {
+          "library": "B1",
+          "n": 295,
+          "min_library_size": 25.79379687333823,
+          "min_detected": 34.6338348708067,
+          "median_library_size": 1342.0,
+          "flagged": 2
+        },
+        {
+          "library": "B5",
+          "n": 289,
+          "min_library_size": 77.35582795680853,
+          "min_detected": 92.76379764464261,
+          "median_library_size": 1445.0,
+          "flagged": 2
+        },
+        {
+          "library": "B4",
+          "n": 283,
+          "min_library_size": 22.038963996758348,
+          "min_detected": 25.821739777997855,
+          "median_library_size": 636.0,
+          "flagged": 2
+        },
+        {
+          "library": "B6",
+          "n": 277,
+          "min_library_size": 26.06393799858313,
+          "min_detected": 33.149290553274405,
+          "median_library_size": 1149.0,
+          "flagged": 0
+        },
+        {
+          "library": "B2",
+          "n": 270,
+          "min_library_size": 9.06033892169628,
+          "min_detected": 15.136853842270112,
+          "median_library_size": 935.5,
+          "flagged": 2
+        },
+        {
+          "library": "C2",
+          "n": 187,
+          "min_library_size": 940.4623496467727,
+          "min_detected": 861.0448817588733,
+          "median_library_size": 8341.0,
+          "flagged": 7
+        },
+        {
+          "library": "C4",
+          "n": 184,
+          "min_library_size": 1200.9247755767624,
+          "min_detected": 1136.3720407003143,
+          "median_library_size": 9952.5,
+          "flagged": 9
+        },
+        {
+          "library": "C5",
+          "n": 181,
+          "min_library_size": 1526.9583842349473,
+          "min_detected": 1180.8008952435923,
+          "median_library_size": 9806.0,
+          "flagged": 10
+        },
+        {
+          "library": "C3",
+          "n": 180,
+          "min_library_size": 1131.9965252004922,
+          "min_detected": 1101.6965873782758,
+          "median_library_size": 9316.5,
+          "flagged": 12
+        },
+        {
+          "library": "C6",
+          "n": 178,
+          "min_library_size": 2657.985286125148,
+          "min_detected": 1870.7257639161992,
+          "median_library_size": 12194.5,
+          "flagged": 14
+        },
+        {
+          "library": "C1",
+          "n": 176,
+          "min_library_size": 743.6563685602234,
+          "min_detected": 727.3226732205187,
+          "median_library_size": 7501.0,
+          "flagged": 8
+        }
+      ]
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "qc",
+    "decision": "features kept",
+    "chosen": "11,871 of 11,871",
+    "rationale": "Features detected in fewer than 10 of the 13,417 kept samples carry too little information to normalise or test.",
+    "alternatives_rejected": [
+      {
+        "option": "keep all features",
+        "reason": "near-empty features add noise and multiple-testing burden"
+      }
+    ],
+    "evidence": {
+      "dropped": 0
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "split",
+    "decision": "count splitting",
+    "chosen": "poisson thinning, epsilon 0.5",
+    "rationale": "Binomial (Poisson) thinning of counts with the estimated overdispersion would leave a median correlation of 0.049 between the halves of the 9,548 features detected in at least 5% of samples, within 0.05.",
+    "alternatives_rejected": [
+      {
+        "option": "negative_binomial",
+        "reason": "not needed: counts near Poisson"
+      },
+      {
+        "option": "no splitting",
+        "reason": "markers would be tested on the data that defined the groups (double dipping)"
+      }
+    ],
+    "evidence": {
+      "median_dependence_binomial": 0.04938991203777957,
+      "median_phi": 0.4902219291817249
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "norm",
+    "decision": "variable features",
+    "chosen": "2,000 by Pearson residual variance within each slide",
+    "rationale": "Residual variances are computed inside each slide level and features variable in the most levels are kept, so features that differ only between levels are not selected as biological variation.",
+    "alternatives_rejected": [
+      {
+        "option": "highest log-variance",
+        "reason": "favours highly expressed features regardless of noise"
+      },
+      {
+        "option": "pooled selection",
+        "reason": "between-level differences would be picked as variable features"
+      }
+    ],
+    "evidence": {
+      "n_batches": 36
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "norm",
+    "decision": "normalisation",
+    "chosen": "log",
+    "rationale": "|rho(PC1, log depth)| is 0.52 after log normalisation and 0.49 with Pearson residuals; the difference (+0.04) is not above 0.1, so the simpler log values (interpretable fold changes) are kept.",
+    "alternatives_rejected": [
+      {
+        "option": "pearson_residuals",
+        "reason": "|rho(PC1, log depth)| = 0.49"
+      }
+    ],
+    "evidence": {
+      "pc1_depth_rho_before": 0.9801188471576124,
+      "pc1_depth_rho_log": 0.524296758161773,
+      "pc1_depth_rho_pearson_residuals": 0.4871280513811252
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "pca",
+    "decision": "standardise features before PCA",
+    "chosen": "yes",
+    "rationale": "Expression-type features have very different variances; standardising (clipped at 10 s.d.) lets every feature contribute.",
+    "alternatives_rejected": [
+      {
+        "option": "no",
+        "reason": "rejected for the reason given"
+      }
+    ],
+    "evidence": {
+      "input_kind": "normalized",
+      "setting": "auto",
+      "already_scaled": false
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "pca",
+    "decision": "analysis dimension",
+    "chosen": "50",
+    "rationale": "Parallel analysis: 51 leading components have more variance than the 95th percentile of their permutation null (20 permutations of 5000 samples); clamped to the allowed range [5, 50].",
+    "alternatives_rejected": [
+      {
+        "option": "components for 90% of the variance",
+        "reason": "more than 50 components; past the null line the extra components are what uncorrelated noise with the same marginals also produces"
+      }
+    ],
+    "evidence": {
+      "parallel_analysis_k": 51,
+      "k_for_90pct": null,
+      "range": [
+        5,
+        50
+      ],
+      "observed_variance_top10": [
+        38.11250898490638,
+        26.85638058139737,
+        16.086086822004923,
+        12.808009823126355,
+        10.907021175707857,
+        9.239079053917061,
+        7.974515957447198,
+        6.969609612003586,
+        5.230766200642103,
+        4.575676551802212
+      ],
+      "null95_top10": [
+        2.4147348700853604,
+        2.397592768338261,
+        2.3858299453510066,
+        2.3707366665033494,
+        2.36011996900364,
+        2.3446950590008107,
+        2.337138691580264,
+        2.3250901725204374,
+        2.319309379935629,
+        2.3110547429783423
+      ]
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "batch_assess",
+    "decision": "batch effect",
+    "chosen": "weak",
+    "rationale": "Within each patient: silhouette by slide 0.000 and neighbour mixing 0.77 (1 = fully mixed); thresholds: weak at silhouette >= 0.05 or mixing <= 0.8, strong at >= 0.15 or <= 0.5. Differences between patients mix biology and technique and are not counted as batch effect.",
+    "alternatives_rejected": [
+      {
+        "option": "judge across all batches",
+        "reason": "patient differences are biological as well as technical"
+      }
+    ],
+    "evidence": {
+      "measured": "between slide levels of the same patient",
+      "silhouette": 0.00034425465264530786,
+      "mixing": 0.7741030215307674
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "batch_vae",
+    "decision": "use a batch-conditioned count VAE?",
+    "chosen": "yes",
+    "rationale": "13417 samples of raw counts in 36 batches with >= 10 samples each: enough to train a count VAE conditioned on the batch",
+    "alternatives_rejected": [
+      {
+        "option": "no",
+        "reason": "linear corrections only"
+      }
+    ],
+    "evidence": {
+      "n": 13417,
+      "n_batches": 36,
+      "pooled_batches": []
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "batch_vae",
+    "decision": "count likelihood",
+    "chosen": "NB",
+    "rationale": "genes are overdispersed (median var/mean 1.45) but ZINB beats NB by AIC for only 4% of genes (median fitted zero-inflation 0.028); the extra parameter is not supported",
+    "alternatives_rejected": [
+      {
+        "option": "ZINB",
+        "reason": "zero-inflation not supported by the per-gene likelihood comparison"
+      },
+      {
+        "option": "Poisson",
+        "reason": "ignores overdispersion"
+      }
+    ],
+    "evidence": {
+      "n_genes_assessed": 300,
+      "n_samples_assessed": 3000,
+      "median_dispersion_ratio": 1.4530187674115391,
+      "fraction_overdispersed": 1.0,
+      "fraction_genes_zinb_preferred": 0.04,
+      "median_zero_inflation_pi": 0.027539071101825185
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "batch_vae",
+    "decision": "count VAE hyperparameters",
+    "chosen": "latent_dim=10, hidden_dim=128, n_layers=1, beta=1.0, lr=0.001, batch_size=256, max_epochs=300, weight_decay=1e-06",
+    "rationale": "latent_dim=10 (scVI default; 5 if n<1000); max_epochs=300 (scVI rule min(400, 20000/n x 400), capped by the budget); batch_size=256 (~n/20, power of two in [32, 256]); training capped at 240s.",
+    "alternatives_rejected": [],
+    "evidence": {
+      "n": 13417,
+      "train_seconds": 240.0
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "batch_correct",
+    "decision": "correction scope",
+    "chosen": "across all samples",
+    "rationale": "Set by the plan: every slide belongs to one patient, but batches are corrected across all samples, so differences between patients are removed along with slide effects and structure shared by patients comes forward.",
+    "alternatives_rejected": [
+      {
+        "option": "within each patient",
+        "reason": "keeps patient differences, which can dominate the structure"
+      }
+    ],
+    "evidence": {
+      "nested": true
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "batch_correct",
+    "decision": "batch correction",
+    "chosen": "combat",
+    "rationale": "Best batch mixing (0.71 vs 0.32 uncorrected) among candidates keeping >= 50% of within-batch neighbours (0.75).",
+    "alternatives_rejected": [
+      {
+        "option": "none",
+        "reason": "mixing 0.32, preservation 1.00"
+      },
+      {
+        "option": "harmony",
+        "reason": "mixing 0.59, preservation 0.68"
+      },
+      {
+        "option": "embedding.batch_vae",
+        "reason": "over-corrected: keeps 0.14 of within-batch neighbours"
+      }
+    ],
+    "evidence": {
+      "table": [
+        {
+          "method": "none",
+          "mixing": 0.3189,
+          "neighbourhood_preservation": 1.0,
+          "batch_silhouette": -0.0036,
+          "label_silhouette": 0.0059
+        },
+        {
+          "method": "harmony",
+          "mixing": 0.5907,
+          "neighbourhood_preservation": 0.6844,
+          "batch_silhouette": -0.1161,
+          "label_silhouette": 0.0057
+        },
+        {
+          "method": "combat",
+          "mixing": 0.7066,
+          "neighbourhood_preservation": 0.7516,
+          "batch_silhouette": -0.0374,
+          "label_silhouette": 0.0058
+        },
+        {
+          "method": "embedding.batch_vae",
+          "mixing": 0.6975,
+          "neighbourhood_preservation": 0.135,
+          "batch_silhouette": -0.0906,
+          "label_silhouette": -0.0306
+        }
+      ]
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "features",
+    "decision": "patch size",
+    "chosen": "1 x spot diameter",
+    "rationale": "Each patch covers the spot's own footprint, the tissue its RNA was captured from; it is resized to the encoder's input size.",
+    "alternatives_rejected": [
+      {
+        "option": "2.0 x spot diameter",
+        "reason": "adds context but also cells outside the spot"
+      }
+    ],
+    "evidence": {
+      "patch_context": 1.0
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "features",
+    "decision": "image domain",
+    "chosen": "stained_tissue",
+    "rationale": "0% of sampled images greyscale; 75% of tissue pixels with a stain hue",
+    "alternatives_rejected": [],
+    "evidence": {
+      "n_sampled": 240,
+      "domain_hint": "stained_tissue",
+      "greyscale_fraction": 0.0,
+      "stain_hue_fraction": 0.7513536163469103,
+      "colour_between_group_share": 0.1260505507801139,
+      "width_median": 145.0,
+      "height_median": 145.0
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "features",
+    "decision": "colour normalisation",
+    "chosen": "none",
+    "rationale": "between-group colour share 13% < 20%",
+    "alternatives_rejected": [],
+    "evidence": {
+      "colour_between_group_share": 0.1260505507801139
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "features",
+    "decision": "image encoder",
+    "chosen": "phikon",
+    "rationale": "Highest alignment_recall_at_10 on 500 held-out screening samples, whole groups held out (2 of 8 groups to validation): 0.075 (chance 0.020). Pretrained on: iBOT self-supervision on 40M public pan-cancer histology tiles.",
+    "alternatives_rejected": [
+      {
+        "option": "dinov2_base",
+        "reason": "alignment_recall_at_10 0.062"
+      },
+      {
+        "option": "plip_image",
+        "reason": "alignment_recall_at_10 0.050"
+      }
+    ],
+    "evidence": {
+      "n_train": 2000,
+      "n_val": 500,
+      "metric": "alignment_recall_at_10",
+      "chance": 0.02,
+      "clearly_above_chance": true
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "domains",
+    "decision": "domain features",
+    "chosen": "own + neighbourhood mean, lambda 0.8",
+    "rationale": "Each sample's features are joined by the mean of its 6 nearest spatial neighbours in the same library (BANKSY), weighted sqrt(1-lambda) : sqrt(lambda); lambda 0.8 favours contiguous domains over cell-type-like clusters.",
+    "alternatives_rejected": [
+      {
+        "option": "cluster own features only (lambda 0)",
+        "reason": "ignores that neighbouring samples share a domain"
+      },
+      {
+        "option": "lambda 0.2",
+        "reason": "BANKSY's setting for cell typing, not domains"
+      }
+    ],
+    "evidence": {
+      "isolated_samples": 3,
+      "mean_neighbours": 5.300886934486099
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "domains",
+    "decision": "spatial domains: method and number of clusters",
+    "chosen": "kmeans, k=5",
+    "rationale": "The finest candidate whose every cluster has mean subsample Jaccard >= 0.75 (20 subsamples of 5,000 samples) and whose neighbouring clusters are better separated than one Gaussian group cut in two (largest separation p = 0.050 <= 0.05): kmeans with k=5 (least stable cluster 0.84).",
+    "alternatives_rejected": [
+      {
+        "option": "kmeans:6",
+        "reason": "k=6: least stable cluster 0.69 < 0.75"
+      },
+      {
+        "option": "gmm:7",
+        "reason": "k=7: least stable cluster 0.68 < 0.75"
+      },
+      {
+        "option": "gmm:8",
+        "reason": "k=8: least stable cluster 0.41 < 0.75"
+      },
+      {
+        "option": "kmeans:9",
+        "reason": "k=9: least stable cluster 0.35 < 0.75"
+      }
+    ],
+    "evidence": {
+      "candidates": [
+        {
+          "candidate": "kmeans:2",
+          "k": 2,
+          "stability_min": 0.942,
+          "stability_mean": 0.956,
+          "split_p": null
+        },
+        {
+          "candidate": "kmeans:3",
+          "k": 3,
+          "stability_min": 0.949,
+          "stability_mean": 0.955,
+          "split_p": null
+        },
+        {
+          "candidate": "kmeans:4",
+          "k": 4,
+          "stability_min": 0.929,
+          "stability_mean": 0.937,
+          "split_p": null
+        },
+        {
+          "candidate": "kmeans:5",
+          "k": 5,
+          "stability_min": 0.838,
+          "stability_mean": 0.901,
+          "split_p": 0.05
+        },
+        {
+          "candidate": "kmeans:6",
+          "k": 6,
+          "stability_min": 0.691,
+          "stability_mean": 0.827,
+          "split_p": null
+        },
+        {
+          "candidate": "kmeans:7",
+          "k": 7,
+          "stability_min": 0.346,
+          "stability_mean": 0.704,
+          "split_p": null
+        },
+        {
+          "candidate": "kmeans:8",
+          "k": 8,
+          "stability_min": 0.37,
+          "stability_mean": 0.665,
+          "split_p": null
+        },
+        {
+          "candidate": "kmeans:9",
+          "k": 9,
+          "stability_min": 0.348,
+          "stability_mean": 0.569,
+          "split_p": null
+        },
+        {
+          "candidate": "kmeans:10",
+          "k": 10,
+          "stability_min": 0.404,
+          "stability_mean": 0.556,
+          "split_p": null
+        },
+        {
+          "candidate": "kmeans:11",
+          "k": 11,
+          "stability_min": 0.28,
+          "stability_mean": 0.543,
+          "split_p": null
+        },
+        {
+          "candidate": "kmeans:12",
+          "k": 12,
+          "stability_min": 0.279,
+          "stability_mean": 0.531,
+          "split_p": null
+        },
+        {
+          "candidate": "gmm:2",
+          "k": 2,
+          "stability_min": 0.94,
+          "stability_mean": 0.954,
+          "split_p": null
+        },
+        {
+          "candidate": "gmm:3",
+          "k": 3,
+          "stability_min": 0.853,
+          "stability_mean": 0.881,
+          "split_p": null
+        },
+        {
+          "candidate": "gmm:4",
+          "k": 4,
+          "stability_min": 0.758,
+          "stability_mean": 0.831,
+          "split_p": null
+        },
+        {
+          "candidate": "gmm:5",
+          "k": 5,
+          "stability_min": 0.231,
+          "stability_mean": 0.556,
+          "split_p": null
+        },
+        {
+          "candidate": "gmm:6",
+          "k": 6,
+          "stability_min": 0.443,
+          "stability_mean": 0.561,
+          "split_p": null
+        },
+        {
+          "candidate": "gmm:7",
+          "k": 7,
+          "stability_min": 0.675,
+          "stability_mean": 0.768,
+          "split_p": null
+        },
+        {
+          "candidate": "gmm:8",
+          "k": 8,
+          "stability_min": 0.411,
+          "stability_mean": 0.632,
+          "split_p": null
+        },
+        {
+          "candidate": "gmm:9",
+          "k": 9,
+          "stability_min": 0.302,
+          "stability_mean": 0.57,
+          "split_p": null
+        },
+        {
+          "candidate": "gmm:10",
+          "k": 10,
+          "stability_min": 0.266,
+          "stability_mean": 0.517,
+          "split_p": null
+        },
+        {
+          "candidate": "gmm:11",
+          "k": 11,
+          "stability_min": 0.365,
+          "stability_mean": 0.534,
+          "split_p": null
+        },
+        {
+          "candidate": "gmm:12",
+          "k": 12,
+          "stability_min": 0.184,
+          "stability_mean": 0.504,
+          "split_p": null
+        },
+        {
+          "candidate": "leiden:0.1",
+          "k": 2,
+          "stability_min": 0.015,
+          "stability_mean": 0.5,
+          "split_p": null
+        },
+        {
+          "candidate": "leiden:0.2",
+          "k": 5,
+          "stability_min": 0.096,
+          "stability_mean": 0.453,
+          "split_p": null
+        },
+        {
+          "candidate": "leiden:0.3",
+          "k": 8,
+          "stability_min": 0.175,
+          "stability_mean": 0.461,
+          "split_p": null
+        },
+        {
+          "candidate": "leiden:0.5",
+          "k": 10,
+          "stability_min": 0.303,
+          "stability_mean": 0.504,
+          "split_p": null
+        }
+      ]
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "validate_label",
+    "decision": "validation against external labels",
+    "chosen": "3,123 labelled samples",
+    "rationale": "'labels.label' is used only here, after the agent's choices, to measure agreement; it never informed them.",
+    "alternatives_rejected": [],
+    "evidence": {
+      "ari": 0.06604651342249543,
+      "nmi": 0.12285125635699787
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "norm_all",
+    "decision": "variable features",
+    "chosen": "10,000 by Pearson residual variance within each slide",
+    "rationale": "Residual variances are computed inside each slide level and features variable in the most levels are kept, so features that differ only between levels are not selected as biological variation.",
+    "alternatives_rejected": [
+      {
+        "option": "highest log-variance",
+        "reason": "favours highly expressed features regardless of noise"
+      },
+      {
+        "option": "pooled selection",
+        "reason": "between-level differences would be picked as variable features"
+      }
+    ],
+    "evidence": {
+      "n_batches": 36
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "norm_all",
+    "decision": "normalisation",
+    "chosen": "pearson_residuals",
+    "rationale": "|rho(PC1, log depth)| is 0.81 after log normalisation and 0.43 with Pearson residuals; residuals remove more depth signal (by 0.38 > 0.1).",
+    "alternatives_rejected": [
+      {
+        "option": "log",
+        "reason": "|rho(PC1, log depth)| = 0.81"
+      }
+    ],
+    "evidence": {
+      "pc1_depth_rho_before": 0.9866139903450357,
+      "pc1_depth_rho_log": 0.8104793426398632,
+      "pc1_depth_rho_pearson_residuals": 0.4283744822700535
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "svg",
+    "decision": "spatially variable features",
+    "chosen": "5,840 of 10,000 at FDR 0.05",
+    "rationale": "Moran's I on the 6-nearest-neighbour graph of each library, centred within library (differences between libraries are not spatial structure), randomisation variance pooled over 36 libraries, Benjamini-Hochberg across features. Calibration: 5.5% of 200 features with permuted positions reach p < 0.05.",
+    "alternatives_rejected": [
+      {
+        "option": "global centring",
+        "reason": "slide-level mean differences would count as spatial autocorrelation"
+      },
+      {
+        "option": "no multiple-testing control",
+        "reason": "10,000 tests"
+      }
+    ],
+    "evidence": {
+      "tested": 10000,
+      "libraries": 36,
+      "permuted_p05_fraction": 0.055
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "enrichment",
+    "decision": "neighbourhood enrichment test",
+    "chosen": "999 label permutations within each library",
+    "rationale": "Edges between every pair of labels are compared with label permutations that keep each library's label counts; two-sided permutation p-values, Benjamini-Hochberg over 15 pairs.",
+    "alternatives_rejected": [
+      {
+        "option": "analytic z-scores",
+        "reason": "edge counts are not independent"
+      }
+    ],
+    "evidence": {
+      "edges": 37486
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "histology",
+    "decision": "cross-validation",
+    "chosen": "5-fold, grouped by patient",
+    "rationale": "Samples of one patient are not independent, so whole groups are held out and performance is judged on unseen groups (8 groups). Within each training part the penalty is chosen by grouped inner cross-validation (3 folds, macro-F1).",
+    "alternatives_rejected": [
+      {
+        "option": "random folds",
+        "reason": "samples of one group on both sides would inflate the scores"
+      }
+    ],
+    "evidence": {
+      "n_samples": 13417,
+      "n_groups": 8,
+      "n_classes": 5
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "markers",
+    "decision": "test unit",
+    "chosen": "patient (pseudobulk)",
+    "rationale": "Samples of one patient are not independent; counts are summed per patient on each side of every contrast and the paired patient-level differences tested (moderated t, BH within each label). The counts are the held-out half of a count split, so the labels were found on other data.",
+    "alternatives_rejected": [
+      {
+        "option": "sample-level tests",
+        "reason": "treat dependent samples as independent; reported as the naive comparison"
+      }
+    ],
+    "evidence": {
+      "split_half": "test",
+      "n_replicates": 8
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "map",
+    "decision": "2-D map method",
+    "chosen": "tsne",
+    "rationale": "highest mean of trustworthiness and continuity at k=10 (0.819) among maps with seed stability >= 0.5: trustworthiness 0.786, continuity 0.852, stability 1.00.",
+    "alternatives_rejected": [
+      {
+        "option": "umap",
+        "reason": "trustworthiness 0.734, continuity 0.860, stability 0.24"
+      },
+      {
+        "option": "pca",
+        "reason": "trustworthiness 0.705, continuity 0.859, stability 1.00"
+      },
+      {
+        "option": "laplacian_eigenmaps",
+        "reason": "trustworthiness 0.712, continuity 0.818, stability 1.00"
+      },
+      {
+        "option": "diffusion_map",
+        "reason": "needs n <= 5,000 but the input has 13,417 samples"
+      },
+      {
+        "option": "isomap",
+        "reason": "needs n <= 6,000 but the input has 13,417 samples"
+      }
+    ],
+    "evidence": {
+      "umap": {
+        "trustworthiness@10": 0.7341901379348859,
+        "continuity@10": 0.8603702574412241,
+        "knn_overlap@10": 0.0756,
+        "distance_spearman": 0.42387654751892684,
+        "kruskal_stress": 0.40697839856147766,
+        "stability": 0.23544
+      },
+      "tsne": {
+        "trustworthiness@10": 0.7856759591221311,
+        "continuity@10": 0.8515365722901659,
+        "knn_overlap@10": 0.12953333333333333,
+        "distance_spearman": 0.4266910829391602,
+        "kruskal_stress": 0.3972684442996979,
+        "stability": 1.0
+      },
+      "pca": {
+        "trustworthiness@10": 0.7049790249623052,
+        "continuity@10": 0.8585102250516558,
+        "knn_overlap@10": 0.036699999999999997,
+        "distance_spearman": 0.48120546404491993,
+        "kruskal_stress": 0.42253705859184265,
+        "stability": 1.0
+      },
+      "laplacian_eigenmaps": {
+        "trustworthiness@10": 0.7121238286703524,
+        "continuity@10": 0.8184088680404311,
+        "knn_overlap@10": 0.054066666666666666,
+        "distance_spearman": 0.2911431774052364,
+        "kruskal_stress": 0.9438357353210449,
+        "stability": 1.0
+      }
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "critic",
+    "decision": "triggers",
+    "chosen": "2 found",
+    "rationale": "norm: depth_corr_pc1_after = 0.524296758161773 misses its threshold 0.5; map: trustworthiness@10 = 0.7856759591221311 misses its threshold 0.8",
+    "alternatives_rejected": [],
+    "evidence": {
+      "triggers": [
+        {
+          "kind": "criterion_failed",
+          "step": "norm",
+          "message": "norm: depth_corr_pc1_after = 0.524296758161773 misses its threshold 0.5",
+          "evidence": {},
+          "suggestion": null
+        },
+        {
+          "kind": "criterion_failed",
+          "step": "map",
+          "message": "map: trustworthiness@10 = 0.7856759591221311 misses its threshold 0.8",
+          "evidence": {},
+          "suggestion": null
+        }
+      ]
+    },
+    "source": "critic"
+  },
+  {
+    "step": "critic",
+    "decision": "assessment",
+    "chosen": "no revision",
+    "rationale": "The results answer the objective, so I am not proposing a revision. The five spatial domains are stable (least-stable Jaccard 0.84, k not at the edge of the searched range) and spatially coherent (0.64, against 0.28 for clustering a spot's own features alone). Every domain spans all 8 patients. That made all 5 testable for markers on the held-out half of the counts: 699 markers, all of which keep their sign when any one patient is left out, with 1.35\u00d7 more found by the naive per-spot test. Histology image features predict the domains above chance (balanced accuracy 0.36, 95% CI 0.30\u20130.42, chance 0.20). The slide effect within patients is weak (batch silhouette \u22480, about 3% of variance between slides of one patient). ComBat raised mixing from 0.32 to 0.71 while keeping 75% of within-slide neighbourhoods. Spatially variable gene calls are well calibrated: 5.5% of permuted genes reach p < 0.05, against an expected 5%. Two criteria fail narrowly. On the fit half, the first principal component still tracks library size (correlation 0.52, threshold 0.5). The 2-D map's trustworthiness is 0.79 (threshold 0.8). The report should flag one caveat: library size still explains much of the top 10 components (R\u00b2 0.90 after log normalisation). Some of that may reflect real differences in tissue density rather than technical noise.",
+    "alternatives_rejected": [
+      {
+        "option": "Set norm.method = pearson_residuals to clear the depth threshold (0.487 vs 0.524)",
+        "reason": "The gain is small (0.04), and the tool's own rule (Pearson residuals must lower the correlation by at least 0.1) chose log normalisation on purpose. The criterion would be judged at the norm step, so the revision would almost surely be kept, yet it would silently rebuild PCA, the VAE, the batch correction, the image screen, the domains and the markers with nothing checking them. The current domains and markers are already stable and span all patients."
+      },
+      {
+        "option": "Re-tune the map (n_neighbors or input_dims) to raise trustworthiness@10 above 0.8",
+        "reason": "This only affects the figure. The value is 0.786, just under 0.8, and stability is 1.0. t-SNE was already picked from 4 candidates, so further tuning would be chasing noise."
+      },
+      {
+        "option": "Widen the domain search or add GMM/Leiden clustering",
+        "reason": "k = 5 is not at the edge of the 2\u201312 range, the domains are stable, and none is confined to one patient. Nothing shows a need for this."
+      },
+      {
+        "option": "Switch batch correction to Harmony or change its strength",
+        "reason": "ComBat gives good mixing (0.71) and keeps 0.75 of neighbourhoods, and the slide effect is weak to begin with. Neither over- nor under-correction is shown."
+      },
+      {
+        "option": "Re-run the image encoder screen with a wider patch context",
+        "reason": "Image features already predict the domains above chance. The screen's recall score is low but clear of chance, and changing it would cost about 875 s with an uncertain gain."
+      }
+    ],
+    "evidence": {},
+    "source": "llm"
+  },
+  {
+    "step": "writer",
+    "decision": "report prose",
+    "chosen": "LLM (claude-opus-5-5)",
+    "rationale": "200 numbers in the prose checked against the computed outputs; 1 not found: 13,000",
+    "alternatives_rejected": [],
+    "evidence": {
+      "n_checked": 200,
+      "n_unmatched": 1
+    },
+    "source": "system"
+  }
+]

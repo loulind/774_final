@@ -62,13 +62,17 @@ def _bare(ax):
 
 
 def _palette(values: np.ndarray) -> tuple[dict[str, str], np.ndarray]:
-    """The eight largest categories keep fixed colours (largest first); the rest are 'other'."""
+    """The eight largest categories keep fixed colours (largest first); the rest are 'other'.
+    Placeholders for missing values - "(unlabelled)", "(none)" - are grey context."""
     v = pd.Series(np.asarray(values).astype(str))
-    top = list(v.value_counts().index[: len(SERIES)])
+    placeholder = v.str.startswith("(")
+    top = list(v[~placeholder].value_counts().index[: len(SERIES)])
     colours = {c: SERIES[i] for i, c in enumerate(top)}
-    shown = np.where(v.isin(top), v, "other").astype(object)
+    shown = np.where(v.isin(top), v, np.where(placeholder, v, "other")).astype(object)
     if (shown == "other").any():
         colours["other"] = CONTEXT
+    for c in v[placeholder].unique():
+        colours[c] = CONTEXT
     return colours, shown
 
 
@@ -111,7 +115,7 @@ def map_panels(xy: np.ndarray, colourings: dict[str, np.ndarray], path: Path, se
         for cat, col in colours.items():
             m = shown == cat
             ax.scatter(xy[idx][m, 0], xy[idx][m, 1], s=4, c=col, linewidths=0, label=cat,
-                       zorder=1 if cat == "other" else 2)
+                       zorder=1 if col == CONTEXT else 2)              # context (grey) under the categories
         _bare(ax)
         ax.set_title(title)
         ax.legend(markerscale=2.5, fontsize=7, loc="upper left", bbox_to_anchor=(0, -0.02), ncol=2,

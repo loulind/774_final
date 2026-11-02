@@ -1,0 +1,23 @@
+{
+ "valid": true,
+ "issues": [],
+ "estimated_seconds": 1824.95062685,
+ "step_seconds": {
+  "qc": 4.23342298,
+  "split": 5.8501344699999995,
+  "norm": 21.40053788,
+  "pca": 35.0857,
+  "batch_assess": 10.18095,
+  "batch_vae": 270.0,
+  "batch_correct": 12.361899999999999,
+  "features": 874.8000000000001,
+  "domains": 102.98472,
+  "validate_label": 1.013619,
+  "norm_all": 21.40053788,
+  "svg": 26.514200000000002,
+  "enrichment": 164.264572,
+  "histology": 14.7695,
+  "markers": 60.20161363999999,
+  "map": 199.889219
+ }
+}

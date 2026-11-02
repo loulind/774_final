@@ -1,0 +1,431 @@
+{
+ "objective": "Characterize spatial tissue heterogeneity: identify spatial domains, relate them to histology, find marker genes, and assess slide-level batch effects.",
+ "questions": [
+  "structure_discovery",
+  "spatial_structure",
+  "cross_modal_association",
+  "differential_analysis",
+  "batch_assessment",
+  "visualization"
+ ],
+ "steps": [
+  {
+   "id": "qc",
+   "tool": "qc_counts",
+   "inputs": {
+    "counts": "counts.expression",
+    "library": "groups.slide",
+    "report_by": "groups.patient"
+   },
+   "params": {},
+   "purpose": "Remove empty and failing samples (MAD rule, per slide) and near-empty features before normalising.",
+   "answers": [],
+   "addresses": [
+    "low_quality_samples:counts.expression"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "keep every sample",
+     "reason": "failing samples distort normalisation and clustering"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "split",
+   "tool": "count_split",
+   "inputs": {
+    "counts": "@qc.counts"
+   },
+   "params": {},
+   "purpose": "Split every count into a half that finds groups and a half that tests them, so markers are not tested on the data that defined the groups.",
+   "answers": [
+    "differential_analysis"
+   ],
+   "addresses": [
+    "double_dipping:counts.expression"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "test markers on the same counts",
+     "reason": "double dipping: groups found in the data always look different in the same data"
+    },
+    {
+     "option": "hold out samples instead",
+     "reason": "the groups would have to be predicted on new samples first, and neighbours leak in space"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "norm",
+   "tool": "normalize_counts",
+   "inputs": {
+    "counts": "@split.fit",
+    "batch": "groups.slide"
+   },
+   "params": {},
+   "purpose": "Normalise depth on the fit half (log or Pearson residuals, chosen by remaining depth signal) and keep variable features chosen within each slide.",
+   "answers": [],
+   "addresses": [
+    "depth_variation:counts.expression",
+    "high_dimensionality:counts.expression"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "raw counts",
+     "reason": "library sizes differ, so depth would dominate every comparison"
+    },
+    {
+     "option": "pooled feature selection",
+     "reason": "features differing only between slides would be picked"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "pca",
+   "tool": "dimreduce_pca",
+   "inputs": {
+    "matrix": "@norm.normalized"
+   },
+   "params": {},
+   "purpose": "Reduce the normalised features to the principal components that exceed their permutation null.",
+   "answers": [],
+   "addresses": [
+    "high_dimensionality:counts.expression"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "cluster the full feature matrix",
+     "reason": "noise in thousands of features swamps structure"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "batch_assess",
+   "tool": "batch_assess",
+   "inputs": {
+    "embedding": "@pca.embedding",
+    "batch": "groups.slide",
+    "outer": "groups.patient",
+    "labels": "labels.label"
+   },
+   "params": {},
+   "purpose": "Measure how strongly slides separate the samples, within each patient, and how batches coincide with 'label' (report only).",
+   "answers": [
+    "batch_assessment"
+   ],
+   "addresses": [
+    "batch_effect:groups.patient,counts.expression",
+    "batch_effect:groups.slide,counts.expression",
+    "batch_confounding:groups.patient,labels.label",
+    "nested_sampling:groups.patient"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "judge batches across patients",
+     "reason": "patient differences are biology as well as technique"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "batch_vae",
+   "tool": "generative_batch_vae",
+   "inputs": {
+    "counts": "@split.fit",
+    "batch": "groups.slide",
+    "features": "@norm.normalized"
+   },
+   "params": {},
+   "purpose": "A count VAE conditioned on slide as a non-linear correction candidate next to Harmony and ComBat.",
+   "answers": [],
+   "addresses": [
+    "depth_variation:counts.expression",
+    "high_dimensionality:counts.expression",
+    "batch_effect:groups.slide,counts.expression"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "only linear corrections",
+     "reason": "a conditioned count model can remove non-linear batch effects and residual depth signal"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "batch_correct",
+   "tool": "batch_correct",
+   "inputs": {
+    "embedding": "@pca.embedding",
+    "batch": "groups.slide",
+    "outer": "groups.patient",
+    "candidate": "@batch_vae.embedding",
+    "labels": "labels.label"
+   },
+   "params": {
+    "within_outer": "no"
+   },
+   "purpose": "Compare Harmony, ComBat, the count VAE and no correction for slide effects; keep the best mixing that preserves within-slide neighbourhoods (label-free; label silhouette reported only).",
+   "answers": [
+    "batch_assessment"
+   ],
+   "addresses": [
+    "batch_effect:groups.patient,counts.expression",
+    "batch_effect:groups.slide,counts.expression"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "correct without checking neighbourhoods",
+     "reason": "over-correction removes biology"
+    },
+    {
+     "option": "correct within each patient",
+     "reason": "patient mixing is 0.004; domains would stay confined to single patients and markers with patient replicates would be untestable"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "features",
+   "tool": "multimodal_features",
+   "inputs": {
+    "images": "images.spot_patches",
+    "partner": "@pca.embedding",
+    "library": "groups.slide",
+    "holdout": "groups.patient"
+   },
+   "params": {},
+   "purpose": "Screen pretrained encoders on patient-held-out pairs and extract histology image features, with stain normalisation decided from the measured colour differences.",
+   "answers": [],
+   "addresses": [
+    "batch_effect:groups.slide,images.spot_patches"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "one fixed encoder",
+     "reason": "the best encoder depends on the image domain"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "domains",
+   "tool": "spatial_domains",
+   "inputs": {
+    "embedding": "@batch_correct.embedding",
+    "coords": "coords.spatial",
+    "library": "groups.slide",
+    "groups": "groups.patient"
+   },
+   "params": {},
+   "purpose": "Find spatial domains: features joined with their neighbourhood mean (BANKSY-style), number of domains chosen by subsample stability and spatial coherence.",
+   "answers": [
+    "structure_discovery",
+    "spatial_structure"
+   ],
+   "addresses": [
+    "spatial_autocorrelation:coords.spatial,counts.expression"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "cluster own features only",
+     "reason": "ignores that neighbouring samples share a domain (100% of variable features autocorrelated)"
+    },
+    {
+     "option": "a fixed number of domains",
+     "reason": "the data, not a preset, decide how fine"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "validate_label",
+   "tool": "label_association",
+   "inputs": {
+    "found": "@domains.labels",
+    "reference": "labels.label",
+    "groups": "groups.patient"
+   },
+   "params": {},
+   "purpose": "Compare the discovered domains with the histological annotation 'label' (validation only: never used to choose).",
+   "answers": [
+    "cross_modal_association"
+   ],
+   "addresses": [
+    "partial_labels:labels.label"
+   ],
+   "alternatives_rejected": [],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "norm_all",
+   "tool": "normalize_counts",
+   "inputs": {
+    "counts": "@qc.counts",
+    "batch": "groups.slide"
+   },
+   "params": {
+    "n_features": 10000
+   },
+   "purpose": "Depth-normalise all QC-passed counts, keeping essentially every detected feature, so spatial-variability tests are not driven by spatially varying library size.",
+   "answers": [],
+   "addresses": [
+    "depth_variation:counts.expression",
+    "high_dimensionality:counts.expression"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "Moran's I on raw counts",
+     "reason": "PC1 tracks depth (rho 0.99 raw) and depth varies within tissue, so raw counts would flag depth patterns as spatially variable genes"
+    },
+    {
+     "option": "reuse the fit-half normalisation",
+     "reason": "it holds only 2,000 features and half the counts"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "svg",
+   "tool": "spatial_svg",
+   "inputs": {
+    "matrix": "@norm_all.normalized",
+    "coords": "coords.spatial",
+    "library": "groups.slide"
+   },
+   "params": {},
+   "purpose": "Find spatially variable features (Moran's I within slides, BH FDR, permutation calibration) on depth-normalised counts; the test does not use the discovered groups.",
+   "answers": [
+    "spatial_structure"
+   ],
+   "addresses": [
+    "spatial_autocorrelation:coords.spatial,counts.expression",
+    "multiple_testing"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "raw counts input",
+     "reason": "depth confounding (see norm_all)"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "enrichment",
+   "tool": "spatial_enrichment",
+   "inputs": {
+    "labels": "@domains.labels",
+    "coords": "coords.spatial",
+    "library": "groups.slide"
+   },
+   "params": {},
+   "purpose": "Test which domains border each other more or less often than chance (label permutations within slides).",
+   "answers": [
+    "spatial_structure"
+   ],
+   "addresses": [
+    "multiple_testing"
+   ],
+   "alternatives_rejected": [],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "histology",
+   "tool": "multimodal_predictability",
+   "inputs": {
+    "target": "@domains.labels",
+    "groups": "groups.patient",
+    "image": "@features.image_features",
+    "other": "@batch_correct.embedding"
+   },
+   "params": {},
+   "purpose": "How well histology image features alone predict the discovered domains under patient-grouped cross-validation; the expression arm is a ceiling reference only.",
+   "answers": [
+    "cross_modal_association"
+   ],
+   "addresses": [
+    "nested_sampling:groups.patient",
+    "class_imbalance:labels.label"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "predict 'label' from images",
+     "reason": "the objective relates domains, not annotations, to histology; 'label' is reserved for validation"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "markers",
+   "tool": "differential_expression",
+   "inputs": {
+    "counts": "@split.test",
+    "labels": "@domains.labels",
+    "replicate": "groups.patient"
+   },
+   "params": {},
+   "purpose": "Marker genes per domain: patient pseudobulk, paired moderated t-test, BH FDR, on the held-out half of the counts; the naive per-sample test is reported for comparison.",
+   "answers": [
+    "differential_analysis"
+   ],
+   "addresses": [
+    "nested_sampling:groups.patient",
+    "multiple_testing"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "per-sample tests",
+     "reason": "samples of one patient are not independent (1,702 per patient)"
+    },
+    {
+     "option": "slide as replicate",
+     "reason": "slides are nested in patients; the patient is the independent unit"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "map",
+   "tool": "dimreduce_map",
+   "inputs": {
+    "embedding": "@batch_correct.embedding"
+   },
+   "params": {},
+   "purpose": "A two-dimensional map of the corrected representation for the report, method chosen by trustworthiness and stability.",
+   "answers": [
+    "visualization"
+   ],
+   "addresses": [
+    "high_dimensionality:counts.expression"
+   ],
+   "alternatives_rejected": [],
+   "criteria": [],
+   "validation_only": false
+  }
+ ],
+ "accepted": [],
+ "notes": [
+  "In 'histology' the expression arm ('other') is circular because domains were found from that embedding; only the image-alone balanced accuracy against chance is interpreted as the histology association.",
+  "Domains found in only one or two patients cannot be tested with min_replicates 3; such domains are reported as patient-specific rather than forced into marker tests.",
+  "Declared costs (largest: multimodal_features ~875 s, generative_batch_vae ~270 s, dimreduce_map ~200 s) sum well below the 10,800 s total budget."
+ ],
+ "source": "llm"
+}

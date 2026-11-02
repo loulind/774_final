@@ -12,7 +12,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from ..agents.multimodal.imaging import MIN_GROUP_IMAGES, image_summary, sample_rows
+from ..agents.multimodal.imaging import COLOUR_SEED_OFFSET, MIN_GROUP_IMAGES, image_summary, sample_rows
 from ..schema import ImageProfile, TextProfile
 from ..tools.base import Artifact, values_on
 from ..tools.qc import ImageQCParams, image_flags, image_stats
@@ -23,7 +23,7 @@ MAX_PATCHES = 240
 
 
 def image_profile(a: Artifact, group: Artifact | None, split: Artifact | None, cache_dir, rng,
-                  log=print) -> ImageProfile:
+                  log=print, seed: int = 774) -> ImageProfile:
     rows = a.rows
     kind = str(a.meta.get("source_kind") or getattr(a.data, "kind", "files"))
     files = kind == "files"
@@ -49,7 +49,8 @@ def image_profile(a: Artifact, group: Artifact | None, split: Artifact | None, c
                        height_median=float(np.median(h[ok])) if ok.any() else None,
                        size_iqr_ratio=float(np.quantile(short, 0.75) / max(1.0, np.quantile(short, 0.25)))
                        if ok.any() else None)
-    summ = image_summary(a.data, rows, g, rng)
+    # the same colour sample the feature step draws, so both measure the same between-group colour share
+    summ = image_summary(a.data, rows, g, np.random.default_rng(seed + COLOUR_SEED_OFFSET))
     rec.n_colour_sampled = summ["n_sampled"]
     rec.domain_hint = summ["domain_hint"]
     rec.greyscale_fraction = summ["greyscale_fraction"]

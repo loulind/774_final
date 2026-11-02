@@ -20,6 +20,7 @@ import numpy as np
 import pandas as pd
 
 MAX_IMAGES = 240
+COLOUR_SEED_OFFSET = 11          # the profile and the feature step draw the same colour sample (seed + offset)
 MIN_GROUP_IMAGES = 10            # images a group needs before its mean colour is estimated
 
 

@@ -85,8 +85,9 @@ def _run_features(ctx, inputs, p: FeaturesParams) -> StepResult:
     # what the images look like: domain and between-group colour share
     lib = _values_on(rows, library)
     has_lib = None if lib is None else lib != ""
-    summ = (imaging.image_summary(source, rows[has_lib], lib[has_lib], ctx.rng(11)) if lib is not None
-            else imaging.image_summary(source, rows, None, ctx.rng(11)))
+    colour_rng = ctx.rng(imaging.COLOUR_SEED_OFFSET)
+    summ = (imaging.image_summary(source, rows[has_lib], lib[has_lib], colour_rng) if lib is not None
+            else imaging.image_summary(source, rows, None, colour_rng))
     domain = summ["domain_hint"] if p.domain == "auto" else p.domain
     ctx.decide("image domain", domain, summ["evidence"] if p.domain == "auto" else "Set by the plan.", [],
                {k: v for k, v in summ.items() if k != "evidence"})

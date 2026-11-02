@@ -1,0 +1,836 @@
+{
+ "qc": {
+  "tool": "qc_counts",
+  "metrics": {
+   "n_input": 13619,
+   "n_removed": 202,
+   "fraction_removed": 0.014832219693075849,
+   "max_group_fraction_removed": 0.055248618784530384,
+   "n_empty": 0,
+   "n_low_library_size": 140,
+   "n_low_detected": 199,
+   "n_features_kept": 11871,
+   "n_features_dropped": 0,
+   "median_library_size": 3286.0,
+   "per_library_thresholds": true
+  },
+  "criteria": [
+   {
+    "metric": "fraction_removed",
+    "goal": "min",
+    "threshold": 0.2,
+    "value": 0.014832219693075849,
+    "passed": true,
+    "selection": true,
+    "doc": "share of samples removed"
+   },
+   {
+    "metric": "max_group_fraction_removed",
+    "goal": "min",
+    "threshold": 0.5,
+    "value": 0.055248618784530384,
+    "passed": true,
+    "selection": true,
+    "doc": "largest share removed from one group: removal concentrated in a group is a warning"
+   }
+  ],
+  "seconds": 0.31,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "split": {
+  "tool": "count_split",
+  "metrics": {
+   "method": "poisson",
+   "epsilon": 0.5,
+   "median_dependence_binomial": 0.04938991203777957,
+   "median_overdispersion": 0.4902219291817249,
+   "fit_count_share": 0.5000107262808441
+  },
+  "criteria": [
+   {
+    "metric": "median_dependence_binomial",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.04938991203777957,
+    "passed": null,
+    "selection": true,
+    "doc": "correlation binomial thinning would leave"
+   },
+   {
+    "metric": "fit_count_share",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.5000107262808441,
+    "passed": null,
+    "selection": true,
+    "doc": "share of all counts in the fit half"
+   }
+  ],
+  "seconds": 1.55,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "norm": {
+  "tool": "normalize_counts",
+  "metrics": {
+   "method": "log",
+   "n_features": 2000,
+   "binary_input": false,
+   "depth_corr_pc1_before": 0.9801188471576124,
+   "depth_corr_pc1_after": 0.524296758161773,
+   "depth_r2_top10_before": 0.907027111798339,
+   "depth_r2_top10_after": 0.8955313922485442,
+   "depth_corr_pc1_log": 0.524296758161773,
+   "depth_corr_pc1_pearson_residuals": 0.4871280513811252,
+   "batch_aware_selection": true
+  },
+  "criteria": [
+   {
+    "metric": "depth_corr_pc1_after",
+    "goal": "min",
+    "threshold": 0.5,
+    "value": 0.524296758161773,
+    "passed": false,
+    "selection": true,
+    "doc": "|Spearman rho| of PC1 with log library size after normalisation"
+   },
+   {
+    "metric": "depth_corr_pc1_before",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.9801188471576124,
+    "passed": null,
+    "selection": true,
+    "doc": "the same for log1p of raw counts"
+   }
+  ],
+  "seconds": 1.75,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "pca": {
+  "tool": "dimreduce_pca",
+  "metrics": {
+   "n_components": 50,
+   "variance_explained": 0.11653764545917511,
+   "pc1_variance": 0.02087603323161602,
+   "parallel_analysis_k": 51
+  },
+  "criteria": [
+   {
+    "metric": "variance_explained",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.11653764545917511,
+    "passed": null,
+    "selection": true,
+    "doc": "share of variance in the kept components"
+   },
+   {
+    "metric": "n_components",
+    "goal": "report",
+    "threshold": null,
+    "value": 50,
+    "passed": null,
+    "selection": true,
+    "doc": "analysis dimension"
+   }
+  ],
+  "seconds": 15.69,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "batch_assess": {
+  "tool": "batch_assess",
+  "metrics": {
+   "n_samples": 13417,
+   "n_batches": 36,
+   "batch_nested_in_outer": true,
+   "batch_silhouette": -0.004250409617233883,
+   "variance_share_batch": 0.4957953313827493,
+   "mixing": 0.3210791871786574,
+   "n_outer": 8,
+   "variance_share_outer": 0.46625114375158416,
+   "outer_silhouette": 0.23636396824703146,
+   "share_between_outer": 0.46625114375158766,
+   "share_between_inner_within_outer": 0.02954418763116115,
+   "share_within_inner": 0.5042046686172509,
+   "within_outer_batch_silhouette": 0.00034425465264530786,
+   "within_outer_mixing": 0.7741030215307674,
+   "n_outer_with_several_batches": 8,
+   "batch_effect": "weak",
+   "correction_warranted": 1,
+   "cramers_v_batch_label": 0.3716905830976055,
+   "cramers_v_outer_label": 0.3716905830976055,
+   "label_silhouette": 0.005858363724955871
+  },
+  "criteria": [
+   {
+    "metric": "batch_silhouette",
+    "goal": "report",
+    "threshold": null,
+    "value": -0.004250409617233883,
+    "passed": null,
+    "selection": true,
+    "doc": "silhouette width by batch (0 = no separation)"
+   },
+   {
+    "metric": "within_outer_batch_silhouette",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.00034425465264530786,
+    "passed": null,
+    "selection": true,
+    "doc": "the same within each outer group"
+   },
+   {
+    "metric": "mixing",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.3210791871786574,
+    "passed": null,
+    "selection": true,
+    "doc": "neighbour batch entropy relative to the batch proportions"
+   },
+   {
+    "metric": "within_outer_mixing",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.7741030215307674,
+    "passed": null,
+    "selection": true,
+    "doc": ""
+   },
+   {
+    "metric": "share_between_inner_within_outer",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.02954418763116115,
+    "passed": null,
+    "selection": true,
+    "doc": "variance share between batches of one outer group"
+   },
+   {
+    "metric": "cramers_v_batch_label",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.3716905830976055,
+    "passed": null,
+    "selection": false,
+    "doc": "association of batch and external label"
+   }
+  ],
+  "seconds": 0.82,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "batch_vae": {
+  "tool": "generative_batch_vae",
+  "metrics": {
+   "model": "nb_vae",
+   "latent_dim": 10,
+   "n_genes": 2000,
+   "n_batches": 36,
+   "epochs_run": 150,
+   "stopped_because": "early_stop",
+   "best_epoch": 125,
+   "val_neg_elbo_per_gene": 0.430376220703125,
+   "train_seconds": 75.6
+  },
+  "criteria": [
+   {
+    "metric": "val_neg_elbo_per_gene",
+    "goal": "min",
+    "threshold": null,
+    "value": 0.430376220703125,
+    "passed": null,
+    "selection": true,
+    "doc": "held-out negative ELBO per gene"
+   },
+   {
+    "metric": "epochs_run",
+    "goal": "report",
+    "threshold": null,
+    "value": 150,
+    "passed": null,
+    "selection": true,
+    "doc": ""
+   },
+   {
+    "metric": "stopped_because",
+    "goal": "report",
+    "threshold": null,
+    "value": "early_stop",
+    "passed": null,
+    "selection": true,
+    "doc": ""
+   }
+  ],
+  "seconds": 86.35,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "batch_correct": {
+  "tool": "batch_correct",
+  "metrics": {
+   "method": "combat",
+   "mixing": 0.7066383614880236,
+   "neighbourhood_preservation": 0.7515794451291001,
+   "batch_silhouette": -0.03738393629940355,
+   "mixing_uncorrected": 0.3188911802926323,
+   "batch_silhouette_uncorrected": -0.0036010753772821964,
+   "within_outer": false,
+   "mixing_gain": 0.3877471811953913,
+   "outer_mixing": 0.6553301607462836,
+   "outer_mixing_uncorrected": 0.01466827437128348,
+   "label_silhouette": 0.005839550283034527,
+   "label_silhouette_uncorrected": 0.005858363724955871
+  },
+  "criteria": [
+   {
+    "metric": "mixing",
+    "goal": "max",
+    "threshold": null,
+    "value": 0.7066383614880236,
+    "passed": null,
+    "selection": true,
+    "doc": "neighbour batch mixing of the chosen representation"
+   },
+   {
+    "metric": "neighbourhood_preservation",
+    "goal": "max",
+    "threshold": 0.5,
+    "value": 0.7515794451291001,
+    "passed": true,
+    "selection": true,
+    "doc": "share of within-batch neighbours kept"
+   },
+   {
+    "metric": "batch_silhouette",
+    "goal": "min",
+    "threshold": null,
+    "value": -0.03738393629940355,
+    "passed": null,
+    "selection": true,
+    "doc": "silhouette by batch after correction"
+   },
+   {
+    "metric": "label_silhouette",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.005839550283034527,
+    "passed": null,
+    "selection": false,
+    "doc": "external labels (report only)"
+   }
+  ],
+  "seconds": 2.31,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "features": {
+  "tool": "multimodal_features",
+  "metrics": {
+   "image_encoder": "phikon",
+   "text_encoder": null,
+   "domain": "stained_tissue",
+   "rank_by": "alignment",
+   "greyscale_fraction": 0.0,
+   "stain_hue_fraction": 0.7513536163469103,
+   "colour_between_group_share": 0.1260505507801139,
+   "colour_normalised": false,
+   "n_candidates": 3,
+   "n_failed": 0,
+   "n_images": 13620,
+   "screen_metric": "alignment_recall_at_10",
+   "screen_score": 0.075,
+   "screen_chance": 0.02,
+   "screen_clear_of_chance": true,
+   "screen_recall_at_10": 0.075,
+   "zero_shot_recall_at_10": null,
+   "n_screen_train": 2000,
+   "n_screen_val": 500
+  },
+  "criteria": [
+   {
+    "metric": "screen_recall_at_10",
+    "goal": "max",
+    "threshold": null,
+    "value": 0.075,
+    "passed": null,
+    "selection": true,
+    "doc": "held-out recall@10 of the chosen encoder pair after CCA, or zero-shot (label-free)"
+   },
+   {
+    "metric": "zero_shot_recall_at_10",
+    "goal": "report",
+    "threshold": null,
+    "value": null,
+    "passed": null,
+    "selection": true,
+    "doc": "recall@10 in a dual encoder's own space; a very high value suggests pretraining overlap"
+   }
+  ],
+  "seconds": 2.7,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "domains": {
+  "tool": "spatial_domains",
+  "metrics": {
+   "method": "kmeans",
+   "k": 5,
+   "stability": 0.8379561235563624,
+   "stability_mean": 0.9013184198829561,
+   "stable": true,
+   "separated": true,
+   "separation_p": 0.05,
+   "k_at_edge": 0,
+   "smallest_cluster": 1599,
+   "cramers_v_groups": 0.19937575677302674,
+   "groups_per_cluster_median": 8.0,
+   "clusters_in_one_group": 0,
+   "spatial_coherence": 0.6383183960692915,
+   "spatial_coherence_own_features": 0.27916354773336627,
+   "isolated_samples": 3
+  },
+  "criteria": [
+   {
+    "metric": "stability",
+    "goal": "max",
+    "threshold": 0.75,
+    "value": 0.8379561235563624,
+    "passed": true,
+    "selection": true,
+    "doc": "mean subsample Jaccard of the least stable domain"
+   },
+   {
+    "metric": "spatial_coherence",
+    "goal": "max",
+    "threshold": null,
+    "value": 0.6383183960692915,
+    "passed": null,
+    "selection": true,
+    "doc": "chance-corrected share of neighbours in the same domain"
+   },
+   {
+    "metric": "k_at_edge",
+    "goal": "min",
+    "threshold": 0,
+    "value": 0,
+    "passed": true,
+    "selection": true,
+    "doc": "1 when k is at the end of the searched range"
+   },
+   {
+    "metric": "spatial_coherence_own_features",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.27916354773336627,
+    "passed": null,
+    "selection": true,
+    "doc": "the same for clusters of own features"
+   },
+   {
+    "metric": "cramers_v_groups",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.19937575677302674,
+    "passed": null,
+    "selection": true,
+    "doc": "association of domains with the groups (0 = spread evenly, 1 = one group each)"
+   }
+  ],
+  "seconds": 117.18,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "validate_label": {
+  "tool": "label_association",
+  "metrics": {
+   "n_samples": 3123,
+   "n_found": 5,
+   "n_reference": 6,
+   "ari": 0.06604651342249543,
+   "ami": 0.12088227213443403,
+   "nmi": 0.12285125635699787,
+   "purity": 0.5587576048671149,
+   "inverse_purity": 0.39385206532180594,
+   "ari_group_median": 0.1750585858935442,
+   "ari_group_min": 0.05318630956214386,
+   "ari_group_max": 0.3735078924829006,
+   "n_groups": 8
+  },
+  "criteria": [
+   {
+    "metric": "ari",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.06604651342249543,
+    "passed": null,
+    "selection": false,
+    "doc": "adjusted Rand index"
+   },
+   {
+    "metric": "ami",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.12088227213443403,
+    "passed": null,
+    "selection": false,
+    "doc": "adjusted mutual information"
+   },
+   {
+    "metric": "purity",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.5587576048671149,
+    "passed": null,
+    "selection": false,
+    "doc": ""
+   },
+   {
+    "metric": "ari_group_median",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.1750585858935442,
+    "passed": null,
+    "selection": false,
+    "doc": "median ARI across groups"
+   }
+  ],
+  "seconds": 0.04,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "norm_all": {
+  "tool": "normalize_counts",
+  "metrics": {
+   "method": "pearson_residuals",
+   "n_features": 10000,
+   "binary_input": false,
+   "depth_corr_pc1_before": 0.9866139903450357,
+   "depth_corr_pc1_after": 0.4283744822700535,
+   "depth_r2_top10_before": 0.9119078016789515,
+   "depth_r2_top10_after": 0.33066948775008964,
+   "depth_corr_pc1_log": 0.8104793426398632,
+   "depth_corr_pc1_pearson_residuals": 0.4283744822700535,
+   "batch_aware_selection": true
+  },
+  "criteria": [
+   {
+    "metric": "depth_corr_pc1_after",
+    "goal": "min",
+    "threshold": 0.5,
+    "value": 0.4283744822700535,
+    "passed": true,
+    "selection": true,
+    "doc": "|Spearman rho| of PC1 with log library size after normalisation"
+   },
+   {
+    "metric": "depth_corr_pc1_before",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.9866139903450357,
+    "passed": null,
+    "selection": true,
+    "doc": "the same for log1p of raw counts"
+   }
+  ],
+  "seconds": 8.18,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "svg": {
+  "tool": "spatial_svg",
+  "metrics": {
+   "n_tested": 10000,
+   "n_significant": 5840,
+   "fraction_significant": 0.584,
+   "n_libraries": 36,
+   "permuted_p05_fraction": 0.055,
+   "median_i_significant": 0.019733494924326092,
+   "top_features": [
+    "MUCL1",
+    "KRT81",
+    "IGKC",
+    "TFF3",
+    "IGLC2",
+    "IGHG3",
+    "IGHG4",
+    "IGHA1",
+    "CALML5",
+    "MGP"
+   ]
+  },
+  "criteria": [
+   {
+    "metric": "n_significant",
+    "goal": "report",
+    "threshold": null,
+    "value": 5840,
+    "passed": null,
+    "selection": true,
+    "doc": "features spatially variable at the FDR level"
+   },
+   {
+    "metric": "permuted_p05_fraction",
+    "goal": "min",
+    "threshold": 0.1,
+    "value": 0.055,
+    "passed": true,
+    "selection": true,
+    "doc": "share of permuted features with p < 0.05 (about 0.05 when calibrated)"
+   }
+  ],
+  "seconds": 2.61,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "enrichment": {
+  "tool": "spatial_enrichment",
+  "metrics": {
+   "n_labels": 5,
+   "n_edges": 37486,
+   "n_pairs": 15,
+   "n_permutations": 999,
+   "n_enriched": 5,
+   "n_depleted": 10,
+   "self_enrichment_median_z": 109.5604223822554
+  },
+  "criteria": [
+   {
+    "metric": "n_enriched",
+    "goal": "report",
+    "threshold": null,
+    "value": 5,
+    "passed": null,
+    "selection": true,
+    "doc": ""
+   },
+   {
+    "metric": "n_depleted",
+    "goal": "report",
+    "threshold": null,
+    "value": 10,
+    "passed": null,
+    "selection": true,
+    "doc": ""
+   },
+   {
+    "metric": "self_enrichment_median_z",
+    "goal": "report",
+    "threshold": null,
+    "value": 109.5604223822554,
+    "passed": null,
+    "selection": true,
+    "doc": "how strongly labels cluster with themselves"
+   }
+  ],
+  "seconds": 0.42,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "histology": {
+  "tool": "multimodal_predictability",
+  "metrics": {
+   "n_samples": 13417,
+   "n_groups": 8,
+   "n_classes": 5,
+   "n_folds": 5,
+   "chance_balanced_accuracy": 0.2,
+   "macro_f1_image": 0.3285744748751687,
+   "balanced_accuracy_image": 0.35796703770759714,
+   "ba_ci_low_image": 0.2961561866647538,
+   "ba_ci_high_image": 0.4221876517709564,
+   "above_chance_image": true,
+   "macro_f1_other": 0.657649985828621,
+   "balanced_accuracy_other": 0.6639970866329361,
+   "ba_ci_low_other": 0.618605768076368,
+   "ba_ci_high_other": 0.6990454103889187,
+   "above_chance_other": true,
+   "macro_f1_both": 0.5352772736990571,
+   "balanced_accuracy_both": 0.5585032331038717,
+   "ba_ci_low_both": 0.5076031098165561,
+   "ba_ci_high_both": 0.6234398186557133,
+   "above_chance_both": true
+  },
+  "criteria": [
+   {
+    "metric": "balanced_accuracy_image",
+    "goal": "max",
+    "threshold": null,
+    "value": 0.35796703770759714,
+    "passed": null,
+    "selection": false,
+    "doc": "out-of-fold balanced accuracy from image features"
+   },
+   {
+    "metric": "macro_f1_image",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.3285744748751687,
+    "passed": null,
+    "selection": false,
+    "doc": "out-of-fold macro-F1 from image features"
+   },
+   {
+    "metric": "balanced_accuracy_other",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.6639970866329361,
+    "passed": null,
+    "selection": false,
+    "doc": "from the second representation"
+   },
+   {
+    "metric": "balanced_accuracy_both",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.5585032331038717,
+    "passed": null,
+    "selection": false,
+    "doc": "from both (early fusion)"
+   },
+   {
+    "metric": "chance_balanced_accuracy",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.2,
+    "passed": null,
+    "selection": false,
+    "doc": "1 / number of classes"
+   }
+  ],
+  "seconds": 34.29,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "markers": {
+  "tool": "differential_expression",
+  "metrics": {
+   "n_labels": 5,
+   "n_tested_labels": 5,
+   "testable": true,
+   "n_skipped_labels": 0,
+   "n_markers": 699,
+   "n_features_with_marker": 582,
+   "loo_stable_fraction": 1.0,
+   "median_sign_consistency": 1.0,
+   "n_replicates_min": 8,
+   "n_replicates_max": 8,
+   "n_markers_naive": 941,
+   "naive_inflation": 1.34620886981402
+  },
+  "criteria": [
+   {
+    "metric": "n_markers",
+    "goal": "report",
+    "threshold": null,
+    "value": 699,
+    "passed": null,
+    "selection": true,
+    "doc": "label-feature pairs at the FDR and fold-change bar"
+   },
+   {
+    "metric": "loo_stable_fraction",
+    "goal": "max",
+    "threshold": 0.8,
+    "value": 1.0,
+    "passed": true,
+    "selection": true,
+    "doc": "markers whose sign survives leaving out any one replicate"
+   },
+   {
+    "metric": "median_sign_consistency",
+    "goal": "max",
+    "threshold": 0.75,
+    "value": 1.0,
+    "passed": true,
+    "selection": true,
+    "doc": "share of replicates agreeing in sign"
+   },
+   {
+    "metric": "naive_inflation",
+    "goal": "report",
+    "threshold": null,
+    "value": 1.34620886981402,
+    "passed": null,
+    "selection": true,
+    "doc": "naive discoveries per pseudobulk discovery"
+   }
+  ],
+  "seconds": 10.96,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "map": {
+  "tool": "dimreduce_map",
+  "metrics": {
+   "method": "tsne",
+   "n_candidates": 4,
+   "trustworthiness@10": 0.7856759591221311,
+   "continuity@10": 0.8515365722901659,
+   "distance_spearman": 0.4266910829391602,
+   "stability": 1.0
+  },
+  "criteria": [
+   {
+    "metric": "trustworthiness@10",
+    "goal": "max",
+    "threshold": 0.8,
+    "value": 0.7856759591221311,
+    "passed": false,
+    "selection": true,
+    "doc": "share of map neighbours that are true neighbours (rank-weighted)"
+   },
+   {
+    "metric": "continuity@10",
+    "goal": "max",
+    "threshold": null,
+    "value": 0.8515365722901659,
+    "passed": null,
+    "selection": true,
+    "doc": "share of true neighbours kept in the map"
+   },
+   {
+    "metric": "stability",
+    "goal": "max",
+    "threshold": 0.5,
+    "value": 1.0,
+    "passed": true,
+    "selection": true,
+    "doc": "k-NN overlap of two fits with different seeds"
+   },
+   {
+    "metric": "distance_spearman",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.4266910829391602,
+    "passed": null,
+    "selection": true,
+    "doc": "rank correlation of pairwise distances"
+   }
+  ],
+  "seconds": 204.89,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ }
+}

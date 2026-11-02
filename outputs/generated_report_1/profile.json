@@ -1,0 +1,359 @@
+{
+ "n_samples": 13620,
+ "format": "spatial_anndata",
+ "modalities": [
+  {
+   "name": "expression",
+   "kind": "matrix",
+   "n_present": 13619,
+   "missing_fraction": 7.342143906019505e-05,
+   "source": "spots.h5ad:X"
+  },
+  {
+   "name": "spatial",
+   "kind": "spatial",
+   "n_present": 13620,
+   "missing_fraction": 0.0,
+   "source": "obsm['spatial']"
+  },
+  {
+   "name": "image",
+   "kind": "image",
+   "n_present": 13620,
+   "missing_fraction": 0.0,
+   "source": "patches around spot centres (36 source images)"
+  }
+ ],
+ "roles": {
+  "slide": "library",
+  "patient": "group",
+  "label": "label"
+ },
+ "artifacts": [
+  {
+   "name": "counts.expression",
+   "kind": "counts",
+   "n": 13619,
+   "detail": {
+    "n_features": 11871
+   }
+  },
+  {
+   "name": "coords.spatial",
+   "kind": "coords",
+   "n": 13620,
+   "detail": {
+    "library": "groups.slide"
+   }
+  },
+  {
+   "name": "images.spot_patches",
+   "kind": "images",
+   "n": 13620,
+   "detail": {
+    "source_kind": "spot_patches",
+    "library": "groups.slide"
+   }
+  },
+  {
+   "name": "groups.slide",
+   "kind": "groups",
+   "n": 13620,
+   "detail": {
+    "column": "slide",
+    "role": "library",
+    "n_levels": 36,
+    "nested_in": [
+     "groups.patient"
+    ]
+   }
+  },
+  {
+   "name": "groups.patient",
+   "kind": "groups",
+   "n": 13620,
+   "detail": {
+    "column": "patient",
+    "role": "group",
+    "n_levels": 8
+   }
+  },
+  {
+   "name": "labels.label",
+   "kind": "labels",
+   "n": 3157,
+   "detail": {
+    "column": "label",
+    "n_classes": 6,
+    "external": true
+   }
+  }
+ ],
+ "matrices": [
+  {
+   "artifact": "counts.expression",
+   "is_counts": true,
+   "n_samples": 13619,
+   "n_features": 11871,
+   "sparsity": 0.827092668216269,
+   "features_per_sample": 0.8716499008737792,
+   "library_size_median": 3231.0,
+   "library_size_log2_iqr": 1.8625868678443993,
+   "library_median_range": [
+    636.0,
+    12194.5
+   ],
+   "n_empty": 0,
+   "qc_flagged_fraction": 0.014832219693075849,
+   "qc_per_library": true,
+   "detected_features_median": 1764.0,
+   "n_features_detected_5pct": 9514,
+   "overdispersed_fraction": 1.0,
+   "pc1_depth_rho_raw": 0.9938460419481758,
+   "pc1_depth_rho_scaled": 0.766178235129092,
+   "components_50": null,
+   "components_90": null,
+   "variance_top_components": 0.23629291491427007,
+   "measured_on": "5,000 sampled rows; counts scaled to the median library size, log1p; the 2,000 most variable features, standardised; 50 principal components"
+  }
+ ],
+ "group_structure": [
+  {
+   "matrix": "counts.expression",
+   "group": "groups.slide",
+   "column": "slide",
+   "n_levels": 36,
+   "silhouette": 0.031222629083669445,
+   "variance_share": 0.7168587035639729,
+   "mixing": 0.2705594822432871,
+   "outer": "groups.patient",
+   "within_outer_silhouette": 0.03237932301199735,
+   "within_outer_mixing": 0.6670816520986753,
+   "share_between_outer": 0.6642541242052777,
+   "share_between_inner_within_outer": 0.05260457935869479,
+   "n_outer_with_several_levels": 8,
+   "measured_on": "first 20 principal components of 5,000 sampled rows (levels with >= 10 samples)"
+  },
+  {
+   "matrix": "counts.expression",
+   "group": "groups.patient",
+   "column": "patient",
+   "n_levels": 8,
+   "silhouette": 0.37544846138094046,
+   "variance_share": 0.6642541242052786,
+   "mixing": 0.004117524659216732,
+   "outer": null,
+   "within_outer_silhouette": null,
+   "within_outer_mixing": null,
+   "share_between_outer": null,
+   "share_between_inner_within_outer": null,
+   "n_outer_with_several_levels": null,
+   "measured_on": "first 20 principal components of 5,000 sampled rows (levels with >= 10 samples)"
+  }
+ ],
+ "spatial": [
+  {
+   "artifact": "coords.spatial",
+   "matrix": "counts.expression",
+   "library": "groups.slide",
+   "n_libraries": 36,
+   "samples_per_library": [
+    176.0,
+    320.0,
+    712.0
+   ],
+   "nn_distance_median": 272.81126982752664,
+   "features_tested": 100,
+   "fraction_autocorrelated": 1.0,
+   "median_morans_i": 0.13436859782258737,
+   "measured_on": "Moran's I of the 100 most variable features on each library's 6-nearest-neighbour graph, centred per library, BH across features"
+  }
+ ],
+ "images": [
+  {
+   "artifact": "images.spot_patches",
+   "source_kind": "spot_patches",
+   "n_images": 13620,
+   "n_measured": 240,
+   "unusable_fraction": 0.0,
+   "flag_counts": {
+    "unreadable": 0,
+    "tiny": 0,
+    "extreme_aspect": 0,
+    "blank": 0
+   },
+   "width_median": 145.0,
+   "height_median": 145.0,
+   "size_iqr_ratio": 1.0017241379310344,
+   "n_colour_sampled": 240,
+   "domain_hint": "stained_tissue",
+   "greyscale_fraction": 0.0,
+   "stain_hue_fraction": 0.7513536163469103,
+   "colour_group": "groups.slide",
+   "colour_between_group_share": 0.1260505507801139,
+   "n_hashed": 0,
+   "n_hash_candidates": null,
+   "duplicate_fraction": null,
+   "n_duplicate_pairs": null,
+   "cross_split_duplicate_pairs": null,
+   "measured_on": "240 sampled images; colour on 240 thumbnails"
+  }
+ ],
+ "texts": [],
+ "tabular": [],
+ "labels": [
+  {
+   "artifact": "labels.label",
+   "column": "label",
+   "kind": "labels",
+   "n_annotated": 3157,
+   "annotated_fraction": 0.23179148311306902,
+   "n_classes": 6,
+   "imbalance_ratio": 18.123711340206185,
+   "largest": {
+    "invasive cancer": 1758,
+    "connective tissue": 617,
+    "adipose tissue": 295,
+    "immune infiltrate": 252,
+    "cancer in situ": 138,
+    "breast glands": 97
+   },
+   "smallest": {
+    "connective tissue": 617,
+    "adipose tissue": 295,
+    "immune infiltrate": 252,
+    "cancer in situ": 138,
+    "breast glands": 97
+   },
+   "labels_per_sample_median": null,
+   "gini": null,
+   "n_modelable": 6,
+   "n_assessable": 6,
+   "too_rare_fraction": 0.0,
+   "annotated_groups": {
+    "groups.slide": [
+     8,
+     36
+    ],
+    "groups.patient": [
+     8,
+     8
+    ]
+   },
+   "cramers_v": {
+    "groups.patient": 0.3694246880625486
+   },
+   "variance_share": {
+    "counts.expression": 0.15147634933495438
+   }
+  }
+ ],
+ "label_agreement": [],
+ "groups": [
+  {
+   "artifact": "groups.slide",
+   "column": "slide",
+   "role": "library",
+   "n_levels": 36,
+   "size_min": 176,
+   "size_median": 320.0,
+   "size_max": 712,
+   "samples_per_level": 378.3333333333333,
+   "shared_fraction": 1.0,
+   "nested_in": [
+    "groups.patient"
+   ],
+   "split_overlap": null
+  },
+  {
+   "artifact": "groups.patient",
+   "column": "patient",
+   "role": "group",
+   "n_levels": 8,
+   "size_min": 1086,
+   "size_median": 1727.5,
+   "size_max": 2098,
+   "samples_per_level": 1702.5,
+   "shared_fraction": 1.0,
+   "nested_in": [],
+   "split_overlap": null
+  }
+ ],
+ "split": null,
+ "pairing": {
+  "expression|spatial": 13619,
+  "expression|image": 13619,
+  "spatial|image": 13620
+ },
+ "compute": {
+  "device": "mps",
+  "step_seconds": 3600.0,
+  "total_seconds": 10800.0,
+  "estimates": [
+   {
+    "tool": "multimodal_features",
+    "inputs": {
+     "images": "images.spot_patches"
+    },
+    "seconds": 874.8000000000001
+   },
+   {
+    "tool": "generative_density",
+    "inputs": {
+     "features": "a 50-dimensional representation"
+    },
+    "seconds": 732.043
+   },
+   {
+    "tool": "multimodal_agreement",
+    "inputs": {
+     "image": "a 50-dimensional representation",
+     "text": "a 50-dimensional representation"
+    },
+    "seconds": 731.362
+   },
+   {
+    "tool": "generative_batch_vae",
+    "inputs": {
+     "counts": "counts.expression",
+     "batch": "groups.slide"
+    },
+    "seconds": 270.0
+   },
+   {
+    "tool": "dimreduce_map",
+    "inputs": {
+     "embedding": "a 50-dimensional representation"
+    },
+    "seconds": 199.90161999999998
+   },
+   {
+    "tool": "spatial_domains",
+    "inputs": {
+     "embedding": "a 50-dimensional representation",
+     "coords": "coords.spatial"
+    },
+    "seconds": 102.98559999999999
+   },
+   {
+    "tool": "cluster",
+    "inputs": {
+     "embedding": "a 50-dimensional representation"
+    },
+    "seconds": 89.4874
+   },
+   {
+    "tool": "differential_expression",
+    "inputs": {
+     "counts": "counts.expression",
+     "labels": "labels.label",
+     "replicate": "groups.slide"
+    },
+    "seconds": 60.20161363999999
+   }
+  ]
+ },
+ "seed": 774,
+ "seconds": 5.0715777080040425,
+ "notes": []
+}

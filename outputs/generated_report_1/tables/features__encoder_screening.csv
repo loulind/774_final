@@ -1,0 +1,4 @@
+image_encoder,partner,cca_recall_at_10,zero_shot_recall_at_10,alignment_recall_at_10
+phikon,embedding.pca,0.075,,0.075
+plip_image,embedding.pca,0.05,,0.05
+dinov2_base,embedding.pca,0.062,,0.062

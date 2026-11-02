@@ -1,0 +1,92 @@
+{
+ "text": "Characterize spatial tissue heterogeneity: identify spatial domains, relate them to histology, find marker genes, and assess slide-level batch effects.",
+ "questions": [
+  {
+   "type": "structure_discovery",
+   "phrase": "identify spatial domains",
+   "targets": {
+    "features": [
+     "counts.expression"
+    ]
+   },
+   "challenges": [],
+   "implied": false,
+   "evidence": "domains"
+  },
+  {
+   "type": "spatial_structure",
+   "phrase": "Characterize spatial tissue heterogeneity",
+   "targets": {
+    "coords": [
+     "coords.spatial"
+    ],
+    "features": [
+     "counts.expression"
+    ]
+   },
+   "challenges": [],
+   "implied": false,
+   "evidence": "spatial"
+  },
+  {
+   "type": "cross_modal_association",
+   "phrase": "relate them to histology",
+   "targets": {
+    "modalities": [
+     "images.spot_patches"
+    ],
+    "structure": [
+     "discovered"
+    ]
+   },
+   "challenges": [],
+   "implied": false,
+   "evidence": "relate"
+  },
+  {
+   "type": "differential_analysis",
+   "phrase": "find marker genes",
+   "targets": {
+    "features": [
+     "counts.expression"
+    ],
+    "groups": [
+     "discovered"
+    ]
+   },
+   "challenges": [],
+   "implied": false,
+   "evidence": "marker"
+  },
+  {
+   "type": "batch_assessment",
+   "phrase": "assess slide-level batch effects",
+   "targets": {
+    "batch": [
+     "groups.slide"
+    ],
+    "outer": [
+     "groups.patient"
+    ]
+   },
+   "challenges": [],
+   "implied": false,
+   "evidence": "batch"
+  },
+  {
+   "type": "visualization",
+   "phrase": "(maps for the report)",
+   "targets": {
+    "features": [
+     "counts.expression"
+    ]
+   },
+   "challenges": [],
+   "implied": true,
+   "evidence": "every report shows maps"
+  }
+ ],
+ "constraints": {},
+ "source": "rules",
+ "notes": []
+}
