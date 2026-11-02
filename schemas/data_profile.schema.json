@@ -433,6 +433,18 @@
           "title": "N Colour Sampled",
           "type": "integer"
         },
+        "domain_hint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Domain Hint"
+        },
         "greyscale_fraction": {
           "anyOf": [
             {

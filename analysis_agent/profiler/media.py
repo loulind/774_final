@@ -51,6 +51,7 @@ def image_profile(a: Artifact, group: Artifact | None, split: Artifact | None, c
                        if ok.any() else None)
     summ = image_summary(a.data, rows, g, rng)
     rec.n_colour_sampled = summ["n_sampled"]
+    rec.domain_hint = summ["domain_hint"]
     rec.greyscale_fraction = summ["greyscale_fraction"]
     rec.stain_hue_fraction = summ["stain_hue_fraction"]
     rec.colour_between_group_share = summ["colour_between_group_share"]

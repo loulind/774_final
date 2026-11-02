@@ -1,0 +1,111 @@
+{
+  "$defs": {
+    "Question": {
+      "properties": {
+        "type": {
+          "title": "Type",
+          "type": "string"
+        },
+        "phrase": {
+          "default": "",
+          "title": "Phrase",
+          "type": "string"
+        },
+        "targets": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Targets",
+          "type": "object"
+        },
+        "challenges": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Challenges",
+          "type": "array"
+        },
+        "implied": {
+          "default": false,
+          "title": "Implied",
+          "type": "boolean"
+        },
+        "evidence": {
+          "default": "",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "Question",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "text": {
+      "title": "Text",
+      "type": "string"
+    },
+    "questions": {
+      "items": {
+        "$ref": "#/$defs/Question"
+      },
+      "title": "Questions",
+      "type": "array"
+    },
+    "constraints": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "integer"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          {
+            "items": {},
+            "type": "array"
+          }
+        ]
+      },
+      "title": "Constraints",
+      "type": "object"
+    },
+    "source": {
+      "default": "rules",
+      "enum": [
+        "rules",
+        "llm"
+      ],
+      "title": "Source",
+      "type": "string"
+    },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "text"
+  ],
+  "title": "Objective",
+  "type": "object"
+}

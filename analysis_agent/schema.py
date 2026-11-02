@@ -137,6 +137,7 @@ class ImageProfile(BaseModel):
     height_median: Number = None
     size_iqr_ratio: Number = None                 # Q3 / Q1 of the shorter side
     n_colour_sampled: int = 0
+    domain_hint: str | None = None                # stained_tissue | greyscale_imaging | colour_other
     greyscale_fraction: Number = None
     stain_hue_fraction: Number = None
     colour_group: str | None = None
@@ -304,8 +305,88 @@ class ChallengeRegister(BaseModel):
                 and (c.relevant or not relevant_only)]
 
 
+# ---------------------------------------------------------------------------
+# Objective: the free-text objective read as question types (new in Project 4)
+# ---------------------------------------------------------------------------
+
+class Question(BaseModel):
+    type: str                                     # a key of taxonomy.QUESTION_TYPES
+    phrase: str = ""                              # the part of the objective it was read from
+    targets: dict[str, list[str]] = Field(default_factory=dict)   # role -> artifacts (features, labels, batch, ...)
+    challenges: list[str] = Field(default_factory=list)           # challenge types the objective names
+    implied: bool = False                         # added by the agent (e.g. maps for the report), not asked
+    evidence: str = ""                            # which cue matched
+
+
+class Objective(BaseModel):
+    text: str
+    questions: list[Question] = Field(default_factory=list)
+    constraints: dict[str, str | float | int | bool | dict | list] = Field(default_factory=dict)
+    source: Literal["rules", "llm"] = "rules"
+    notes: list[str] = Field(default_factory=list)
+
+    def types(self, include_implied: bool = True) -> list[str]:
+        return list(dict.fromkeys(q.type for q in self.questions if include_implied or not q.implied))
+
+    def get(self, kind: str) -> Question | None:
+        return next((q for q in self.questions if q.type == kind), None)
+
+
+# ---------------------------------------------------------------------------
+# Analysis plan (new in Project 4)
+# ---------------------------------------------------------------------------
+
+class PlanStep(BaseModel):
+    id: str                                       # short and unique; later steps refer to "@id.port"
+    tool: str                                     # a registry tool
+    inputs: dict[str, str] = Field(default_factory=dict)   # port -> first artifact name or "@step.port"
+    params: dict[str, str | int | float | bool | list | dict | None] = Field(default_factory=dict)
+    purpose: str = ""                             # why, in one sentence
+    answers: list[str] = Field(default_factory=list)       # question types it serves
+    addresses: list[str] = Field(default_factory=list)     # challenge ids it handles
+    alternatives_rejected: list[Alternative] = Field(default_factory=list)
+    criteria: list[str] = Field(default_factory=list)      # the tool's declared criteria, judged after the run
+    validation_only: bool = False                 # external labels / test split: reported, never used to choose
+
+
+class AcceptedChallenge(BaseModel):
+    challenge: str                                # register id
+    reason: str
+
+
+class AnalysisPlan(BaseModel):
+    objective: str
+    questions: list[str] = Field(default_factory=list)
+    steps: list[PlanStep] = Field(default_factory=list)
+    accepted: list[AcceptedChallenge] = Field(default_factory=list)
+    notes: list[str] = Field(default_factory=list)
+    source: Literal["heuristic", "llm", "repaired"] = "heuristic"
+
+    def step(self, sid: str) -> PlanStep | None:
+        return next((s for s in self.steps if s.id == sid), None)
+
+
+class ValidationIssue(BaseModel):
+    rule: str                                     # schema | tools | inputs | params | flow | labels | grouping | ...
+    severity: Literal["error", "warning"]
+    message: str
+    step: str | None = None
+    repaired: bool = False
+
+
+class ValidationReport(BaseModel):
+    valid: bool
+    issues: list[ValidationIssue] = Field(default_factory=list)
+    estimated_seconds: float = 0.0
+    step_seconds: dict[str, float] = Field(default_factory=dict)
+
+    def errors(self) -> list[ValidationIssue]:
+        return [i for i in self.issues if i.severity == "error" and not i.repaired]
+
+
 # JSON schemas written to schemas/ (``bioagent schema --write``); a test keeps them in step.
-SCHEMA_MODELS: dict[str, type[BaseModel]] = {"data_profile": DataProfile, "challenge_register": ChallengeRegister}
+SCHEMA_MODELS: dict[str, type[BaseModel]] = {"data_profile": DataProfile, "challenge_register": ChallengeRegister,
+                                             "objective": Objective, "analysis_plan": AnalysisPlan}
 
 
 def json_schemas() -> dict[str, dict]:

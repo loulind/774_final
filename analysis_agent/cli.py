@@ -5,6 +5,7 @@
     bioagent run ... --no-llm         # rule-based planner, critic and writer (no Claude CLI needed)
     bioagent run ... --replay runs/<run>/llm_cache   # reproduce LLM decisions from cache
     bioagent profile --data data/<dataset> [--out DIR]   # measure the data, list its challenges
+    bioagent plan --data data/<dataset> --objective "..." [--out DIR]   # dry run: the validated plan
     bioagent schema [--write]         # JSON schemas of the profile and the challenge register
     bioagent hardware                 # report detected device, disk and budgets
     bioagent tools [--json | --name TOOL]            # the tool registry: the planner's menu
@@ -41,7 +42,14 @@ def main(argv=None) -> None:
     pr.add_argument("--json", action="store_true", help="print the profile as JSON instead of the register")
     pr.add_argument("--label-column")
     pr.add_argument("--group-column")
-    sc = sub.add_parser("schema", help="JSON schemas of the profile and the challenge register")
+    pl = sub.add_parser("plan", help="read the objective and write the validated rule-based plan (no run)")
+    pl.add_argument("--data", required=True, help="dataset file or directory")
+    pl.add_argument("--objective", required=True, help="free-text objective, in quotes")
+    pl.add_argument("--out", help="directory for the objective, register, plan, validation and decision log")
+    pl.add_argument("--quick", action="store_true", help="quick-mode budgets")
+    pl.add_argument("--label-column")
+    pl.add_argument("--group-column")
+    sc = sub.add_parser("schema", help="JSON schemas of the profile, register, objective and plan")
     sc.add_argument("--write", action="store_true", help="(re)write schemas/*.schema.json")
     t = sub.add_parser("tools", help="list the tools the planner can use")
     t.add_argument("--json", action="store_true", help="every tool's full declaration as JSON")
@@ -99,6 +107,38 @@ def main(argv=None) -> None:
             (out / "challenge_register.md").write_text(render_markdown(reg))
         print(prof.model_dump_json(indent=2) if args.json else render_markdown(reg))
         print(f"profiled in {prof.seconds:.1f} s")
+        return
+
+    if args.cmd == "plan":
+        from pathlib import Path
+
+        from .challenges import assess, render_markdown
+        from .config import load_config
+        from .data.loaders import load_path
+        from .decision_log import DecisionLog
+        from .hardware import detect
+        from .objective import interpret, objective_decisions
+        from .planner import plan_analysis, render_plan_markdown
+        from .profiler import profile_dataset
+
+        cfg = load_config(quick=args.quick)
+        budget = cfg.budget(detect().device)
+        ds = load_path(args.data, args.label_column, args.group_column)
+        prof = profile_dataset(ds, config=cfg, budget=budget, cache_dir=Path(cfg.cache_dir))
+        obj = interpret(args.objective, prof, cfg.criteria)
+        reg = assess(prof, obj.types())
+        plan, report, decisions = plan_analysis(prof, reg, obj, budget)
+        md = render_plan_markdown(plan, report, decisions)
+        if args.out:
+            out = Path(args.out)
+            out.mkdir(parents=True, exist_ok=True)
+            for name, model in (("profile", prof), ("objective", obj), ("challenge_register", reg),
+                                ("analysis_plan", plan), ("validation", report)):
+                (out / f"{name}.json").write_text(model.model_dump_json(indent=2) + "\n")
+            (out / "challenge_register.md").write_text(render_markdown(reg))
+            (out / "analysis_plan.md").write_text(md)
+            DecisionLog(out / "decision_log.json").extend(objective_decisions(obj) + decisions)
+        print(md)
         return
 
     if args.cmd == "schema":
