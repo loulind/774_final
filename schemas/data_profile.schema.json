@@ -1,0 +1,1442 @@
+{
+  "$defs": {
+    "ArtifactRecord": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "n": {
+          "title": "N",
+          "type": "integer"
+        },
+        "detail": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Detail",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name",
+        "kind",
+        "n"
+      ],
+      "title": "ArtifactRecord",
+      "type": "object"
+    },
+    "ComputeProfile": {
+      "properties": {
+        "device": {
+          "title": "Device",
+          "type": "string"
+        },
+        "step_seconds": {
+          "title": "Step Seconds",
+          "type": "number"
+        },
+        "total_seconds": {
+          "title": "Total Seconds",
+          "type": "number"
+        },
+        "estimates": {
+          "items": {
+            "$ref": "#/$defs/CostEstimate"
+          },
+          "title": "Estimates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "device",
+        "step_seconds",
+        "total_seconds"
+      ],
+      "title": "ComputeProfile",
+      "type": "object"
+    },
+    "CostEstimate": {
+      "properties": {
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        },
+        "inputs": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Inputs",
+          "type": "object"
+        },
+        "seconds": {
+          "title": "Seconds",
+          "type": "number"
+        }
+      },
+      "required": [
+        "tool",
+        "inputs",
+        "seconds"
+      ],
+      "title": "CostEstimate",
+      "type": "object"
+    },
+    "GroupProfile": {
+      "properties": {
+        "artifact": {
+          "title": "Artifact",
+          "type": "string"
+        },
+        "column": {
+          "title": "Column",
+          "type": "string"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "n_levels": {
+          "title": "N Levels",
+          "type": "integer"
+        },
+        "size_min": {
+          "title": "Size Min",
+          "type": "integer"
+        },
+        "size_median": {
+          "title": "Size Median",
+          "type": "number"
+        },
+        "size_max": {
+          "title": "Size Max",
+          "type": "integer"
+        },
+        "samples_per_level": {
+          "title": "Samples Per Level",
+          "type": "number"
+        },
+        "shared_fraction": {
+          "title": "Shared Fraction",
+          "type": "number"
+        },
+        "nested_in": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Nested In",
+          "type": "array"
+        },
+        "split_overlap": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Split Overlap"
+        }
+      },
+      "required": [
+        "artifact",
+        "column",
+        "role",
+        "n_levels",
+        "size_min",
+        "size_median",
+        "size_max",
+        "samples_per_level",
+        "shared_fraction"
+      ],
+      "title": "GroupProfile",
+      "type": "object"
+    },
+    "GroupStructureProfile": {
+      "properties": {
+        "matrix": {
+          "title": "Matrix",
+          "type": "string"
+        },
+        "group": {
+          "title": "Group",
+          "type": "string"
+        },
+        "column": {
+          "title": "Column",
+          "type": "string"
+        },
+        "n_levels": {
+          "title": "N Levels",
+          "type": "integer"
+        },
+        "silhouette": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Silhouette"
+        },
+        "variance_share": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Variance Share"
+        },
+        "mixing": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mixing"
+        },
+        "outer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outer"
+        },
+        "within_outer_silhouette": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Within Outer Silhouette"
+        },
+        "within_outer_mixing": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Within Outer Mixing"
+        },
+        "share_between_outer": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Share Between Outer"
+        },
+        "share_between_inner_within_outer": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Share Between Inner Within Outer"
+        },
+        "n_outer_with_several_levels": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Outer With Several Levels"
+        },
+        "measured_on": {
+          "default": "",
+          "title": "Measured On",
+          "type": "string"
+        }
+      },
+      "required": [
+        "matrix",
+        "group",
+        "column",
+        "n_levels"
+      ],
+      "title": "GroupStructureProfile",
+      "type": "object"
+    },
+    "ImageProfile": {
+      "properties": {
+        "artifact": {
+          "title": "Artifact",
+          "type": "string"
+        },
+        "source_kind": {
+          "title": "Source Kind",
+          "type": "string"
+        },
+        "n_images": {
+          "title": "N Images",
+          "type": "integer"
+        },
+        "n_measured": {
+          "title": "N Measured",
+          "type": "integer"
+        },
+        "unusable_fraction": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unusable Fraction"
+        },
+        "flag_counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Flag Counts",
+          "type": "object"
+        },
+        "width_median": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Width Median"
+        },
+        "height_median": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height Median"
+        },
+        "size_iqr_ratio": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Size Iqr Ratio"
+        },
+        "n_colour_sampled": {
+          "default": 0,
+          "title": "N Colour Sampled",
+          "type": "integer"
+        },
+        "greyscale_fraction": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Greyscale Fraction"
+        },
+        "stain_hue_fraction": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stain Hue Fraction"
+        },
+        "colour_group": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Colour Group"
+        },
+        "colour_between_group_share": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Colour Between Group Share"
+        },
+        "n_hashed": {
+          "default": 0,
+          "title": "N Hashed",
+          "type": "integer"
+        },
+        "n_hash_candidates": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Hash Candidates"
+        },
+        "duplicate_fraction": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duplicate Fraction"
+        },
+        "n_duplicate_pairs": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Duplicate Pairs"
+        },
+        "cross_split_duplicate_pairs": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cross Split Duplicate Pairs"
+        },
+        "measured_on": {
+          "default": "",
+          "title": "Measured On",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact",
+        "source_kind",
+        "n_images",
+        "n_measured"
+      ],
+      "title": "ImageProfile",
+      "type": "object"
+    },
+    "LabelAgreementProfile": {
+      "properties": {
+        "first": {
+          "title": "First",
+          "type": "string"
+        },
+        "second": {
+          "title": "Second",
+          "type": "string"
+        },
+        "n_samples_both": {
+          "title": "N Samples Both",
+          "type": "integer"
+        },
+        "n_shared_labels": {
+          "title": "N Shared Labels",
+          "type": "integer"
+        },
+        "kappa_micro": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Kappa Micro"
+        },
+        "precision_micro": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Precision Micro"
+        },
+        "recall_micro": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recall Micro"
+        },
+        "first_source_coverage": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "First Source Coverage"
+        }
+      },
+      "required": [
+        "first",
+        "second",
+        "n_samples_both",
+        "n_shared_labels"
+      ],
+      "title": "LabelAgreementProfile",
+      "type": "object"
+    },
+    "LabelProfile": {
+      "properties": {
+        "artifact": {
+          "title": "Artifact",
+          "type": "string"
+        },
+        "column": {
+          "title": "Column",
+          "type": "string"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "n_annotated": {
+          "title": "N Annotated",
+          "type": "integer"
+        },
+        "annotated_fraction": {
+          "title": "Annotated Fraction",
+          "type": "number"
+        },
+        "n_classes": {
+          "title": "N Classes",
+          "type": "integer"
+        },
+        "imbalance_ratio": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Imbalance Ratio"
+        },
+        "largest": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Largest",
+          "type": "object"
+        },
+        "smallest": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Smallest",
+          "type": "object"
+        },
+        "labels_per_sample_median": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Labels Per Sample Median"
+        },
+        "gini": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gini"
+        },
+        "n_modelable": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Modelable"
+        },
+        "n_assessable": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Assessable"
+        },
+        "too_rare_fraction": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Too Rare Fraction"
+        },
+        "annotated_groups": {
+          "additionalProperties": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Annotated Groups",
+          "type": "object"
+        },
+        "cramers_v": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Cramers V",
+          "type": "object"
+        },
+        "variance_share": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Variance Share",
+          "type": "object"
+        }
+      },
+      "required": [
+        "artifact",
+        "column",
+        "kind",
+        "n_annotated",
+        "annotated_fraction",
+        "n_classes"
+      ],
+      "title": "LabelProfile",
+      "type": "object"
+    },
+    "MatrixProfile": {
+      "properties": {
+        "artifact": {
+          "title": "Artifact",
+          "type": "string"
+        },
+        "is_counts": {
+          "title": "Is Counts",
+          "type": "boolean"
+        },
+        "n_samples": {
+          "title": "N Samples",
+          "type": "integer"
+        },
+        "n_features": {
+          "title": "N Features",
+          "type": "integer"
+        },
+        "sparsity": {
+          "title": "Sparsity",
+          "type": "number"
+        },
+        "features_per_sample": {
+          "title": "Features Per Sample",
+          "type": "number"
+        },
+        "library_size_median": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Library Size Median"
+        },
+        "library_size_log2_iqr": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Library Size Log2 Iqr"
+        },
+        "library_median_range": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Library Median Range"
+        },
+        "n_empty": {
+          "default": 0,
+          "title": "N Empty",
+          "type": "integer"
+        },
+        "qc_flagged_fraction": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Qc Flagged Fraction"
+        },
+        "qc_per_library": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Qc Per Library"
+        },
+        "detected_features_median": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detected Features Median"
+        },
+        "n_features_detected_5pct": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Features Detected 5Pct"
+        },
+        "overdispersed_fraction": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Overdispersed Fraction"
+        },
+        "pc1_depth_rho_raw": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pc1 Depth Rho Raw"
+        },
+        "pc1_depth_rho_scaled": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pc1 Depth Rho Scaled"
+        },
+        "components_50": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Components 50"
+        },
+        "components_90": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Components 90"
+        },
+        "variance_top_components": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Variance Top Components"
+        },
+        "measured_on": {
+          "default": "",
+          "title": "Measured On",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact",
+        "is_counts",
+        "n_samples",
+        "n_features",
+        "sparsity",
+        "features_per_sample"
+      ],
+      "title": "MatrixProfile",
+      "type": "object"
+    },
+    "ModalityRecord": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "n_present": {
+          "title": "N Present",
+          "type": "integer"
+        },
+        "missing_fraction": {
+          "title": "Missing Fraction",
+          "type": "number"
+        },
+        "source": {
+          "default": "",
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "kind",
+        "n_present",
+        "missing_fraction"
+      ],
+      "title": "ModalityRecord",
+      "type": "object"
+    },
+    "SpatialProfile": {
+      "properties": {
+        "artifact": {
+          "title": "Artifact",
+          "type": "string"
+        },
+        "matrix": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Matrix"
+        },
+        "library": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Library"
+        },
+        "n_libraries": {
+          "title": "N Libraries",
+          "type": "integer"
+        },
+        "samples_per_library": {
+          "items": {
+            "type": "number"
+          },
+          "title": "Samples Per Library",
+          "type": "array"
+        },
+        "nn_distance_median": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nn Distance Median"
+        },
+        "features_tested": {
+          "default": 0,
+          "title": "Features Tested",
+          "type": "integer"
+        },
+        "fraction_autocorrelated": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fraction Autocorrelated"
+        },
+        "median_morans_i": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Median Morans I"
+        },
+        "measured_on": {
+          "default": "",
+          "title": "Measured On",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact",
+        "n_libraries",
+        "samples_per_library"
+      ],
+      "title": "SpatialProfile",
+      "type": "object"
+    },
+    "SplitProfile": {
+      "properties": {
+        "artifact": {
+          "title": "Artifact",
+          "type": "string"
+        },
+        "counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Counts",
+          "type": "object"
+        }
+      },
+      "required": [
+        "artifact",
+        "counts"
+      ],
+      "title": "SplitProfile",
+      "type": "object"
+    },
+    "TabularProfile": {
+      "properties": {
+        "artifact": {
+          "title": "Artifact",
+          "type": "string"
+        },
+        "n_columns": {
+          "title": "N Columns",
+          "type": "integer"
+        },
+        "n_numeric": {
+          "title": "N Numeric",
+          "type": "integer"
+        },
+        "missing_cell_fraction": {
+          "title": "Missing Cell Fraction",
+          "type": "number"
+        },
+        "columns_with_missing": {
+          "title": "Columns With Missing",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "artifact",
+        "n_columns",
+        "n_numeric",
+        "missing_cell_fraction",
+        "columns_with_missing"
+      ],
+      "title": "TabularProfile",
+      "type": "object"
+    },
+    "TextProfile": {
+      "properties": {
+        "artifact": {
+          "title": "Artifact",
+          "type": "string"
+        },
+        "n_texts": {
+          "title": "N Texts",
+          "type": "integer"
+        },
+        "flag_fractions": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Flag Fractions",
+          "type": "object"
+        },
+        "flagged_fraction": {
+          "title": "Flagged Fraction",
+          "type": "number"
+        },
+        "words_median": {
+          "title": "Words Median",
+          "type": "number"
+        },
+        "words_p95": {
+          "title": "Words P95",
+          "type": "number"
+        },
+        "cross_split_duplicate_fraction": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cross Split Duplicate Fraction"
+        }
+      },
+      "required": [
+        "artifact",
+        "n_texts",
+        "flag_fractions",
+        "flagged_fraction",
+        "words_median",
+        "words_p95"
+      ],
+      "title": "TextProfile",
+      "type": "object"
+    }
+  },
+  "description": "What the planner, the register and the LLM see about the data: structure and\nmeasurements, never the dataset's name or location.",
+  "properties": {
+    "n_samples": {
+      "title": "N Samples",
+      "type": "integer"
+    },
+    "format": {
+      "title": "Format",
+      "type": "string"
+    },
+    "modalities": {
+      "items": {
+        "$ref": "#/$defs/ModalityRecord"
+      },
+      "title": "Modalities",
+      "type": "array"
+    },
+    "roles": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Roles",
+      "type": "object"
+    },
+    "artifacts": {
+      "items": {
+        "$ref": "#/$defs/ArtifactRecord"
+      },
+      "title": "Artifacts",
+      "type": "array"
+    },
+    "matrices": {
+      "items": {
+        "$ref": "#/$defs/MatrixProfile"
+      },
+      "title": "Matrices",
+      "type": "array"
+    },
+    "group_structure": {
+      "items": {
+        "$ref": "#/$defs/GroupStructureProfile"
+      },
+      "title": "Group Structure",
+      "type": "array"
+    },
+    "spatial": {
+      "items": {
+        "$ref": "#/$defs/SpatialProfile"
+      },
+      "title": "Spatial",
+      "type": "array"
+    },
+    "images": {
+      "items": {
+        "$ref": "#/$defs/ImageProfile"
+      },
+      "title": "Images",
+      "type": "array"
+    },
+    "texts": {
+      "items": {
+        "$ref": "#/$defs/TextProfile"
+      },
+      "title": "Texts",
+      "type": "array"
+    },
+    "tabular": {
+      "items": {
+        "$ref": "#/$defs/TabularProfile"
+      },
+      "title": "Tabular",
+      "type": "array"
+    },
+    "labels": {
+      "items": {
+        "$ref": "#/$defs/LabelProfile"
+      },
+      "title": "Labels",
+      "type": "array"
+    },
+    "label_agreement": {
+      "items": {
+        "$ref": "#/$defs/LabelAgreementProfile"
+      },
+      "title": "Label Agreement",
+      "type": "array"
+    },
+    "groups": {
+      "items": {
+        "$ref": "#/$defs/GroupProfile"
+      },
+      "title": "Groups",
+      "type": "array"
+    },
+    "split": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SplitProfile"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "pairing": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Pairing",
+      "type": "object"
+    },
+    "compute": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ComputeProfile"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "seed": {
+      "default": 774,
+      "title": "Seed",
+      "type": "integer"
+    },
+    "seconds": {
+      "default": 0.0,
+      "title": "Seconds",
+      "type": "number"
+    },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "n_samples",
+    "format",
+    "modalities",
+    "roles",
+    "artifacts"
+  ],
+  "title": "DataProfile",
+  "type": "object"
+}

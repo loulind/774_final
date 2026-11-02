@@ -78,6 +78,28 @@ class AssessParams(ToolParams):
     n_neighbors: int = Field(30, ge=5, le=200, description="neighbours behind the mixing entropy")
 
 
+def measure_groups(Z: np.ndarray, b: np.ndarray, o: np.ndarray | None = None, k: int = 30, cap: int = 5000,
+                   rng=None) -> dict:
+    """Silhouette, variance share and neighbour mixing of grouping ``b`` in Z; with a coarser
+    grouping ``o`` that ``b`` is nested in, the same within each level of ``o`` and the nested
+    variance shares (measurements only; ``batch_strength`` turns them into a level)."""
+    nested = _nested(b, o)
+    m = {"n_samples": len(b), "n_batches": int(len(np.unique(b))), "batch_nested_in_outer": nested,
+         "batch_silhouette": silhouette(Z, b, cap, rng),
+         "variance_share_batch": variance_share(Z, b),
+         "mixing": mixing_entropy(Z, b, k, cap=cap, rng=rng)}
+    if o is not None:
+        m["n_outer"] = int(len(np.unique(o)))
+        m["variance_share_outer"] = variance_share(Z, o)
+        m["outer_silhouette"] = silhouette(Z, o, cap, rng)
+    if nested:
+        m.update({f"share_{key}": v for key, v in nested_shares(Z, b, o).items()})
+        m["within_outer_batch_silhouette"] = _within(Z, b, o, lambda z, g: silhouette(z, g, cap, rng))
+        m["within_outer_mixing"] = mixing_entropy(Z, b, k, within=o, cap=cap, rng=rng)
+        m["n_outer_with_several_batches"] = int((pd.DataFrame({"b": b, "o": o}).groupby("o")["b"].nunique() > 1).sum())
+    return m
+
+
 def _run_assess(ctx, inputs, p: AssessParams) -> StepResult:
     emb, batch_art, outer_art, labels = inputs["embedding"], inputs["batch"], inputs.get("outer"), inputs.get("labels")
     rows = np.intersect1d(emb.rows, batch_art.rows, assume_unique=True)
@@ -86,23 +108,11 @@ def _run_assess(ctx, inputs, p: AssessParams) -> StepResult:
     Z = dense(emb.take(rows)).astype(np.float64)
     b = np.asarray(batch_art.take(rows)).astype(str)
     o = np.asarray(outer_art.take(rows)).astype(str) if outer_art is not None else None
-    nested = _nested(b, o)
     cap, rng = ctx.budget.eval_max_samples, ctx.rng(5)
     bcol = batch_art.meta.get("column", batch_art.name)
     ocol = outer_art.meta.get("column", outer_art.name) if outer_art is not None else None
-    m = {"n_samples": len(rows), "n_batches": int(len(np.unique(b))), "batch_nested_in_outer": nested,
-         "batch_silhouette": silhouette(Z, b, cap, rng),
-         "variance_share_batch": variance_share(Z, b),
-         "mixing": mixing_entropy(Z, b, p.n_neighbors, cap=cap, rng=rng)}
-    if o is not None:
-        m["n_outer"] = int(len(np.unique(o)))
-        m["variance_share_outer"] = variance_share(Z, o)
-        m["outer_silhouette"] = silhouette(Z, o, cap, rng)
-    if nested:
-        m.update({f"share_{k}": v for k, v in nested_shares(Z, b, o).items()})
-        m["within_outer_batch_silhouette"] = _within(Z, b, o, lambda z, g: silhouette(z, g, cap, rng))
-        m["within_outer_mixing"] = mixing_entropy(Z, b, p.n_neighbors, within=o, cap=cap, rng=rng)
-        m["n_outer_with_several_batches"] = int((pd.DataFrame({"b": b, "o": o}).groupby("o")["b"].nunique() > 1).sum())
+    m = measure_groups(Z, b, o, p.n_neighbors, cap, rng)
+    nested = m["batch_nested_in_outer"]
     sil = m.get("within_outer_batch_silhouette") if nested else m["batch_silhouette"]
     mix = m.get("within_outer_mixing") if nested else m["mixing"]
     level = batch_strength(sil, mix)

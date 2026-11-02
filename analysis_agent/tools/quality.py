@@ -3,7 +3,10 @@
 Near-duplicates are found two ways. Pixel level: 64-bit difference hashes (from the cached
 image pass of ``qc_images``) within ``hash_max_distance`` bits, found exactly by
 multi-index hashing (with h allowed differences, two hashes split into h + 1 blocks share at
-least one block). Representation level: pairs of mutual nearest neighbours whose embedding
+least one block), and confirmed by 256-bit hashes within ``wide_hash_max_distance`` bits:
+on greyscale medical images unrelated pictures often agree at 64 bits (a check of 300 such
+pairs found 1% near-identical), while the same relative tolerance at 256 bits keeps copies
+and drops look-alikes. Representation level: pairs of mutual nearest neighbours whose embedding
 cosine is at least as high as that of the pixel-level duplicates (the 5th percentile of
 their cosines), catching crops, overlays and re-scaled copies the hash misses; without
 enough pixel-level pairs to calibrate it, the threshold falls back to ``fallback_cosine``.
@@ -30,7 +33,7 @@ from pydantic import Field
 
 from .base import (Artifact, Criterion, Port, StepResult, ToolParams, ToolSpec, check_time, dense, label_matrix,
                    values_on)
-from .qc import image_stats
+from .qc import WIDE_HASH, image_stats
 from .registry import register
 from .stats import cohen_kappa
 
@@ -101,8 +104,31 @@ def components(n: int, pairs: np.ndarray) -> np.ndarray:
     return connected_components(A, directed=False)[1]
 
 
+def pixel_pairs(st: pd.DataFrame, max_dist: int,
+                wide_max_dist: int | None = None) -> tuple[np.ndarray, np.ndarray, int, int]:
+    """Pairs (positions in ``st``, an ``image_stats`` table) of readable images whose 64-bit
+    difference hashes differ in at most ``max_dist`` bits and, with ``wide_max_dist``, whose
+    256-bit hashes differ in at most that many; hashes of nearly uniform images (<= 2 or >= 62
+    set bits) are left out. Returns (pairs, informative mask, skipped oversized buckets,
+    number of 64-bit candidate pairs)."""
+    h = st["dhash"].to_numpy(np.uint64)
+    bits = popcount(h)
+    informative = st["readable"].to_numpy() & (bits > 2) & (bits < 62)
+    hi = np.flatnonzero(informative)
+    hp, skipped = hash_pairs(h[hi], max_dist)
+    pairs = hi[hp] if len(hp) else hp
+    n_candidates = len(pairs)
+    if wide_max_dist is not None and len(pairs):
+        W = st[list(WIDE_HASH)].to_numpy(np.int64)
+        pairs = pairs[popcount(W[pairs[:, 0]] ^ W[pairs[:, 1]]).sum(1) <= wide_max_dist]
+    return pairs, informative, skipped, n_candidates
+
+
 class DuplicateParams(ToolParams):
-    hash_max_distance: int = Field(4, ge=0, le=16, description="differing bits that still count as a duplicate")
+    hash_max_distance: int = Field(4, ge=0, le=16, description="differing bits of the 64-bit hash that still "
+                                                               "make a candidate pair")
+    wide_hash_max_distance: int = Field(16, ge=0, le=64, description="differing bits of the 256-bit hash that "
+                                                                     "still confirm it")
     use_embedding: bool = Field(True, description="also look for representation-level duplicates")
     min_calibration_pairs: int = Field(20, ge=5, le=10_000, description="pixel-level pairs needed to set the "
                                                                          "embedding threshold")
@@ -114,12 +140,8 @@ def _run_duplicates(ctx, inputs, p: DuplicateParams) -> StepResult:
     images, emb, split, groups = inputs["images"], inputs.get("embedding"), inputs.get("split"), inputs.get("groups")
     rows = images.rows if emb is None else np.intersect1d(images.rows, emb.rows, assume_unique=True)
     st = image_stats(images, rows, ctx.cache_dir, ctx.log, lambda: check_time(ctx, "near-duplicates"))
+    hp, informative, skipped, n_candidates = pixel_pairs(st, p.hash_max_distance, p.wide_hash_max_distance)
     h = st["dhash"].to_numpy(np.uint64)
-    bits = popcount(h)
-    informative = st["readable"].to_numpy() & (bits > 2) & (bits < 62)
-    hi = np.flatnonzero(informative)
-    hp, skipped = hash_pairs(h[hi], p.hash_max_distance)
-    hp = hi[hp] if len(hp) else hp
     hp_set = {tuple(x) for x in hp.tolist()}
     tau, ep, cos_h = None, np.zeros((0, 2), int), None
     if emb is not None and p.use_embedding:
@@ -147,7 +169,8 @@ def _run_duplicates(ctx, inputs, p: DuplicateParams) -> StepResult:
     sizes = np.bincount(comp)
     in_dup = sizes[comp] > 1
     cluster_id = np.array([f"D{c}" if in_dup[i] else f"S{rows[i]}" for i, c in enumerate(comp)], dtype=object)
-    m = {"n_images": len(rows), "n_hash_informative": int(informative.sum()), "n_hash_pairs": len(hp_set),
+    m = {"n_images": len(rows), "n_hash_informative": int(informative.sum()), "n_hash_candidates": n_candidates,
+         "n_hash_pairs": len(hp_set),
          "n_embedding_pairs": len(ep_set), "n_pairs_both": len(hp_set & ep_set),
          "pair_agreement": (len(hp_set & ep_set) / len(hp_set | ep_set)) if (hp_set | ep_set) else None,
          "embedding_threshold": tau, "n_clusters": int((sizes > 1).sum()), "n_in_clusters": int(in_dup.sum()),
@@ -195,7 +218,7 @@ register(ToolSpec(
               Port("embedding", ("embedding",), required=False, doc="image features for representation-level pairs"),
               Port("split", ("split",), required=False), Port("groups", ("groups",), required=False)),
     produces=(Port("clusters", ("groups",), doc="duplicate cluster of every image (singletons have their own)"),),
-    params=DuplicateParams, answers=("data_quality_audit",), addresses=("near_duplicates",),
+    params=DuplicateParams, answers=("data_quality_audit",), addresses=("near_duplicates", "split_leakage"),
     criteria=(Criterion("fraction_in_clusters", "report", doc="share of images with a near-duplicate"),
               Criterion("test_with_train_duplicate_fraction", "report", doc="test images with a training duplicate"),
               Criterion("pair_agreement", "report", doc="Jaccard of hash and embedding pairs"),
@@ -221,22 +244,25 @@ class ImbalanceParams(ToolParams):
                                                                       "modelled")
 
 
-def _run_imbalance(ctx, inputs, p: ImbalanceParams) -> StepResult:
-    target, split = inputs["target"], inputs.get("split")
+def label_frequencies(target: Artifact, split: Artifact | None, min_train_positives: int,
+                      min_test: int) -> tuple[pd.DataFrame, dict]:
+    """Per-label counts (overall and per split) and whether each label has the support to be
+    modelled and judged; plus the summary measurements of the label distribution."""
     rows = target.rows if split is None else np.intersect1d(target.rows, split.rows, assume_unique=True)
     Y, names, ann = label_matrix(target, rows)
     rows, Y = rows[ann], sp.csc_matrix(Y[ann])
     counts = np.asarray(Y.sum(0)).ravel()
     s = values_on(rows, split, "")
     table = pd.DataFrame({"label": names, "count": counts, "prevalence": counts / max(1, len(rows))})
-    min_test = ctx.criteria.reliable_min_test_positives
     if s is not None:
         for lv in sorted(set(s) - {""}):
             table[f"n_{lv}"] = np.asarray(Y[np.flatnonzero(s == lv)].sum(0)).ravel()
         tr = table.get("n_train", 0) + table.get("n_val", 0)
-        table["assessable"] = (tr >= p.min_train_positives) & (table.get("n_test", 0) >= min_test)
+        table["modelable"] = tr >= min_train_positives
+        table["assessable"] = table["modelable"] & (table.get("n_test", 0) >= min_test)
     else:
-        table["assessable"] = table["count"] >= p.min_train_positives + min_test
+        table["modelable"] = table["count"] >= min_train_positives
+        table["assessable"] = table["count"] >= min_train_positives + min_test
     used = counts[counts > 0]
     share = used / used.sum() if used.sum() else used
     per_sample = np.asarray(sp.csr_matrix(Y).sum(1)).ravel()
@@ -247,8 +273,14 @@ def _run_imbalance(ctx, inputs, p: ImbalanceParams) -> StepResult:
          "top10pct_share": float(top[: max(1, len(top) // 10)].sum() / max(1, top.sum())),
          "n_assessable": int(table["assessable"].sum()), "n_below_support": int((~table["assessable"]).sum()),
          "labels_per_sample_median": float(np.median(per_sample)), "unannotated_fraction": float(1 - ann.mean()),
-         "multilabel": target.kind == "multilabel"}
-    ctx.decide("labels assessable", f"{m['n_assessable']:,} of {len(names):,}",
+         "multilabel": target.kind == "multilabel", "n_modelable": int(table["modelable"].sum())}
+    return table, m
+
+
+def _run_imbalance(ctx, inputs, p: ImbalanceParams) -> StepResult:
+    min_test = ctx.criteria.reliable_min_test_positives
+    table, m = label_frequencies(inputs["target"], inputs.get("split"), p.min_train_positives, min_test)
+    ctx.decide("labels assessable", f"{m['n_assessable']:,} of {m['n_labels']:,}",
                f"A label needs >= {p.min_train_positives} training positives to be modelled and >= {min_test} test "
                "positives to be judged; the others are reported as too rare to assess.", [],
                {"imbalance_ratio": m["imbalance_ratio"], "gini": m["gini"]})
@@ -277,8 +309,10 @@ class AgreementParams(ToolParams):
     min_positives: int = Field(5, ge=1, le=10_000, description="labels need this many positives in either source")
 
 
-def _run_label_agreement(ctx, inputs, p: AgreementParams) -> StepResult:
-    a_art, b_art = inputs["labels"], inputs["reference"]
+def source_agreement(a_art: Artifact, b_art: Artifact, min_positives: int = 5) -> tuple[pd.DataFrame, dict]:
+    """Per shared label and overall agreement of two label sources on co-annotated samples;
+    ``first_source_coverage`` is the share of the first source's positive assignments whose
+    label the second source also defines (how much of the first source the estimate covers)."""
     rows = np.intersect1d(a_art.rows, b_art.rows, assume_unique=True)
     A, an, aa = label_matrix(a_art, rows)
     B, bn, ba = label_matrix(b_art, rows)
@@ -289,7 +323,7 @@ def _run_label_agreement(ctx, inputs, p: AgreementParams) -> StepResult:
     recs = []
     for name, i, j in zip(shared, ia, ib):
         x, y = A[:, i], B[:, j]
-        if x.sum() + y.sum() < p.min_positives:
+        if x.sum() + y.sum() < min_positives:
             continue
         tp = int((x & y).sum())
         recs.append({"label": name, "n_first": int(x.sum()), "n_reference": int(y.sum()), "both": tp,
@@ -298,12 +332,21 @@ def _run_label_agreement(ctx, inputs, p: AgreementParams) -> StepResult:
     table = pd.DataFrame(recs)
     if table.empty:
         raise RuntimeError("the two label sources share no label with enough positives on co-annotated samples")
-    Xa, Xb = A[:, ia].ravel(), B[:, ib].ravel()
+    kept = [ia[shared.index(x)] for x in table["label"]]
+    jb = [ib[shared.index(x)] for x in table["label"]]
+    Xa, Xb = A[:, kept].ravel(), B[:, jb].ravel()
     m = {"n_samples_both": int(both.sum()), "n_shared_labels": len(table), "kappa_micro": cohen_kappa(Xa, Xb),
          "kappa_median": float(table["kappa"].median()),
          "precision_micro": float((Xa & Xb).sum() / max(1, Xa.sum())),
          "recall_micro": float((Xa & Xb).sum() / max(1, Xb.sum())),
-         "disagreement_rate": float((Xa != Xb).mean())}
+         "disagreement_rate": float((Xa != Xb).mean()),
+         "first_source_coverage": float(A[:, ia].sum() / max(1, A.sum()))}
+    return table, m
+
+
+def _run_label_agreement(ctx, inputs, p: AgreementParams) -> StepResult:
+    a_art, b_art = inputs["labels"], inputs["reference"]
+    table, m = source_agreement(a_art, b_art, p.min_positives)
     ctx.decide("label noise estimate", f"kappa {m['kappa_micro']:.2f} on {m['n_shared_labels']} shared labels",
                f"'{a_art.name}' is compared with '{b_art.name}' on the {m['n_samples_both']:,} samples both annotate; "
                "precision and recall treat the second source as the reference.", [], {})

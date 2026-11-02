@@ -89,7 +89,7 @@ def tfidf(X: sp.csr_matrix) -> np.ndarray:
     return np.log1p(np.asarray((tf @ sp.diags(idf)).toarray(), dtype=np.float32) * 1e4)
 
 
-def _pc1_depth(M: np.ndarray, log_depth: np.ndarray, standardise: bool, seed: int) -> tuple[float, float]:
+def pc1_depth(M: np.ndarray, log_depth: np.ndarray, standardise: bool, seed: int) -> tuple[float, float]:
     """|Spearman rho| of PC1 with log depth, and R^2 of log depth on the first 10 PCs."""
     from sklearn.decomposition import PCA
 
@@ -182,7 +182,7 @@ def _run_normalize(ctx, inputs, p: NormalizeParams) -> StepResult:
     sel_table["selected"] = np.isin(np.arange(X.shape[1]), keep)
     Xs = X[:, keep]
     raw_log = np.log1p(np.asarray(Xs.toarray(), dtype=np.float32))
-    before = _pc1_depth(raw_log, log_depth, True, ctx.seed)
+    before = pc1_depth(raw_log, log_depth, True, ctx.seed)
 
     cands: dict[str, tuple[np.ndarray, bool]] = {}
     if binary and p.method == "auto" or p.method == "tfidf":
@@ -192,7 +192,7 @@ def _run_normalize(ctx, inputs, p: NormalizeParams) -> StepResult:
             cands["log"] = (log_normalise(Xs, lib), False)
         if p.method in ("auto", "pearson_residuals"):
             cands["pearson_residuals"] = (pearson_residuals(Xs, p.theta, lib), True)
-    depth = {m: _pc1_depth(M, log_depth, not scaled, ctx.seed) for m, (M, scaled) in cands.items()}
+    depth = {m: pc1_depth(M, log_depth, not scaled, ctx.seed) for m, (M, scaled) in cands.items()}
     if len(cands) == 1:
         method = next(iter(cands))
         why = ("Binary matrix: TF-IDF weights presence by rarity." if method == "tfidf" else "Set by the plan.")

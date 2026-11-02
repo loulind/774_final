@@ -2,7 +2,9 @@
 
 Counts: a sample is removed when it is empty, or when its log library size or its log
 number of detected features lies more than ``nmads`` scaled median absolute deviations
-below the median (the outlier rule of scater's ``isOutlier``). Depth differs between
+below the median (the outlier rule of scater's ``isOutlier``) and at least ``min_fold``
+times below it (scater's ``min.diff``: when nearly every sample detects nearly every
+feature, three MADs are a handful of features and would flag ordinary samples). Depth differs between
 libraries (slides, runs), so the thresholds are computed within each library when every
 library is large enough to have its own distribution; one global threshold would remove
 whole low-depth libraries. Features detected in fewer than ``min_feature_samples`` samples
@@ -10,8 +12,8 @@ are dropped.
 
 Images: unreadable, tiny (shorter side below ``min_side`` pixels), an extreme aspect ratio,
 or blank (almost no grey-level variation). One pass measures every image's size, grey-level
-spread and 64-bit difference hash; the pass is cached per dataset, so the near-duplicate
-tool reuses it instead of decoding every image again.
+spread and 64- and 256-bit difference hashes; the pass is cached per dataset, so the
+near-duplicate tool reuses it instead of decoding every image again.
 """
 
 from __future__ import annotations
@@ -51,40 +53,57 @@ class CountQCParams(ToolParams):
         "auto", description="thresholds within each library; auto = yes when every library has at least "
                             "min_library_samples samples")
     min_library_samples: int = Field(50, ge=10, le=5000)
+    min_fold: float = Field(2.0, ge=1.0, le=20.0, description="a flagged sample is also at least this many times "
+                                                              "below the median")
+
+
+def count_outliers(X: sp.csr_matrix, library: np.ndarray | None, nmads: float = 3.0, per_library: str = "auto",
+                   min_library_samples: int = 50, min_fold: float = 2.0) -> dict:
+    """The count-QC rule (module doc) on X with optional library labels: per-sample flags (empty,
+    low_library_size, low_detected, removed), whether thresholds were set per library, the
+    thresholds, and every sample's library size and number of detected features."""
+    n = X.shape[0]
+    lib_size = np.asarray(X.sum(1)).ravel().astype(float)
+    detected = np.asarray((X > 0).sum(1)).ravel().astype(float)
+    sizes = pd.Series(library).value_counts() if library is not None else None
+    per_lib = per_library == "yes" or (per_library == "auto" and sizes is not None and len(sizes) > 1
+                                       and int(sizes.min()) >= min_library_samples)
+    blocks = {lv: np.flatnonzero(library == lv) for lv in sizes.index} if per_lib else {"all": np.arange(n)}
+    empty = lib_size == 0
+    low_depth, low_feat = np.zeros(n, bool), np.zeros(n, bool)
+    thresholds = []
+    for lv, idx in blocks.items():
+        ok = idx[~empty[idx]]
+        if len(ok) == 0:
+            continue
+        f1, lo1, _ = mad_outliers(np.log1p(lib_size[ok]), nmads, min_diff=np.log(min_fold))
+        f2, lo2, _ = mad_outliers(np.log1p(detected[ok]), nmads, min_diff=np.log(min_fold))
+        low_depth[ok], low_feat[ok] = f1, f2
+        thresholds.append({"library": lv, "n": len(idx), "min_library_size": float(np.expm1(lo1)),
+                           "min_detected": float(np.expm1(lo2)), "median_library_size": float(np.median(lib_size[ok])),
+                           "flagged": int((f1 | f2).sum()) + int(empty[idx].sum())})
+    return {"empty": empty, "low_library_size": low_depth & ~empty, "low_detected": low_feat & ~empty,
+            "removed": empty | low_depth | low_feat, "per_library": per_lib, "thresholds": thresholds,
+            "library_size": lib_size, "detected": detected, "library_counts": sizes}
 
 
 def _run_qc_counts(ctx, inputs, p: CountQCParams) -> StepResult:
     a, library, report = inputs["counts"], inputs.get("library"), inputs.get("report_by")
     rows = a.rows
     X = sp.csr_matrix(a.data)
-    lib_size = np.asarray(X.sum(1)).ravel().astype(float)
-    detected = np.asarray((X > 0).sum(1)).ravel().astype(float)
     lib = values_on(rows, library, "(none)")
-    sizes = pd.Series(lib).value_counts() if lib is not None else None
-    per_lib = p.per_library == "yes" or (p.per_library == "auto" and sizes is not None and len(sizes) > 1
-                                         and int(sizes.min()) >= p.min_library_samples)
-    blocks = {lv: np.flatnonzero(lib == lv) for lv in sizes.index} if per_lib else {"all": np.arange(len(rows))}
-    empty = lib_size == 0
-    low_depth, low_feat = np.zeros(len(rows), bool), np.zeros(len(rows), bool)
-    thresholds = []
-    for lv, idx in blocks.items():
-        ok = idx[~empty[idx]]
-        if len(ok) == 0:
-            continue
-        f1, lo1, _ = mad_outliers(np.log1p(lib_size[ok]), p.nmads)
-        f2, lo2, _ = mad_outliers(np.log1p(detected[ok]), p.nmads)
-        low_depth[ok], low_feat[ok] = f1, f2
-        thresholds.append({"library": lv, "n": len(idx), "min_library_size": float(np.expm1(lo1)),
-                           "min_detected": float(np.expm1(lo2)), "median_library_size": float(np.median(lib_size[ok])),
-                           "flagged": int((f1 | f2).sum()) + int(empty[idx].sum())})
-    removed = empty | low_depth | low_feat
+    res = count_outliers(X, lib, p.nmads, p.per_library, p.min_library_samples, p.min_fold)
+    sizes, per_lib, thresholds = res["library_counts"], res["per_library"], res["thresholds"]
+    empty, removed, lib_size = res["empty"], res["removed"], res["library_size"]
     col = library.meta.get("column", library.name) if library is not None else None
     ctx.decide("count QC thresholds", f"per {col}" if per_lib else "global",
                (f"Depth differs between {col} levels (median library size from "
                 f"{min(t['median_library_size'] for t in thresholds):,.0f} to "
                 f"{max(t['median_library_size'] for t in thresholds):,.0f}), so each {col} gets its own "
-                f"{p.nmads:g}-MAD lower threshold on log library size and log detected features.") if per_lib else
-               (f"One {p.nmads:g}-MAD lower threshold on log library size and log detected features"
+                f"{p.nmads:g}-MAD lower threshold (and at least {p.min_fold:g}-fold below its median) on log "
+                "library size and log detected features.") if per_lib else
+               (f"One {p.nmads:g}-MAD lower threshold (and at least {p.min_fold:g}-fold below the median) on log "
+                "library size and log detected features"
                 + (f": the smallest {col} has {int(sizes.min())} samples, fewer than the {p.min_library_samples} "
                    "needed for its own threshold." if sizes is not None and len(sizes) > 1 else ".")),
                [("global thresholds", "would remove whole low-depth libraries") if per_lib else
@@ -101,7 +120,7 @@ def _run_qc_counts(ctx, inputs, p: CountQCParams) -> StepResult:
                "carry too little information to normalise or test.",
                [("keep all features", "near-empty features add noise and multiple-testing burden")],
                {"dropped": int((~keep_feat).sum())})
-    flags = {"empty": empty, "low_library_size": low_depth & ~empty, "low_detected": low_feat & ~empty}
+    flags = {k: res[k] for k in ("empty", "low_library_size", "low_detected")}
     rep = values_on(rows, report) if report is not None else lib
     table = _by_group(rep if rep is not None else np.full(len(rows), "all"), flags, removed)
     out_counts = Artifact("counts", Xk[:, keep_feat].tocsr(), keep_rows,
@@ -144,11 +163,13 @@ register(ToolSpec(
 # images
 # ---------------------------------------------------------------------------
 
-STAT_COLUMNS = ("readable", "width", "height", "grey_std", "dhash")
+WIDE_HASH = ("dhash256_0", "dhash256_1", "dhash256_2", "dhash256_3")
+STAT_COLUMNS = ("readable", "width", "height", "grey_std", "dhash", *WIDE_HASH)
+STATS_VERSION = 2                                       # bump when the measured columns change
 
 
 def _measure(source, i: int) -> tuple:
-    from ..agents.multimodal.imaging import dhash
+    from ..agents.multimodal.imaging import dhash, dhash_words
 
     try:
         im = source.load(int(i))
@@ -156,20 +177,20 @@ def _measure(source, i: int) -> tuple:
         g = im.convert("L")
         t = g.copy()
         t.thumbnail((64, 64))
-        return True, w, h, float(np.asarray(t, np.float32).std()), dhash(g)
+        return (True, w, h, float(np.asarray(t, np.float32).std()), dhash(g), *dhash_words(g))
     except Exception:                                   # unreadable or missing file
-        return False, 0, 0, float("nan"), 0
+        return (False, 0, 0, float("nan"), 0, *([0] * len(WIDE_HASH)))
 
 
 def image_stats(images: Artifact, rows: np.ndarray, cache_dir=None, log=print, check=None,
                 workers: int = 8, chunk: int = 2000) -> pd.DataFrame:
-    """Size, grey-level spread of a 64-pixel thumbnail and difference hash of every image in
-    ``rows``, indexed by row. Cached per dataset under ``cache_dir/image_stats``; rows not in
-    the cache are measured and added."""
+    """Size, grey-level spread of a 64-pixel thumbnail and difference hashes (64-bit, and
+    256-bit as four signed words) of every image in ``rows``, indexed by row. Cached per
+    dataset under ``cache_dir/image_stats``; rows not in the cache are measured and added."""
     source = images.data
     path = None
     if cache_dir is not None and images.meta.get("dataset_key"):
-        key = digest({"data": images.meta["dataset_key"], "source": source.describe()})
+        key = digest({"data": images.meta["dataset_key"], "source": source.describe(), "version": STATS_VERSION})
         path = cache_dir / "image_stats" / f"{key}.npz"
     have = pd.DataFrame(columns=STAT_COLUMNS)
     if path is not None and path.exists():
@@ -201,7 +222,8 @@ def image_stats(images: Artifact, rows: np.ndarray, cache_dir=None, log=print, c
             np.savez(path, rows=have.index.to_numpy(np.int64),
                      **{c: have[c].to_numpy() for c in STAT_COLUMNS})
     out = have.loc[np.asarray(rows, np.int64)]
-    return out.astype({"readable": bool, "width": int, "height": int, "grey_std": float, "dhash": np.uint64})
+    return out.astype({"readable": bool, "width": int, "height": int, "grey_std": float, "dhash": np.uint64,
+                       **{c: np.int64 for c in WIDE_HASH}})
 
 
 class ImageQCParams(ToolParams):
@@ -211,17 +233,26 @@ class ImageQCParams(ToolParams):
                                                                "64-pixel thumbnail below this = blank")
 
 
+def image_flags(st: pd.DataFrame, min_side: int = 32, max_aspect: float = 5.0,
+                blank_std: float = 2.0) -> dict[str, np.ndarray]:
+    """The image-QC rule (module doc) applied to ``image_stats`` output."""
+    ok = st["readable"].to_numpy()
+    w, h = st["width"].to_numpy(float), st["height"].to_numpy(float)
+    short, long_ = np.minimum(w, h), np.maximum(w, h)
+    return {"unreadable": ~ok,
+            "tiny": ok & (short < min_side),
+            "extreme_aspect": ok & (long_ > max_aspect * np.maximum(short, 1)),
+            "blank": ok & (st["grey_std"].to_numpy() < blank_std)}
+
+
 def _run_qc_images(ctx, inputs, p: ImageQCParams) -> StepResult:
     images, report, split = inputs["images"], inputs.get("report_by"), inputs.get("split")
     rows = images.rows
     st = image_stats(images, rows, ctx.cache_dir, ctx.log, lambda: check_time(ctx, "image QC"))
     ok = st["readable"].to_numpy()
     w, h = st["width"].to_numpy(float), st["height"].to_numpy(float)
-    short, long_ = np.minimum(w, h), np.maximum(w, h)
-    flags = {"unreadable": ~ok,
-             "tiny": ok & (short < p.min_side),
-             "extreme_aspect": ok & (long_ > p.max_aspect * np.maximum(short, 1)),
-             "blank": ok & (st["grey_std"].to_numpy() < p.blank_std)}
+    short = np.minimum(w, h)
+    flags = image_flags(st, p.min_side, p.max_aspect, p.blank_std)
     removed = np.zeros(len(rows), bool)
     for f in flags.values():
         removed |= f

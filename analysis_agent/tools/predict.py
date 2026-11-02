@@ -371,7 +371,7 @@ register(ToolSpec(
     produces=(Port("table", ("table",), doc="per-target AUROC, CI, q, AUPRC, calibration, status"),
               Port("predictions", ("scores",), required=False, doc="evaluation-set probabilities")),
     params=PredictParams, answers=("predictive_modelling",),
-    addresses=("class_imbalance", "near_duplicates", "nested_sampling", "multiple_testing"),
+    addresses=("class_imbalance", "near_duplicates", "split_leakage", "nested_sampling", "multiple_testing"),
     criteria=(Criterion("cv_auroc_median", "max", None, "median inner cross-validation AUROC (training data)"),
               Criterion("n_reliable", "report", selection=False, doc="targets meeting the reliability rule"),
               Criterion("median_auroc", "report", selection=False, doc="median evaluation AUROC"),

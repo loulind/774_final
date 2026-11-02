@@ -314,6 +314,21 @@ def test_image_qc_flags_degenerate_images():
     assert out["mask"].data[:20].all() and not out["mask"].data[20:].any() and out["images"].n == 20
 
 
+def test_wide_hash_confirms_only_real_copies():
+    from analysis_agent.tools.qc import WIDE_HASH
+    from analysis_agent.tools.quality import pixel_pairs
+
+    rng = np.random.default_rng(12)
+    h = rng.integers(0, 2 ** 62, 4).astype(np.uint64) | np.uint64(0xFFFF)   # informative 64-bit hashes
+    h[1], h[3] = h[0], h[2]                                                  # two 64-bit matches ...
+    wide = rng.integers(-2 ** 62, 2 ** 62, (4, 4))
+    wide[1] = wide[0] ^ 0b111                                               # ... one 3 bits apart at 256 bits
+    wide[3] = wide[2] ^ ((1 << 40) - 1)                                     # ... one 40 bits apart
+    st = pd.DataFrame({"readable": True, "dhash": h, **{c: wide[:, k] for k, c in enumerate(WIDE_HASH)}})
+    pairs, _, _, n_candidates = pixel_pairs(st, 4, 16)
+    assert n_candidates == 2 and pairs.tolist() == [[0, 1]]
+
+
 def test_near_duplicates_finds_planted_copies():
     rng = np.random.default_rng(11)
     originals = [_smooth(rng) for _ in range(60)]

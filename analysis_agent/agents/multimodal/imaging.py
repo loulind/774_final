@@ -10,7 +10,8 @@ a domain hint matched against the encoder registry:
     colour_other        anything else
 
 Adapted: these are functions of an image source and sample rows instead of parts of a
-Project 3 profile object; the hashing helper is kept for the near-duplicate tools.
+Project 3 profile object; the hashing helper is kept for the near-duplicate tools, which
+also use a wider 256-bit hash (``dhash_words``) to confirm its matches.
 """
 
 from __future__ import annotations
@@ -52,6 +53,14 @@ def dhash(im) -> int:
     g = np.asarray(im.convert("L").resize((9, 8)), dtype=np.int16)
     bits = (g[:, 1:] > g[:, :-1]).flatten()
     return int(sum(1 << i for i, b in enumerate(bits) if b))
+
+
+def dhash_words(im, side: int = 16) -> tuple[int, ...]:
+    """A side x side-bit difference hash (16 -> 256 bits) as signed 64-bit words; added in
+    Project 4: at 64 bits, unrelated radiographs often fall within a few bits of each other."""
+    g = np.asarray(im.convert("L").resize((side + 1, side)), dtype=np.int16)
+    bits = (g[:, 1:] > g[:, :-1]).ravel()
+    return tuple(int(w) for w in np.packbits(bits).view(">i8"))
 
 
 def hsv(arr: np.ndarray) -> tuple[np.ndarray, np.ndarray]:

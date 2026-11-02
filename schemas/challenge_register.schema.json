@@ -1,0 +1,212 @@
+{
+  "$defs": {
+    "Challenge": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "type": {
+          "title": "Type",
+          "type": "string"
+        },
+        "subject": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Subject",
+          "type": "array"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "detected",
+            "not_detected",
+            "not_applicable",
+            "not_measurable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "none",
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "affects": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Affects",
+          "type": "array"
+        },
+        "relevant": {
+          "default": true,
+          "title": "Relevant",
+          "type": "boolean"
+        },
+        "mitigations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Mitigations",
+          "type": "array"
+        },
+        "stage": {
+          "default": "profile",
+          "enum": [
+            "profile",
+            "execution"
+          ],
+          "title": "Stage",
+          "type": "string"
+        },
+        "handled_by": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Handled By",
+          "type": "array"
+        },
+        "handling": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Handling"
+        },
+        "residual_risk": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Residual Risk"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "summary",
+        "status",
+        "severity"
+      ],
+      "title": "Challenge",
+      "type": "object"
+    },
+    "Evidence": {
+      "properties": {
+        "metric": {
+          "title": "Metric",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        },
+        "rule": {
+          "default": "",
+          "title": "Rule",
+          "type": "string"
+        },
+        "source": {
+          "default": "",
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "metric",
+        "value"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "questions": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Questions"
+    },
+    "thresholds": {
+      "additionalProperties": {
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "type": "object"
+      },
+      "title": "Thresholds",
+      "type": "object"
+    },
+    "entries": {
+      "items": {
+        "$ref": "#/$defs/Challenge"
+      },
+      "title": "Entries",
+      "type": "array"
+    }
+  },
+  "title": "ChallengeRegister",
+  "type": "object"
+}

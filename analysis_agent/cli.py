@@ -4,7 +4,8 @@
     bioagent run ... --quick          # smoke test: small subsample, seconds per step
     bioagent run ... --no-llm         # rule-based planner, critic and writer (no Claude CLI needed)
     bioagent run ... --replay runs/<run>/llm_cache   # reproduce LLM decisions from cache
-    bioagent profile --data data/<dataset>           # load a dataset and describe its structure
+    bioagent profile --data data/<dataset> [--out DIR]   # measure the data, list its challenges
+    bioagent schema [--write]         # JSON schemas of the profile and the challenge register
     bioagent hardware                 # report detected device, disk and budgets
     bioagent tools [--json | --name TOOL]            # the tool registry: the planner's menu
 """
@@ -33,11 +34,15 @@ def main(argv=None) -> None:
     r.add_argument("--seed", type=int)
     r.add_argument("--model", help="LLM model id (default from config)")
     sub.add_parser("hardware", help="print detected hardware and budgets")
-    pr = sub.add_parser("profile", help="load a dataset and describe its structure")
+    pr = sub.add_parser("profile", help="measure a dataset and list its analytical challenges")
     pr.add_argument("--data", required=True, help="dataset file or directory")
-    pr.add_argument("--out", help="also write the description as JSON here")
+    pr.add_argument("--out", help="directory for profile.json, challenge_register.json and challenge_register.md")
+    pr.add_argument("--quick", action="store_true", help="quick-mode budgets for the cost estimates")
+    pr.add_argument("--json", action="store_true", help="print the profile as JSON instead of the register")
     pr.add_argument("--label-column")
     pr.add_argument("--group-column")
+    sc = sub.add_parser("schema", help="JSON schemas of the profile and the challenge register")
+    sc.add_argument("--write", action="store_true", help="(re)write schemas/*.schema.json")
     t = sub.add_parser("tools", help="list the tools the planner can use")
     t.add_argument("--json", action="store_true", help="every tool's full declaration as JSON")
     t.add_argument("--name", help="the full declaration of one tool")
@@ -75,16 +80,40 @@ def main(argv=None) -> None:
         return
 
     if args.cmd == "profile":
+        from pathlib import Path
+
+        from .challenges import assess, render_markdown
+        from .config import load_config
         from .data.loaders import load_path
+        from .profiler import profile_dataset
 
+        cfg = load_config(quick=args.quick)
         ds = load_path(args.data, args.label_column, args.group_column)
-        text = json.dumps(ds.summary(), indent=2, default=str)
+        prof = profile_dataset(ds, config=cfg, cache_dir=Path(cfg.cache_dir))
+        reg = assess(prof)
         if args.out:
-            from pathlib import Path
+            out = Path(args.out)
+            out.mkdir(parents=True, exist_ok=True)
+            (out / "profile.json").write_text(prof.model_dump_json(indent=2) + "\n")
+            (out / "challenge_register.json").write_text(reg.model_dump_json(indent=2) + "\n")
+            (out / "challenge_register.md").write_text(render_markdown(reg))
+        print(prof.model_dump_json(indent=2) if args.json else render_markdown(reg))
+        print(f"profiled in {prof.seconds:.1f} s")
+        return
 
-            Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-            Path(args.out).write_text(text + "\n")
-        print(text)
+    if args.cmd == "schema":
+        from .config import REPO_ROOT
+        from .schema import json_schemas
+
+        schemas = json_schemas()
+        if args.write:
+            d = REPO_ROOT / "schemas"
+            d.mkdir(exist_ok=True)
+            for name, sch in schemas.items():
+                (d / f"{name}.schema.json").write_text(json.dumps(sch, indent=2) + "\n")
+                print(f"wrote schemas/{name}.schema.json")
+        else:
+            print(json.dumps(schemas, indent=2))
         return
 
     from .orchestrator import run

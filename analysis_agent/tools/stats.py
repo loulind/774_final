@@ -455,15 +455,17 @@ def silhouette(Z: np.ndarray, labels, cap: int = 5000, rng=None) -> float | None
 # ---------------------------------------------------------------------------
 
 
-def mad_outliers(x, nmads: float = 3.0, tail: str = "lower") -> tuple[np.ndarray, float, float]:
-    """Values more than ``nmads`` scaled MADs (1.4826 x MAD, the normal-consistent scale)
-    from the median; returns (flags, lower threshold, upper threshold). A MAD of 0 flags
-    nothing."""
+def mad_outliers(x, nmads: float = 3.0, tail: str = "lower", min_diff: float = 0.0) -> tuple[np.ndarray, float, float]:
+    """Values more than ``nmads`` scaled MADs (1.4826 x MAD, the normal-consistent scale) from
+    the median, and at least ``min_diff`` from it (scater's ``min.diff``: a very narrow
+    distribution otherwise flags ordinary values); returns (flags, lower threshold, upper
+    threshold). A zero width flags nothing."""
     x = np.asarray(x, float)
     med = float(np.median(x))
     mad = 1.4826 * float(np.median(np.abs(x - med)))
-    lo, hi = med - nmads * mad, med + nmads * mad
-    if mad == 0:
+    width = max(nmads * mad, min_diff)
+    lo, hi = med - width, med + width
+    if width == 0:
         return np.zeros(len(x), bool), lo, hi
     out = x < lo
     if tail == "both":

@@ -64,19 +64,27 @@ class TextQCParams(ToolParams):
                                description="flags that remove a text; the others are reported only")
 
 
-def _run_qc_text(ctx, inputs, p: TextQCParams) -> StepResult:
-    text, split, groups = inputs["text"], inputs.get("split"), inputs.get("report_by")
-    rows = text.rows
-    raw = pd.Series(text.data, dtype=object).fillna("").astype(str)
+def text_flags(raw: pd.Series, min_words: int = 3,
+               boilerplate_min_count: int = 5) -> tuple[dict[str, np.ndarray], np.ndarray, pd.Series]:
+    """The text-QC flags (module doc) of every text, its word count and its normalised form."""
+    raw = pd.Series(raw, dtype=object).fillna("").astype(str)
     words = raw.str.split().str.len().fillna(0).to_numpy()
     norm = normalise_text(raw)
     counts = norm.map(norm.value_counts())
     empty = (raw.str.strip() == "").to_numpy()
     flags = {"empty": empty,
-             "too_short": ~empty & (words < p.min_words),
+             "too_short": ~empty & (words < min_words),
              "duplicate": ~empty & (counts >= 2).to_numpy(),
-             "boilerplate": ~empty & (counts >= p.boilerplate_min_count).to_numpy(),
+             "boilerplate": ~empty & (counts >= boilerplate_min_count).to_numpy(),
              "panel_reference": raw.str.contains(PANEL).to_numpy()}
+    return flags, words, norm
+
+
+def _run_qc_text(ctx, inputs, p: TextQCParams) -> StepResult:
+    text, split, groups = inputs["text"], inputs.get("split"), inputs.get("report_by")
+    rows = text.rows
+    flags, words, norm = text_flags(pd.Series(text.data, dtype=object), p.min_words, p.boilerplate_min_count)
+    empty = flags["empty"]
     removed = np.zeros(len(rows), bool)
     for f in p.remove:
         removed |= flags[f]
