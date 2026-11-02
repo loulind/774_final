@@ -1,0 +1,84 @@
+"""Command line: one command per dataset and objective.
+
+    bioagent run --data data/<dataset> --objective "..." --out outputs/generated_report_1
+    bioagent run ... --quick          # smoke test: small subsample, seconds per step
+    bioagent run ... --no-llm         # rule-based planner, critic and writer (no Claude CLI needed)
+    bioagent run ... --replay runs/<run>/llm_cache   # reproduce LLM decisions from cache
+    bioagent profile --data data/<dataset>           # load a dataset and describe its structure
+    bioagent hardware                 # report detected device, disk and budgets
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+
+
+def main(argv=None) -> None:
+    ap = argparse.ArgumentParser(prog="bioagent", description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    r = sub.add_parser("run", help="run the agent on one dataset and objective")
+    r.add_argument("--data", required=True, help="dataset file or directory")
+    r.add_argument("--objective", required=True, help="free-text objective, in quotes")
+    r.add_argument("--out", required=True, help="output directory for the report and artefacts")
+    r.add_argument("--config", help="YAML with budgets/seed/LLM settings (never analysis choices)")
+    r.add_argument("--quick", action="store_true", help="smoke-test budgets")
+    r.add_argument("--no-llm", action="store_true", help="rule-based planner/critic/writer only")
+    r.add_argument("--replay", help="directory of cached LLM responses to replay")
+    r.add_argument("--label-column", help="override the detected label column")
+    r.add_argument("--group-column", help="override the detected group (slide/patient/source) column")
+    r.add_argument("--device", choices=["auto", "cuda", "mps", "cpu"])
+    r.add_argument("--seed", type=int)
+    r.add_argument("--model", help="LLM model id (default from config)")
+    sub.add_parser("hardware", help="print detected hardware and budgets")
+    pr = sub.add_parser("profile", help="load a dataset and describe its structure")
+    pr.add_argument("--data", required=True, help="dataset file or directory")
+    pr.add_argument("--out", help="also write the description as JSON here")
+    pr.add_argument("--label-column")
+    pr.add_argument("--group-column")
+    args = ap.parse_args(argv)
+
+    if args.cmd == "hardware":
+        from .config import load_config
+        from .hardware import detect
+
+        hw = detect()
+        cfg = load_config()
+        print(json.dumps({"hardware": hw.to_record(),
+                          "full_budget": cfg.budget(hw.device).model_dump(),
+                          "quick_budget": load_config(quick=True).budget(hw.device).model_dump(),
+                          "fit_device": cfg.fit_device,
+                          "llm": {"backend": "claude CLI (claude-agent-sdk)", "model": cfg.llm.model,
+                                  "max_output_tokens": cfg.llm.max_output_tokens,
+                                  "max_budget_usd": cfg.llm.max_budget_usd}},
+                         indent=2))
+        return
+
+    if args.cmd == "profile":
+        from .data.loaders import load_path
+
+        ds = load_path(args.data, args.label_column, args.group_column)
+        text = json.dumps(ds.summary(), indent=2, default=str)
+        if args.out:
+            from pathlib import Path
+
+            Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+            Path(args.out).write_text(text + "\n")
+        print(text)
+        return
+
+    from .orchestrator import run
+
+    overrides = {"quick": args.quick, "no_llm": args.no_llm, "replay": args.replay,
+                 "label_column": args.label_column, "group_column": args.group_column,
+                 "device": args.device, "seed": args.seed, "config": args.config}
+    if args.model:
+        overrides["llm"] = {"model": args.model}
+    result = run(args.data, args.objective, args.out,
+                 **{k: v for k, v in overrides.items() if v not in (None, False)})
+    print(f"\nreport: {result['out_dir']}/report.html")
+
+
+if __name__ == "__main__":
+    main()
