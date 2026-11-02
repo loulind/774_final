@@ -6,6 +6,7 @@
     bioagent run ... --replay runs/<run>/llm_cache   # reproduce LLM decisions from cache
     bioagent profile --data data/<dataset>           # load a dataset and describe its structure
     bioagent hardware                 # report detected device, disk and budgets
+    bioagent tools [--json | --name TOOL]            # the tool registry: the planner's menu
 """
 
 from __future__ import annotations
@@ -37,7 +38,25 @@ def main(argv=None) -> None:
     pr.add_argument("--out", help="also write the description as JSON here")
     pr.add_argument("--label-column")
     pr.add_argument("--group-column")
+    t = sub.add_parser("tools", help="list the tools the planner can use")
+    t.add_argument("--json", action="store_true", help="every tool's full declaration as JSON")
+    t.add_argument("--name", help="the full declaration of one tool")
     args = ap.parse_args(argv)
+
+    if args.cmd == "tools":
+        from .tools import registry
+
+        if args.name or args.json:
+            spec = registry.get(args.name).describe() if args.name else registry.describe_all()
+            print(json.dumps(spec, indent=2, default=str))
+            return
+        for row in registry.table():
+            print(f"{row['tool']}  [{row['origin']}]")
+            print(f"    consumes:  {row['consumes']}")
+            print(f"    produces:  {row['produces']}")
+            print(f"    answers:   {row['answers']}")
+            print(f"    addresses: {row['addresses']}")
+        return
 
     if args.cmd == "hardware":
         from .config import load_config
