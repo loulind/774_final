@@ -17,7 +17,7 @@ from analysis_agent.tools.normalize import variable_features
 GENERAL = {"qc_counts", "qc_images", "qc_text", "caption_label_consistency", "normalize_counts", "count_split",
            "batch_assess", "batch_correct", "cluster", "spatial_domains", "spatial_svg", "spatial_enrichment",
            "label_association", "differential_expression", "predict_targets", "near_duplicates",
-           "label_imbalance", "label_agreement"}
+           "label_imbalance", "label_agreement", "label_consistency"}
 
 
 def run(tool, arts, params=None, quick=True):
@@ -409,3 +409,31 @@ def test_label_imbalance_and_agreement():
     r, _ = run("label_agreement", {"labels": art("labels", np.array(first, dtype=object)),
                                    "reference": art("labels", np.array(ref, dtype=object))})
     assert r.metrics["kappa_micro"] == pytest.approx(0.4)
+
+
+def test_markers_without_replicates_use_the_sample():
+    rng = np.random.default_rng(3)
+    y = np.repeat(np.array(["A", "B", "C"], dtype=object), 100)
+    mu = np.full((300, 60), 5.0)
+    mu[y == "A", :5] *= 6                                 # five planted markers of A
+    counts = art("counts", sp.csr_matrix(rng.poisson(mu)), {"feature_names": [f"g{j}" for j in range(60)]})
+    r, out = run("differential_expression", {"counts": counts, "labels": art("labels", y)})
+    m, t = r.metrics, out["table"].data
+    assert m["test_unit"] == "sample" and m["testable"] and m["loo_stable_fraction"] is None
+    assert set(t[(t["label"] == "A") & t["significant"]]["feature"]) == {f"g{j}" for j in range(5)}
+    assert m["half_stable_fraction"] == 1.0 and not m["held_out"]
+
+
+def test_label_consistency_within_links():
+    # ten linked triplets (five labelled A, five B) and ten unlinked samples, which are not judged
+    links = np.array([f"D{i // 3}" for i in range(30)] + [f"s{i}" for i in range(10)], dtype=object)
+    labels = np.array(["A" if (i // 3) % 2 else "B" for i in range(30)] + ["A"] * 10, dtype=object)
+    r, out = run("label_consistency", {"labels": art("labels", labels), "links": art("groups", links)})
+    assert r.metrics["n_linked_groups"] == 10 and r.metrics["n_linked_samples"] == 30
+    assert r.metrics["kappa"] == pytest.approx(1.0) and r.metrics["disagreeing_fraction"] == 0.0
+    labels[0] = "A"                                       # one triplet now disagrees: 56 of 60 pairs agree
+    r, _ = run("label_consistency", {"labels": art("labels", labels), "links": art("groups", links)})
+    chance = (16 / 30) ** 2 + (14 / 30) ** 2
+    assert r.metrics["observed_agreement"] == pytest.approx(56 / 60)
+    assert r.metrics["kappa"] == pytest.approx((56 / 60 - chance) / (1 - chance))
+    assert r.metrics["disagreeing_fraction"] == pytest.approx(0.1)

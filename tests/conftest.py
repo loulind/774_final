@@ -190,6 +190,47 @@ def _table(d, planted: bool):
     return d
 
 
+def _cells(d):
+    """One source with no grouping: two count matrices of the same 240 cells, expression and a
+    sparse peak-named matrix (alphabetically first), both driven by three planted populations."""
+    import anndata as ad
+
+    rng = np.random.default_rng(5)
+    n, G, P = 240, 150, 300
+    pop = np.repeat([0, 1, 2], n // 3)
+    lib = np.exp(rng.normal(0, 0.3, n))[:, None]
+    expr = rng.poisson(rng.lognormal(np.log(3), 0.5, G) * np.exp(rng.normal(0, 1.2, (3, G))[pop]) * lib)
+    peaks = rng.poisson(0.15 * np.exp(rng.normal(0, 1.2, (3, P))[pop]) * lib)
+    ids = pd.DataFrame(index=[f"cell{i}" for i in range(n)])
+    out = d / "cells"
+    out.mkdir()
+    ad.AnnData(X=sp.csr_matrix(peaks.astype(np.int32)), obs=ids,
+               var=pd.DataFrame(index=[f"chr1:{1000 * j}-{1000 * j + 500}" for j in range(P)])).write_h5ad(
+        out / "accessibility.h5ad")
+    ad.AnnData(X=sp.csr_matrix(expr.astype(np.int32)), obs=ids,
+               var=pd.DataFrame(index=[f"g{j}" for j in range(G)])).write_h5ad(out / "gene_expression.h5ad")
+    return out
+
+
+def _sites(d):
+    """180 colour images from 6 sites, each site with its own tint (a staining batch), and a
+    three-class 'grade' column; no split, so prediction is judged by grouped cross-validation."""
+    from PIL import Image
+
+    rng = np.random.default_rng(7)
+    (d / "images").mkdir()
+    rows = []
+    for i in range(180):
+        site = i % 6
+        tint = np.array([40 * site, 120, 255 - 40 * site], float)
+        arr = np.clip(rng.normal(0, 25, (32, 32, 3)) + tint, 0, 255).astype(np.uint8)
+        Image.fromarray(arr).save(d / "images" / f"im{i}.png")
+        rows.append({"id": f"im{i}", "image_path": f"images/im{i}.png", "site": f"S{site}",
+                     "grade": ["low", "mid", "high"][int(rng.integers(0, 3))]})
+    pd.DataFrame(rows).to_csv(d / "samples.csv", index=False)
+    return d / "samples.csv"
+
+
 @pytest.fixture(scope="session")
 def registers(tmp_path_factory):
     from analysis_agent.challenges import assess

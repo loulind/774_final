@@ -40,6 +40,20 @@ def test_delong_interval_covers_the_true_auroc():
     assert null["p_vs_half"] > 0.01
 
 
+def test_stratified_delong_ignores_offsets_between_strata():
+    # stratum 0 scores high but is mostly negative, stratum 1 scores low but is mostly positive:
+    # pooled, the offset ranks almost every positive below a negative; within strata ranking is perfect
+    y = np.r_[np.ones(2, bool), np.zeros(18, bool), np.ones(18, bool), np.zeros(2, bool)]
+    s = np.r_[np.full(2, 1.0), np.full(18, 0.9), np.full(18, 0.2), np.full(2, 0.1)] + np.linspace(0, 1e-3, 40)
+    strata = np.r_[np.zeros(20, int), np.ones(20, int)]
+    assert S.delong(y, s)[0] < 0.3
+    auc, var = S.stratified_delong(y, s, strata)
+    assert auc == pytest.approx(1.0) and np.isfinite(var)
+    rng = np.random.default_rng(2)                       # a single stratum is plain DeLong
+    y1, s1 = rng.random(60) < 0.5, rng.normal(size=60)
+    assert S.stratified_delong(y1, s1, np.zeros(60)) == pytest.approx(S.delong(y1, s1))
+
+
 def _grid(n=10):
     xy = np.array([(i, j) for i in range(n) for j in range(n)], float)
     A = S.spatial_knn(xy, np.zeros(len(xy)), k=4, max_distance_factor=1.01)    # rook neighbours

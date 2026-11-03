@@ -62,9 +62,15 @@ def _run_association(ctx, inputs, p: AssociationParams) -> StepResult:
             tables["agreement_by_group"] = per
             m.update({"ari_group_median": float(per["ari"].median()), "ari_group_min": float(per["ari"].min()),
                       "ari_group_max": float(per["ari"].max()), "n_groups": len(per)})
-    ctx.decide("validation against external labels", f"{m['n_samples']:,} labelled samples",
-               f"'{ref_art.name}' is used only here, after the agent's choices, to measure agreement; it never "
-               "informed them.", [], {"ari": m["ari"], "nmi": m["nmi"]})
+    if ref_art.meta.get("external", True):
+        ctx.decide("validation against external labels", f"{m['n_samples']:,} labelled samples",
+                   f"'{ref_art.name}' is used only here, after the agent's choices, to measure agreement; it never "
+                   "informed them.", [], {"ari": m["ari"], "nmi": m["nmi"]})
+    else:
+        ctx.decide("agreement of two partitions", f"{m['n_samples']:,} samples",
+                   f"Both '{found_art.name}' and '{ref_art.name}' were found by the agent, from different data; the "
+                   "indices measure how far they coincide and inform no choice.", [],
+                   {"ari": m["ari"], "nmi": m["nmi"]})
     return StepResult(artifacts={"table": Artifact("table", major)}, metrics=m, tables=tables)
 
 

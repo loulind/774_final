@@ -39,6 +39,7 @@ class _Planner:
         self.library = next((g.artifact for g in profile.groups if g.role == "library"), None)
         self.split = profile.split.artifact if profile.split else None
         self.single_labels = [a.name for a in profile.artifacts if a.kind == "labels" and a.detail.get("external")]
+        self.partner: dict[str, str] | None = None        # a second matrix modality, for cross-modal questions
 
     # --- helpers ---------------------------------------------------------------
     def of(self, kind: str) -> list[str]:
@@ -143,6 +144,32 @@ class _Planner:
         mat["embedding"] = mat["representation"] = out["embedding"]
         return mat
 
+    def prepare_partner(self, counts: str, first: str) -> dict[str, str]:
+        """A second matrix modality of the same samples that a cross-modal question relates to the
+        first: its own QC, normalisation and principal components. Nothing is tested on it, so it
+        needs no count split."""
+        tag = counts.split(".", 1)[-1]
+        cur = counts
+        if self.worst("low_quality_samples", counts) != "none" or "data_quality_audit" in self.asked:
+            cur = self.add(f"qc_{tag}", "qc_counts",
+                           {"counts": counts, "library": self.library, "report_by": self.unit},
+                           purpose=f"Remove empty and failing samples of {counts} (MAD rule) and near-empty features "
+                                   "before normalising.",
+                           answers=["data_quality_audit"] if "data_quality_audit" in self.asked else [])["counts"]
+        norm = self.add(f"norm_{tag}", "normalize_counts", {"counts": cur},
+                        purpose=f"Normalise {counts} on its own (TF-IDF for presence/absence data, else log or Pearson "
+                                "residuals by the depth signal left) and keep its variable features.",
+                        rejected=[("raw counts", "library sizes differ, so depth would dominate the comparison")])
+        emb = self.add(f"pca_{tag}", "dimreduce_pca", {"matrix": norm["normalized"]},
+                       purpose=f"Principal components of {counts} above their permutation null (Project 1 sub-agent).",
+                       rejected=[("one matrix of both modalities", "the larger or louder modality would dominate, "
+                                                                     "and their agreement could not be measured")])
+        self.decide("second modality", counts,
+                    f"The objective relates {first} to {counts}; each is prepared on its own (QC, normalisation, "
+                    "principal components) so that the two can be compared on the same samples.",
+                    [("concatenate the matrices", "one modality's scale and dimension would dominate")])
+        return {"source": counts, "counts": cur, "normalized": norm["normalized"], "embedding": emb["embedding"]}
+
     def handle_batches(self, mat: dict[str, str]) -> None:
         asked = "batch_assessment" in self.asked
         batch = (self.target("batch_assessment", "batch") or ([self.library] if self.library else [])
@@ -206,6 +233,30 @@ class _Planner:
                        + scope_rej)
         mat["representation"] = out["embedding"]
 
+    def assess_image_batches(self, media: dict[str, str]) -> None:
+        """Batch structure in image features when no count matrix carries the analysis: how strongly
+        a technical grouping (site, scanner, batch) separates the images, and how it coincides with
+        the label the objective is about (report only). Colour differences between groups are
+        handled when the features are extracted; nothing here changes the features."""
+        asked = "batch_assessment" in self.asked
+        batch = (self.target("batch_assessment", "batch")
+                 or [g for g in self.groups if self.worst("batch_effect", g) in ("medium", "high")][:1])
+        if not batch or not media.get("image_features"):
+            return
+        batch = batch[0]
+        outer = (self.groups[batch].nested_in or [None])[0] if batch in self.groups else None
+        label = (self.target("predictive_modelling", "labels") or self.single_labels)[:1]
+        label = label[0] if label and self.arts[label[0]].kind == "labels" else None
+        self.add("batch_assess", "batch_assess",
+                 {"embedding": media["image_features"], "batch": batch, "outer": outer, "labels": label},
+                 purpose=f"Measure how strongly {self.col(batch)}s separate the image features"
+                         + (f", within each {self.col(outer)}" if outer else "")
+                         + (f", and how {self.col(batch)}s coincide with '{self.col(label)}' (report only)"
+                            if label else "") + ".",
+                 answers=["batch_assessment"] if asked else [],
+                 rejected=[("correct the image features", "a correction fitted across groups could remove signal the "
+                                                          "prediction needs; groups are held out together instead")])
+
     def prepare_images(self, images: str, text: str | None, mat: dict | None) -> dict[str, str]:
         out: dict[str, str] = {"images": images, "text": text}
         audit = "data_quality_audit" in self.asked
@@ -221,6 +272,15 @@ class _Planner:
                                  "ones.", answers=["data_quality_audit"] if audit else [])
             out["text"] = o["text"]
         img_lib = self.arts[images].detail.get("library")
+        colour = next((i.colour_group for i in self.p.images if i.artifact == images), None)
+        if img_lib not in self.groups and colour in self.groups \
+                and self.worst("batch_effect", colour) in ("medium", "high"):
+            img_lib = colour                          # no slide library, but image colour differs by this grouping
+            self.decide("colour grouping", self.col(colour),
+                        f"Mean image colour differs between {self.col(colour)} levels (a batch effect in the "
+                        f"register), so the feature step measures colour per {self.col(colour)} and normalises it "
+                        "when the between-group share is large.",
+                        [("no grouping", "colour shifts between groups would act as a batch effect in the features")])
         partner = mat["embedding"] if mat else None
         o = self.add("features", "multimodal_features",
                      {"images": out["images"], "text": out["text"], "partner": partner if not out["text"] else None,
@@ -277,6 +337,8 @@ class _Planner:
                                  "(label permutations within libraries).", answers=["spatial_structure"])
         if "cross_modal_association" in self.asked:
             mods = self.target("cross_modal_association", "modalities")
+            if mat and self.partner:
+                self.compare_matrices(mat, self.partner, structure)
             if structure and media and media.get("image_features") and set(mods) & set(self.of("images")):
                 self.add("histology", "multimodal_predictability",
                          {"target": structure, "groups": self.unit, "image": media["image_features"],
@@ -292,6 +354,19 @@ class _Planner:
         if "differential_analysis" in self.asked and mat and self.of("counts"):
             groups = structure if self.target("differential_analysis", "groups") == ["discovered"] else \
                 (self.target("differential_analysis", "groups") or self.single_labels or [None])[0]
+            if groups and not self.unit:
+                held = ", on the held-out half of the counts" if mat["test"] != mat["fit"] else ""
+                self.add("markers", "differential_expression", {"counts": mat["test"], "labels": groups},
+                         purpose="Marker features per group with the sample as the test unit (no grouping identifies "
+                                 f"independent units): Wilcoxon rank-sum, BH FDR{held}, and a split-half check of "
+                                 "each marker's direction.",
+                         answers=["differential_analysis"],
+                         rejected=[("replicate pseudobulk", "no column groups the samples into independent units")])
+                self.decide("test unit for markers", "the sample (no replicate grouping)",
+                            "No column groups the samples into patients, donors or other independent units, so "
+                            "markers can only be tested across samples; if the samples come from one source, the "
+                            "results describe that source and do not generalise to others.",
+                            [("replicate pseudobulk", "needs a grouping of the samples into independent units")])
             if groups and self.unit:
                 self.add("markers", "differential_expression",
                          {"counts": mat["test"], "labels": groups, "replicate": self.unit},
@@ -307,6 +382,32 @@ class _Planner:
                             [("the sample", "pseudoreplication")])
         if "predictive_modelling" in self.asked:
             self.predict(mat, media)
+
+    def compare_matrices(self, mat: dict[str, str], partner: dict[str, str], structure: str | None) -> None:
+        """Agreement of two matrix modalities of the same samples: do the groups found in each
+        coincide, and does each sample's profile in one identify its own profile in the other?"""
+        first, second = mat["source"], partner["source"]
+        if structure:
+            tag = second.split(".", 1)[-1]
+            own = self.add(f"clusters_{tag}", "cluster", {"embedding": partner["embedding"], "groups": self.unit},
+                           purpose=f"Find groups of samples in {second} alone (number chosen by subsample stability "
+                                   f"and separation), to compare with the groups found in {first}.",
+                           answers=["cross_modal_association"],
+                           rejected=[("reuse the groups of the first modality", "agreement would be assumed, not "
+                                                                                   "measured")])
+            self.add("modality_groups", "label_association",
+                     {"found": structure, "reference": own["labels"], "groups": self.unit},
+                     purpose=f"How far the groups found in {first} and in {second} coincide (ARI, NMI, purity).",
+                     answers=["cross_modal_association"])
+        self.add("modality_pairs", "multimodal_agreement",
+                 {"image": partner["embedding"], "text": mat["representation"], "split": self.split,
+                  "groups": self.unit},
+                 purpose=f"How well each sample's {second} profile picks out its own {first} profile among others: "
+                         "alignments fitted on training samples, compared by validation recall@10, and every sample "
+                         "scored against random partners by a model that did not see it.",
+                 answers=["cross_modal_association"],
+                 rejected=[("correlate the two matrices directly", "they measure different features; an alignment "
+                                                                   "must be learned and judged on held-out samples")])
 
     def predict(self, mat, media) -> None:
         feat_target = self.target("predictive_modelling", "features")
@@ -379,6 +480,13 @@ class _Planner:
                          {"text": media["text"], "labels": labels[0], "split": self.split, "reference": ref},
                          purpose="Flag labels their text does not support, negates, or names without the label "
                                  "(lexicons learned on training texts).", answers=["data_quality_audit"])
+            dup = (media or {}).get("duplicates")
+            single = [x for x in labels if self.arts[x].kind == "labels"][:3]
+            for lab in single if dup and "label_noise" in want else []:
+                self.add("duplicate_labels_" + self.col(lab), "label_consistency", {"labels": lab, "links": dup},
+                         purpose=f"Do near-duplicate images carry the same '{self.col(lab)}'? Agreement within "
+                                 "duplicate clusters (Fleiss' kappa) estimates label noise where one item was "
+                                 "annotated more than once.", answers=["data_quality_audit"])
             if media and media.get("text_features") and media.get("image_features") \
                     and not any(s.tool == "multimodal_agreement" for s in self.plan.steps):
                 self.add("image_text", "multimodal_agreement",
@@ -459,16 +567,23 @@ class _Planner:
 
     def build(self) -> AnalysisPlan:
         counts = self.of("counts")
+        tested = [c for c in self.target("differential_analysis", "features") if c in counts]
+        counts = tested + [c for c in counts if c not in tested]      # the matrix markers are tested on leads
         mat = None
         if counts and (self.uses("counts") or self.asked & {"batch_assessment", "differential_analysis"}):
             mat = self.prepare_counts(counts[0])
             self.handle_batches(mat)
+            others = [c for c in self.target("cross_modal_association", "modalities") if c in counts[1:]]
+            if others:
+                self.partner = self.prepare_partner(others[0], counts[0])
         images, texts = self.of("images"), self.of("text")
         need_images = images and (self.uses("images") or (self.asked & {"data_quality_audit"} and images))
         need_text = texts and (self.uses("text") or (self.asked & {"data_quality_audit"} and texts))
         media = self.prepare_images(images[0], texts[0] if need_text else None, mat) if need_images else None
         if not need_images and images:
             self.decide("images", "not used", "No question of the objective uses the images.")
+        if media and mat is None:
+            self.assess_image_batches(media)
         if media:                                     # audits first: duplicate clusters group the predictions
             self.audit(mat, media)
         self.answer(mat, media)

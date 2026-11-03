@@ -20,19 +20,23 @@ from .schema import ArtifactRecord, DataProfile, Decision, Objective, Question
 
 CUES: dict[str, tuple[str, ...]] = {
     "structure_discovery": (r"\bdomains?\b", r"\bclusters?\b", r"\bclustering\b", r"\bsub-?types?\b",
-                            r"\bsub-?groups?\b", r"\bsub-?populations?\b", r"\bcell types?\b", r"\bheterogeneity\b",
-                            r"\bdiscover", r"\bsegment"),
+                            r"\bsub-?groups?\b", r"\bsub-?populations?\b", r"\bpopulations?\b", r"\bcell types?\b",
+                            r"\bcell states?\b", r"\bheterogeneity\b", r"\bdiscover", r"\bsegment"),
     "spatial_structure": (r"\bspatial(ly)?\b", r"\bniches?\b", r"\bneighbou?rhoods?\b", r"\barchitecture\b",
                           r"\bdomains?\b"),
     "cross_modal_association": (r"\brelate\b", r"\brelat(ion|ionship)s?\b", r"\bassociat", r"\bcorrespond",
-                                r"\balign", r"\bagreement between\b", r"\bcross-modal\b"),
+                                r"\balign", r"\bagreement between\b", r"\bcross-modal\b", r"\bmodalit(y|ies)\b",
+                                r"\bintegrat(e|es|ed|ing|ion)\b", r"\bjoint(ly)?\b", r"\bconcordan"),
     "differential_analysis": (r"\bmarkers?\b", r"\bdifferential(ly)?\b", r"\bsignatures?\b",
-                              r"\bdiffer(s|ences)? between\b", r"\benriched (genes|features|proteins)\b"),
+                              r"\bdiffer(s|ences)? between\b", r"\benriched (genes|features|proteins)\b",
+                              r"\b(change|changes|alter|alters|affect|affects)\b(?:\W+\w+){0,2}\W+expression\b",
+                              r"\b(up|down)-?regulat"),
     "batch_assessment": (r"\bbatch(es)?\b", r"\btechnical (variation|effects?)\b", r"\bsite effects?\b"),
     "predictive_modelling": (r"\bpredict(ed|ion|ions|able|ability|s|ing)?\b", r"\bclassif(y|ied|ication|ier)\b",
                              r"\bprognos", r"\bdiagnos(e|is|tic)\b"),
     "data_quality_audit": (r"\bdata[- ]quality\b", r"\bquality (issues|problems|control)\b", r"\bimbalance",
-                           r"\bduplicat", r"\bnois(y|e)\b", r"\bmissing\b", r"\bleakage\b", r"\boutliers?\b"),
+                           r"\bduplicat", r"\bnois(y|e)\b", r"\bmissing\b", r"\bleakage\b", r"\boutliers?\b",
+                           r"\bquality\b(?:\W+\w+){0,3}\W+(issues|problems)\b", r"\b(low|poor)[- ]quality\b"),
     "representation_learning": (r"\bembeddings?\b", r"\brepresentations?\b", r"\blatent\b"),
     "generative_modelling": (r"\bgenerative\b", r"\bdensity\b", r"\banomal", r"\bimput", r"\bsynthes"),
     "visualization": (r"\bvisuali[sz]", r"\bmaps?\b", r"\bplots?\b", r"\bumap\b", r"\bt-?sne\b"),
@@ -43,19 +47,26 @@ CHALLENGE_CUES: dict[str, tuple[str, ...]] = {
     "near_duplicates": (r"\bduplicat", r"\bcopies\b", r"\bredundan"),
     "text_noise": (r"\bnoisy (captions?|texts?|reports?)\b", r"\b(caption|text) (noise|quality)\b"),
     "label_noise": (r"\bnoisy (labels?|annotations?|captions?|concepts?)\b", r"\blabel (noise|errors?)\b",
-                    r"\bmislabel"),
+                    r"\bmislabel", r"\binter-?(rater|reader|observer|annotator)\b",
+                    r"\b(readers?|raters?|annotators?|observers?)\b(?:\W+\w+){0,3}\W+(dis)?agree",
+                    r"\b(dis)?agree\w*\b(?:\W+\w+){0,3}\W+(readers?|raters?|annotators?|observers?)\b",
+                    r"\b(reader|rater|annotator|observer) (dis)?agree"),
     "missing_data": (r"\bmissing\b",),
     "split_leakage": (r"\bleak",),
-    "low_quality_samples": (r"\blow[- ]quality\b", r"\bunusable\b", r"\bcorrupt"),
-    "batch_effect": (r"\bbatch(es)?\b",),
+    "low_quality_samples": (r"\blow[- ]quality\b", r"\bunusable\b", r"\bcorrupt",
+                            r"\b(cell|sample|image)[- ]quality\b"),
+    "depth_variation": (r"\b(sequencing|read|library)[- ]depth\b", r"\blibrary sizes?\b"),
+    "batch_effect": (r"\bbatch(es)?\b", r"\bsite effects?\b", r"\btechnical (variation|effects?)\b"),
 }
 
 # Words that point at a kind of data, matched against the objective's (singular) tokens.
 MODALITY_WORDS: dict[str, frozenset[str]] = {
     "images": frozenset("image imaging picture photo scan radiograph x ray histology histological histopathology "
-                        "morphology microscopy stain stained figure slide-image".split()),
+                        "morphology microscopy stain stained figure slide-image patch ct mri tomography ultrasound "
+                        "mammogram radiology radiological".split()),
     "text": frozenset("text caption report description note".split()),
-    "matrix": frozenset("gene expression transcript transcriptome rna count protein peak abundance".split()),
+    "matrix": frozenset("gene expression transcript transcriptome rna count protein peak abundance chromatin "
+                        "accessibility atac methylation".split()),
     "coords": frozenset("spatial spatially location coordinate neighbourhood neighborhood".split()),
 }
 STOPWORDS = frozenset("a an and are as at be by can for from how in into is it its of on or such that the them "
@@ -64,6 +75,8 @@ STOPWORDS = frozenset("a an and are as at be by can for from how in into is it i
 
 
 def _singular(w: str) -> str:
+    if len(w) > 4 and w.endswith(("ches", "shes", "xes", "sses")):
+        return w[:-2]
     return w[:-1] if len(w) > 3 and w.endswith("s") and not w.endswith("ss") else w
 
 
@@ -91,6 +104,14 @@ def _clause(text: str, pos: int) -> str:
 def _column_tokens(a: ArtifactRecord) -> set[str]:
     col = str(a.detail.get("column") or a.name.split(".", 1)[-1])
     return {_singular(w) for w in re.findall(r"[a-z0-9]+", col.lower())}
+
+
+def _named_first(names: list[str], phrase: str) -> list[str]:
+    """Artifacts whose own words (``counts.gene_expression`` -> gene, expression) occur in the
+    phrase first; the profile's order otherwise."""
+    words = _tokens(phrase)
+    return sorted(names, key=lambda a: not {_singular(w) for w in re.findall(r"[a-z0-9]+", a.split(".", 1)[-1].lower())}
+                  & words)
 
 
 def _modality_artifacts(profile: DataProfile) -> dict[str, list[str]]:
@@ -138,7 +159,7 @@ def interpret(text: str, profile: DataProfile, criteria: Criteria | None = None)
             q.targets["coords"] = mods["coords"]
             q.targets["features"] = features[:1]
         if q.type == "differential_analysis":
-            q.targets["features"] = (mods["matrix"] or features)[:1]
+            q.targets["features"] = (_named_first(mods["matrix"], q.phrase) or features)[:1]
             q.targets["groups"] = (["discovered"] if "structure_discovery" in asked
                                    else [a.name for a in named_labels] or [a.name for a in labels][:1])
         if q.type == "batch_assessment":

@@ -5,7 +5,7 @@ import json
 
 import numpy as np
 import pytest
-from conftest import _table, _tissue
+from conftest import _cells, _table, _tissue
 from test_agents import fake_encoders  # noqa: F401  (fixture: no model downloads)
 
 import analysis_agent.orchestrator as orch
@@ -59,6 +59,21 @@ def test_tissue_run_writes_every_output(tissue_run):
                     "## Critic and revision", "## Limitations", "## Reproducibility",
                     "## Numbers not found in the outputs"):
         assert section in report
+
+
+def test_two_matrices_without_replicates_end_to_end(tmp_path):
+    out = tmp_path / "out"
+    summary = run_agent(str(_cells(tmp_path)), "Discover populations of cells using both count matrices, find "
+                        "marker genes for each population, and assess how well the two modalities agree.", out,
+                        quick=True, no_llm=True, **_settings(tmp_path))
+    assert summary["failed"] == [] and summary["numbers_unmatched"] == 0
+    ev = json.loads((out / "evaluation.json").read_text())
+    assert ev["markers"]["metrics"]["test_unit"] == "sample" and ev["markers"]["metrics"]["n_markers"] > 0
+    assert ev["modality_groups"]["metrics"]["ari"] > 0.5                    # the planted populations, in both
+    assert ev["modality_pairs"]["metrics"]["val_recall_at_10"] > ev["modality_pairs"]["metrics"][
+        "chance_recall_at_10"]
+    assert (out / "figures" / "markers.png").exists() and (out / "figures" / "map.png").exists()
+    assert "no replicate grouping" in (out / "report.md").read_text()
 
 
 def test_critic_revision_is_recorded(tissue_run):

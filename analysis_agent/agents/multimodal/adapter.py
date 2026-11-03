@@ -427,7 +427,8 @@ def _run_agreement(ctx, inputs, p: AgreementParams) -> StepResult:
     options, skipped = list(p.aligners or ["zero_shot", "cca", "contrastive"]), []
     if "zero_shot" in options and not dual:
         options.remove("zero_shot")
-        skipped.append(("zero_shot", f"'{ea}' and '{eb}' are not the two towers of one dual encoder"))
+        skipped.append(("zero_shot", f"'{ea}' and '{eb}' are not the two towers of one dual encoder" if ea and eb
+                        else "the inputs are not the two towers of one pretrained dual encoder"))
     if "contrastive" in options and len(tr) < agent.MIN_PAIRS_CONTRASTIVE:
         options.remove("contrastive")
         skipped.append(("contrastive", f"{len(tr)} training pairs < {agent.MIN_PAIRS_CONTRASTIVE}"))
@@ -448,7 +449,8 @@ def _run_agreement(ctx, inputs, p: AgreementParams) -> StepResult:
                               if k in hist}})
     best = max(comparison, key=lambda r: r["val_recall_at_10"])
     chance = min(1.0, 10 / len(gallery))
-    ctx.decide("image-text alignment", best["aligner"],
+    ctx.decide("image-text alignment" if ea and eb else f"alignment of {a_art.name} with {b_art.name}",
+               best["aligner"],
                f"Highest validation recall@10 on {len(gallery)} held-out pairs: {best['val_recall_at_10']:.3f} "
                f"(chance {chance:.3f}).",
                [(r["aligner"], f"validation recall@10 {r['val_recall_at_10']:.3f}") for r in comparison
@@ -491,11 +493,12 @@ def _agreement_cost(n, p, prm, budget) -> float:
 
 register(ToolSpec(
     name="multimodal_agreement", origin="project3", source=SOURCE,
-    summary="Image-text agreement per pair: zero-shot, CCA and contrastive alignments are compared by "
-            "validation recall@10 (label-free); the best scores each pair against random partners "
-            "(cross-fitted), and pairs that agree less than an unrelated partner would are flagged.",
-    consumes=(Port("image", ("embedding",), doc="image features"),
-              Port("text", ("embedding",), doc="text features of the same samples"),
+    summary="Agreement per pair of two representations of the same samples (image and text features, or two "
+            "measured modalities): zero-shot, CCA and contrastive alignments are compared by validation "
+            "recall@10 (label-free); the best scores each pair against random partners (cross-fitted), and "
+            "pairs that agree less than an unrelated partner would are flagged.",
+    consumes=(Port("image", ("embedding",), doc="image features, or the first representation"),
+              Port("text", ("embedding",), doc="text features, or a second representation of the same samples"),
               Port("split", ("split",), required=False, doc="predefined split: train fits, val selects"),
               Port("groups", ("groups",), required=False, doc="groups kept apart between fit and validation")),
     produces=(Port("scores", ("scores",), doc="percentile among random partners, and cosine"),

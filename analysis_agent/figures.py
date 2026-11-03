@@ -188,7 +188,8 @@ def correction_chart(table: pd.DataFrame, path: Path) -> str | None:
     return _save(fig, path)
 
 
-def markers_heatmap(markers: pd.DataFrame, path: Path, per_label: int = 5) -> str | None:
+def markers_heatmap(markers: pd.DataFrame, path: Path, per_label: int = 5, unit: str = "replicate pseudobulk",
+                    held_out: bool = True) -> str | None:
     if markers is None or markers.empty or "significant" not in markers:
         return None
     sig = markers[markers["significant"]]
@@ -207,8 +208,8 @@ def markers_heatmap(markers: pd.DataFrame, path: Path, per_label: int = 5) -> st
     im = ax.imshow(M.to_numpy(), aspect="auto", cmap=cmap, vmin=-lim, vmax=lim)
     ax.set_yticks(range(len(M)), M.index, fontsize=7)
     ax.set_xticks(range(M.shape[1]), M.columns, rotation=45, ha="right")
-    fig.colorbar(im, ax=ax, fraction=0.04, label="log2 fold change (replicate pseudobulk)")
-    ax.set_title("Top markers per group (FDR 5%, held-out counts)")
+    fig.colorbar(im, ax=ax, fraction=0.04, label=f"log2 fold change ({unit})")
+    ax.set_title("Top markers per group (FDR 5%" + (", held-out counts)" if held_out else ")"))
     return _save(fig, path)
 
 
@@ -338,8 +339,12 @@ def make_figures(ws: Workspace, plan, results: dict, register, out_dir: Path, se
             add("batch_correction", s.id, "Batch-correction candidates: mixing against neighbourhood preservation.",
                 correction_chart, r.tables.get("correction_comparison"), fdir / "batch_correction.png")
         elif s.tool == "differential_expression":
-            add("markers", s.id, "Top markers per discovered group.", markers_heatmap, r.tables.get("markers"),
-                fdir / "markers.png")
+            by_sample = r.metrics.get("test_unit") == "sample"
+            agent_made = str(s.inputs.get("labels", "")).startswith("@")
+            add("markers", s.id, f"Top markers per {'discovered ' if agent_made else ''}group"
+                + (" (samples as the test unit: no replicate grouping)." if by_sample else "."), markers_heatmap,
+                r.tables.get("markers"), fdir / "markers.png", 5,
+                "samples, no replicates" if by_sample else "replicate pseudobulk", r.metrics.get("held_out", True))
         elif s.tool == "predict_targets":
             add("predictability", s.id, "Test AUROC with DeLong intervals for the assessable targets (at most the "
                 "20 highest and 20 lowest).", forest,

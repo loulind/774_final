@@ -38,7 +38,7 @@ from pydantic import Field
 from .base import (Artifact, Criterion, Port, StepResult, ToolParams, ToolSpec, check_time, dense,
                    label_matrix, values_on)
 from .registry import register
-from .stats import auc_inference, bh_adjust, delong, fast_auroc
+from .stats import auc_inference, bh_adjust, delong, fast_auroc, stratified_delong
 
 SOURCE = "new in Project 4 (DeLong after Sun & Xu 2014)"
 RIDGE_GRID = (1e-3, 1e-2, 1e-1, 1.0, 10.0)        # x mean eigenvalue of the training Gram matrix
@@ -259,12 +259,15 @@ def _run_predict(ctx, inputs, p: PredictParams) -> StepResult:
                      f"drops {eval_mates.mean():.0%} of the evaluation set")],
                    {"n_set_aside": int(mates.sum()), "test_with_group_mates_fraction": float(eval_mates.mean())})
     design = ("fit on the non-test splits, scored once on the test split" if has_test else
-              f"out-of-fold predictions from {ctx.budget.max_folds}-fold cross-validation")
+              f"out-of-fold predictions from {ctx.budget.max_folds}-fold cross-validation; AUROC compares positives "
+              "with negatives of the same outer fold only")
     ctx.decide("evaluation design", design,
                (f"Folds keep every {' / '.join(gnames)} group whole (samples linked by any grouping stay together); "
                 if gnames else "No grouping given: folds are random; ")
                + f"penalties are chosen by {ctx.budget.inner_folds}-fold inner cross-validation on training "
-                 "samples only.",
+                 "samples only."
+               + ("" if has_test else " Each outer fold's model has its own calibration, so pooling scores across "
+                  "folds would rank by those offsets as well; AUROCs are computed within folds and combined."),
                [("random folds", "related samples on both sides would inflate the scores")] if gnames else [],
                {"has_test_split": bool(has_test), "groupings": gnames})
     Yu = Y[:, use]
@@ -283,8 +286,9 @@ def _run_predict(ctx, inputs, p: PredictParams) -> StepResult:
                                       ctx.seed, check)["probs"]
     else:
         ev = np.arange(len(rows))
-        probs, cvs = np.zeros(Yu.shape), []
+        probs, cvs, fold_of = np.zeros(Yu.shape), [], np.zeros(len(rows), int)
         for k, (tr, te) in enumerate(make_folds(len(rows), cv_groups, ctx.budget.max_folds, ctx.seed)):
+            fold_of[te] = k
             ctx.log(f"    outer fold {k + 1}: {model} for {len(use)} targets on {len(tr):,} samples")
             fp = fit_predict(X[tr], Yu[tr], None if cv_groups is None else cv_groups[tr], X[te], model,
                              ctx.budget.inner_folds, ctx.seed, check)
@@ -302,7 +306,7 @@ def _run_predict(ctx, inputs, p: PredictParams) -> StepResult:
         rec = {"target": names[t], "n_train_positives": int(pos_train[t]), "n_eval_positives": npos,
                "eval_prevalence": float(y.mean()), "cv_auroc": cv_auc[j]}
         if 0 < npos < len(y):
-            auc, var = delong(y, pr)
+            auc, var = delong(y, pr) if has_test else stratified_delong(y, pr, fold_of)
             rec.update(auc_inference(auc, var, crit.ci_level))
             rec["auprc"] = float(average_precision_score(y, pr))
             rec["brier"] = float(np.mean((pr - y) ** 2))

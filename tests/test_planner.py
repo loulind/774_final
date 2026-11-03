@@ -28,6 +28,50 @@ def _tools(plan):
     return [s.tool for s in plan.steps]
 
 
+def test_two_matrices_of_one_source(tmp_path):
+    from conftest import _cells, _profile
+
+    prof = _profile(_cells(tmp_path), tmp_path / "cache")
+    counts = [a.name for a in prof.artifacts if a.kind == "counts"]
+    assert counts == ["counts.peaks", "counts.gene_expression"] and not prof.groups
+    obj = interpret("Discover populations of cells using both count matrices, find marker genes for each "
+                    "population, and assess how well the two modalities agree.", prof)
+    assert obj.types(include_implied=False) == ["structure_discovery", "cross_modal_association",
+                                                "differential_analysis"]
+    assert obj.get("differential_analysis").targets["features"] == ["counts.gene_expression"]   # named in its clause
+    reg = assess(prof, obj.types())
+    nested = [c for c in reg.of_type("nested_sampling") if c.status == "detected"]
+    assert len(nested) == 1 and nested[0].severity == "medium" and not nested[0].subject
+    plan, report, decisions = plan_analysis(prof, reg, obj, BUDGET)
+    assert report.valid, [i.message for i in report.errors()]
+    steps = {s.id: s for s in plan.steps}
+    src = steps["split"].inputs["counts"]                                            # QC only if samples fail
+    assert "counts.gene_expression" in (src, steps.get(src[1:].split(".")[0], steps["split"]).inputs.get("counts"))
+    assert steps["pca_peaks"].inputs["matrix"] == "@norm_peaks.normalized"           # the partner, prepared alone
+    assert steps["modality_groups"].inputs == {"found": "@clusters.labels", "reference": "@clusters_peaks.labels"}
+    assert steps["modality_pairs"].tool == "multimodal_agreement"
+    assert steps["markers"].inputs == {"counts": "@split.test", "labels": "@clusters.labels"}   # no replicate
+    assert any(d.decision == "test unit for markers" and "no replicate" in d.chosen for d in decisions)
+
+
+def test_image_site_effects_without_a_count_matrix(tmp_path):
+    from conftest import _profile, _sites
+
+    prof = _profile(_sites(tmp_path), tmp_path / "cache")
+    obj = interpret("Determine whether the grade can be predicted from the images, and identify data-quality issues "
+                    "such as class imbalance and site effects.", prof)
+    assert {"predictive_modelling", "data_quality_audit", "batch_assessment"} <= set(obj.types())
+    reg = assess(prof, obj.types())
+    assert any(c.status == "detected" and c.severity in ("medium", "high") for c in reg.of_type("batch_effect"))
+    plan, report, decisions = plan_analysis(prof, reg, obj, BUDGET)
+    assert report.valid, [i.message for i in report.errors()]
+    steps = {s.id: s for s in plan.steps}
+    assert steps["features"].inputs["library"] == "groups.site"            # colour measured per site
+    assert steps["batch_assess"].inputs == {"embedding": "@features.image_features", "batch": "groups.site",
+                                            "labels": "labels.grade"}
+    assert "batch_assessment" in steps["batch_assess"].answers and steps["predict"].inputs["groups"] == "groups.site"
+
+
 # ---------------------------------------------------------------------------
 # objective
 # ---------------------------------------------------------------------------

@@ -108,7 +108,7 @@ def template_sections(record: dict) -> dict[str, str]:
     qs = [q for q in record["questions"] if not q["implied"]]
     lines = []
     for q in qs:
-        for sid in _answering(record, q["type"])[:2]:
+        for sid in _answering(record, q["type"])[:4]:
             r = res[sid]
             if not r.get("error") and not r.get("skipped"):
                 lines.append(f"{q['type'].replace('_', ' ')}: {sid} ({r['tool']}) - "
@@ -136,8 +136,10 @@ def template_sections(record: dict) -> dict[str, str]:
             results.append(f"- {sid} ({r['tool']}): {headline(r['tool'], r['metrics'], 5)}"
                            + (f"; criteria missed: {', '.join(missed)}" if missed else ""))
     limits = [f"- {a['challenge']}: accepted ({a['reason']})" for a in record["plan"]["accepted"]]
-    limits += [f"- {c['id']}: {c['residual_risk']}" for c in ch if c.get("residual_risk")
-               and not str(c["residual_risk"]).startswith("low") and c["severity"] in ("high", "medium")][:10]
+    accepted = {a["challenge"] for a in record["plan"]["accepted"]}
+    limits += [f"- {c['id']}: {c['residual_risk']}" for c in ch if c.get("residual_risk") and c["id"] not in accepted
+               and not str(c["residual_risk"]).startswith(("low", "handled"))
+               and c["severity"] in ("high", "medium")][:10]
     if record["mode"] == "quick":
         limits.append("- Quick mode: small budgets (few subsamples, permutations and epochs); numbers are a smoke "
                       "test, not the analysis.")

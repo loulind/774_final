@@ -373,3 +373,70 @@ register(ToolSpec(
               Criterion("recall_micro", "report")),
     run=_run_label_agreement, cost=lambda n, p, prm, b: 1e-6 * n + 1.0,
 ))
+
+
+# ---------------------------------------------------------------------------
+# label consistency among linked samples
+# ---------------------------------------------------------------------------
+
+class ConsistencyParams(ToolParams):
+    min_members: int = Field(2, ge=2, le=100, description="labelled members a link group needs to be judged")
+
+
+def linked_agreement(labels: np.ndarray, links: np.ndarray, min_members: int = 2) -> tuple[pd.DataFrame, dict]:
+    """Agreement of one label among samples linked as the same item: the share of within-group
+    pairs that agree (pooled over groups), chance agreement from the linked samples' label
+    frequencies, and Fleiss' kappa for a varying number of annotations per item."""
+    df = pd.DataFrame({"link": np.asarray(links).astype(str), "label": np.asarray(labels).astype(str)})
+    df = df[df.groupby("link")["label"].transform("size") >= min_members]
+    rows, same, pairs = [], 0.0, 0.0
+    for link, g in df.groupby("link", sort=True):
+        c = g["label"].value_counts()
+        n = int(c.sum())
+        rows.append({"link": link, "n": n, "n_distinct": int(len(c)), "majority": c.index[0],
+                     "majority_share": float(c.iloc[0] / n),
+                     "pairwise_agreement": float((c * (c - 1)).sum() / (n * (n - 1)))})
+        same += float((c * (c - 1)).sum())
+        pairs += n * (n - 1)
+    table = pd.DataFrame(rows, columns=["link", "n", "n_distinct", "majority", "majority_share", "pairwise_agreement"])
+    if table.empty:
+        return table, {"n_linked_groups": 0, "n_linked_samples": 0, "observed_agreement": None,
+                       "chance_agreement": None, "kappa": None, "disagreeing_fraction": None}
+    observed = same / pairs
+    chance = float((df["label"].value_counts(normalize=True) ** 2).sum())
+    return table, {"n_linked_groups": int(len(table)), "n_linked_samples": int(table["n"].sum()),
+                   "observed_agreement": observed, "chance_agreement": chance,
+                   "kappa": (observed - chance) / (1 - chance) if chance < 1 else None,
+                   "disagreeing_fraction": float((table["n_distinct"] > 1).mean())}
+
+
+def _run_label_consistency(ctx, inputs, p: ConsistencyParams) -> StepResult:
+    lab, links = inputs["labels"], inputs["links"]
+    rows = np.intersect1d(lab.rows, links.rows, assume_unique=True)
+    table, m = linked_agreement(np.asarray(lab.take(rows)), np.asarray(links.take(rows)), p.min_members)
+    src = links.meta.get("source") or links.meta.get("column") or links.name
+    if m["kappa"] is None:
+        ctx.decide("label consistency", "not measurable", f"No link group of {src} has {p.min_members} labelled "
+                   f"members with '{lab.meta.get('column', lab.name)}'.", [], {})
+    else:
+        ctx.decide("label consistency", f"kappa {m['kappa']:.2f} over {m['n_linked_groups']:,} linked groups",
+                   f"Samples linked by {src} should carry the same '{lab.meta.get('column', lab.name)}'; agreement "
+                   "beyond chance among them estimates label noise (or links between different items).", [],
+                   {k: m[k] for k in ("observed_agreement", "chance_agreement", "disagreeing_fraction")})
+    return StepResult(artifacts={"table": Artifact("table", table)}, metrics=m,
+                      tables={"linked_labels": table.sort_values(["majority_share", "link"])})
+
+
+register(ToolSpec(
+    name="label_consistency", origin="new", source=SOURCE,
+    summary="Agreement of one label among samples linked as the same item (near-duplicate images, repeated "
+            "annotations): within-group pair agreement, chance agreement, Fleiss' kappa and the share of groups "
+            "whose members disagree: an estimate of label noise from a single label source.",
+    consumes=(Port("labels", ("labels",), doc="labels expected to agree within each link group"),
+              Port("links", ("groups",), doc="samples linked as one item, e.g. near-duplicate clusters")),
+    produces=(Port("table", ("table",), doc="per link group: size, distinct labels, majority share"),),
+    params=ConsistencyParams, answers=("data_quality_audit",), addresses=("label_noise",),
+    criteria=(Criterion("kappa", "report", doc="Fleiss' kappa within link groups"),
+              Criterion("disagreeing_fraction", "report", doc="share of link groups whose members disagree")),
+    run=_run_label_consistency, cost=lambda n, p, prm, b: 1e-6 * n + 1.0,
+))

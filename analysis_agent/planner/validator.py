@@ -39,7 +39,7 @@ from .refs import Trace, is_ref, split_ref, step_costs
 # Ports where external labels only describe or are compared with, never shape the output.
 REPORT_LABEL_PORTS = {("batch_assess", "labels"), ("batch_correct", "labels"), ("label_association", "reference"),
                       ("label_imbalance", "target"), ("label_agreement", "labels"), ("label_agreement", "reference"),
-                      ("caption_label_consistency", "reference")}
+                      ("caption_label_consistency", "reference"), ("label_consistency", "labels")}
 DISCOVERY_TOOLS = ("spatial_domains", "cluster")
 
 

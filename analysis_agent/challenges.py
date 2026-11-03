@@ -136,7 +136,7 @@ def assess(profile: DataProfile, questions: list[str] | None = None) -> Challeng
     _dimensionality(b, profile)
     _batch(b, profile)
     _confounding(b, profile)
-    _nesting(b, profile)
+    _nesting(b, profile, questions)
     _double_dipping(b, profile, questions)
     _spatial(b, profile)
     _labels(b, profile)
@@ -283,9 +283,16 @@ def _confounding(b: _Builder, p: DataProfile) -> None:
                  "not_applicable" if not p.labels or not p.groups else "not_measurable")
 
 
-def _nesting(b: _Builder, p: DataProfile) -> None:
+def _nesting(b: _Builder, p: DataProfile, questions=None) -> None:
     if not p.groups:
-        b.absent("nested_sampling", "No grouping of samples: every sample is its own unit.")
+        if questions is not None and "differential_analysis" not in questions:
+            b.absent("nested_sampling", "No grouping of samples: every sample is its own unit.")
+            return
+        b.add("nested_sampling", [], "medium",
+              f"No column groups the {p.n_samples:,} samples into independent units (patients, donors, libraries), "
+              "so tests between groups must treat every sample as a replicate; if the samples come from one source, "
+              "the results describe that source and may not generalise.",
+              [_ev(None, "groupings of the samples", 0, "profile.groups")])
         return
     unit = min(p.groups, key=lambda g: g.n_levels)          # the coarsest grouping is the independent unit
     sev = RULES["samples_per_unit"].grade(unit.samples_per_level)
@@ -555,6 +562,7 @@ def update_after_run(reg: ChallengeRegister, plan, records: dict[str, dict]) -> 
     ok = {sid for sid, r in records.items() if not r.get("error") and not r.get("skipped")}
     steps = {s.id: s for s in plan.steps}
     accepted = {a.challenge: a.reason for a in plan.accepted}
+    used = {v for s in plan.steps for v in s.inputs.values() if isinstance(v, str) and not v.startswith("@")}
     for c in out.entries:
         if c.status != "detected":
             continue
@@ -563,8 +571,12 @@ def update_after_run(reg: ChallengeRegister, plan, records: dict[str, dict]) -> 
             c.handling = "; ".join(f"{sid} ({steps[sid].tool}): {headline(steps[sid].tool, records[sid]['metrics'], 3)}"
                                    for sid in c.handled_by[:4])
             c.residual_risk = _residual(c, plan, records)
+            continue
+        failed = [s.id for s in plan.steps if c.id in s.addresses and s.id not in ok]
+        data = [x for x in c.subject if not x.startswith(("groups.", "split."))]
+        if data and not set(data) & used and not failed and c.id not in accepted:
+            c.residual_risk = f"low: no step of the plan uses {', '.join(data)}"   # cannot reach any result
         else:
-            failed = [s.id for s in plan.steps if c.id in s.addresses and s.id not in ok]
             c.residual_risk = ("not handled: " + (accepted.get(c.id) or ("its steps failed or were skipped: "
                                                                          + ", ".join(failed) if failed
                                                                          else "no step of the plan applies")))
@@ -614,6 +626,9 @@ def _residual(c: Challenge, plan, records: dict[str, dict]) -> str:
         return f"|rho(PC1, depth)| after normalisation {_fmt(m('normalize_counts', 'depth_corr_pc1_after'))}"
     if t == "double_dipping":
         return "low: markers are tested on the held-out half of the count split"
+    if t == "nested_sampling" and not c.subject:
+        return ("no replicate grouping: markers were tested across samples, so they describe these samples' "
+                "source and may not generalise to others")
     if t == "nested_sampling":
         n = m("differential_expression", "n_replicates_min")
         return (f"markers rest on {n} replicates per group" if n is not None
@@ -630,6 +645,10 @@ def _residual(c: Challenge, plan, records: dict[str, dict]) -> str:
                 "together in folds and splits")
     if t == "label_noise" and m("label_agreement", "kappa_micro") is not None:
         return f"kappa between sources {_fmt(m('label_agreement', 'kappa_micro'))}; the rest is unmeasured"
+    if t == "label_noise" and m("label_consistency", "kappa") is not None:
+        return (f"kappa among linked samples {_fmt(m('label_consistency', 'kappa'))} "
+                f"({_fmt(m('label_consistency', 'disagreeing_fraction'))} of linked groups disagree); labels of "
+                "unlinked samples are unchecked")
     return "handled; see the steps' results"
 
 

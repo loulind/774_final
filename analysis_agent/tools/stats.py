@@ -68,6 +68,24 @@ def delong(y, score) -> tuple[float, float]:
     return auc, float(v10.var(ddof=1) / m + v01.var(ddof=1) / n)
 
 
+def stratified_delong(y, score, strata) -> tuple[float, float]:
+    """AUROC from positive-negative pairs within each stratum only, e.g. the outer folds of a
+    cross-validation, whose models differ in calibration: per-stratum AUROCs weighted by their
+    number of pairs, with the variance of that weighted mean from each stratum's DeLong variance."""
+    y, s, strata = np.asarray(y).astype(bool), np.asarray(score, float), np.asarray(strata)
+    total = weight = var = 0.0
+    for k in np.unique(strata):
+        sel = strata == k
+        m, n = int(y[sel].sum()), int((~y[sel]).sum())
+        if m == 0 or n == 0:
+            continue
+        auc_k, var_k = delong(y[sel], s[sel])
+        total, weight, var = total + m * n * auc_k, weight + m * n, var + (m * n) ** 2 * var_k
+    if weight == 0:
+        return float("nan"), float("nan")
+    return float(total / weight), float(var / weight ** 2)
+
+
 def auc_inference(auc: float, var: float, level: float = 0.95) -> dict:
     """DeLong interval (clipped to [0, 1]) and the one-sided p-value of AUROC > 0.5."""
     if not np.isfinite(auc) or not np.isfinite(var) or var < 0:

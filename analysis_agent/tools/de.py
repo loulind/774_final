@@ -15,6 +15,13 @@ all samples, treating them as independent - is run on the same features; the rat
 discoveries to the pseudobulk discoveries shows how much pseudoreplication would inflate the
 result. When the counts are the held-out half of a count split, the labels were found on the
 other half, so the test does not re-use the data that defined the groups.
+
+Without any grouping of the samples into independent units, there is no replicate to sum
+over: each label is then tested against the rest with the sample as the unit (the Wilcoxon
+test above, BH within each label), and each marker's direction is checked in two random
+halves of the samples instead of leaving out replicates. If the samples come from one source
+(one library, donor or culture), such p-values describe that source and do not generalise;
+the step says so in its decision and its metrics (``test_unit`` "sample").
 """
 
 from __future__ import annotations
@@ -51,8 +58,82 @@ class DEParams(ToolParams):
     max_labels: int = Field(40, ge=1, le=500)
 
 
+def _run_de_samples(ctx, counts, labels, p: DEParams) -> StepResult:
+    """No replicate grouping: every label against the rest with the sample as the unit."""
+    rows = np.intersect1d(counts.rows, labels.rows, assume_unique=True)
+    X = sp.csr_matrix(counts.take(rows))
+    y = np.asarray(labels.take(rows)).astype(str)
+    names = np.asarray(counts.meta.get("feature_names") or [f"f{j}" for j in range(X.shape[1])], dtype=object)
+    fdr, min_fc = ctx.criteria.fdr, ctx.criteria.min_abs_log2fc
+    half = counts.meta.get("split_half")
+    ctx.decide("test unit", "sample (no replicate grouping)",
+               "No grouping of the samples into independent units (patients, donors, libraries) is available, so "
+               "every label is tested against the rest across samples (Wilcoxon rank-sum on log-normalised values, "
+               "BH within each label). If the samples come from one source, the p-values describe that source and "
+               "do not generalise to others."
+               + (" The counts are the held-out half of a count split, so the labels were found on other data."
+                  if half == "test" else ""),
+               [("replicate pseudobulk", "needs a grouping of the samples into independent units")],
+               {"split_half": half, "n_samples": int(len(rows))})
+    lib = library_sizes(X)
+    levels = list(pd.Series(y).value_counts().index[: p.max_labels])
+    detected = np.asarray((X > 0).sum(0)).ravel()
+    keep = np.flatnonzero((detected >= p.min_samples) & (np.asarray(X.sum(0)).ravel() >= p.min_count))
+    tested = {lv: y == lv for lv in levels
+              if p.min_samples <= (y == lv).sum() <= len(y) - p.min_samples and len(keep) >= 3}
+    pvals = {lv: np.full(len(keep), np.nan) for lv in tested}
+    for s in range(0, len(keep), 500):                     # ranks computed once per feature block
+        check_time(ctx, "differential expression")
+        block = keep[s:s + 500]
+        R, tie = column_ranks(log_normalise(X[:, block], lib))
+        for lv, mask in tested.items():
+            pvals[lv][s:s + len(block)] = rank_sum(R, tie, mask)["p"]
+    halves = ctx.rng(31).permutation(len(rows)) % 2
+
+    def log2fc(a, b):
+        cpm_a = np.asarray(X[a][:, keep].sum(0)).ravel() / max(lib[a].sum(), 1.0) * 1e6
+        cpm_b = np.asarray(X[b][:, keep].sum(0)).ravel() / max(lib[b].sum(), 1.0) * 1e6
+        return np.log2((cpm_a + 1) / (cpm_b + 1))
+
+    results, summary = [], []
+    for lv in levels:
+        if lv not in tested:
+            summary.append({"label": lv, "n_samples": int((y == lv).sum()), "status": f"skipped: fewer than "
+                            f"{p.min_samples} samples on one side, or too few expressed features"})
+            continue
+        mask = tested[lv]
+        fc = log2fc(mask, ~mask)
+        stable = np.ones(len(keep), bool)
+        for h in (0, 1):
+            stable &= np.sign(log2fc(mask & (halves == h), ~mask & (halves == h))) == np.sign(fc)
+        q = bh_adjust(pvals[lv])
+        sig = (q < fdr) & (np.abs(fc) >= min_fc)
+        results.append(pd.DataFrame({"label": lv, "feature": names[keep], "log2fc": fc, "p": pvals[lv], "q": q,
+                                     "significant": sig, "half_stable": stable, "n_samples": int(mask.sum()),
+                                     "test_unit": "sample"}))
+        summary.append({"label": lv, "n_samples": int(mask.sum()), "status": "tested", "n_tested": int(len(keep)),
+                        "n_markers": int(sig.sum()), "n_markers_half_stable": int((sig & stable).sum())})
+    summary = pd.DataFrame(summary)
+    cols = ["label", "feature", "log2fc", "p", "q", "significant", "half_stable", "n_samples", "test_unit"]
+    table = pd.concat(results, ignore_index=True) if results else pd.DataFrame(columns=cols)
+    marks = table[table["significant"].astype(bool)]
+    metrics = {"test_unit": "sample", "n_labels": len(levels), "n_tested_labels": len(results),
+               "n_skipped_labels": len(levels) - len(results), "testable": bool(results),
+               "n_markers": int(len(marks)), "n_features_with_marker": int(marks["feature"].nunique()),
+               "half_stable_fraction": float(marks["half_stable"].mean()) if len(marks) else None,
+               "loo_stable_fraction": None, "median_sign_consistency": None, "held_out": half == "test"}
+    if not results:
+        ctx.decide("markers", "none testable", f"No label has at least {p.min_samples} samples on both sides of "
+                   "its contrast with enough expressed features.", [], {})
+    top = (marks.sort_values(["label", "q", "log2fc"], ascending=[True, True, False]).groupby("label").head(10))
+    return StepResult(artifacts={"table": Artifact("table", table)}, metrics=metrics,
+                      tables={"markers": table, "markers_top": top, "de_summary": summary})
+
+
 def _run_de(ctx, inputs, p: DEParams) -> StepResult:
-    counts, labels, rep = inputs["counts"], inputs["labels"], inputs["replicate"]
+    counts, labels, rep = inputs["counts"], inputs["labels"], inputs.get("replicate")
+    if rep is None:
+        return _run_de_samples(ctx, counts, labels, p)
     rows = np.intersect1d(np.intersect1d(counts.rows, labels.rows, assume_unique=True), rep.rows, assume_unique=True)
     X = sp.csr_matrix(counts.take(rows))
     y = np.asarray(labels.take(rows)).astype(str)
@@ -148,7 +229,7 @@ def _run_de(ctx, inputs, p: DEParams) -> StepResult:
                                       "loo_stable", "n_replicates"])
         metrics = {"n_labels": len(levels), "n_tested_labels": 0, "n_skipped_labels": len(levels), "testable": False,
                    "n_markers": 0, "loo_stable_fraction": None, "median_sign_consistency": None,
-                   "n_replicates_max": int(summary["n_replicates"].max())}
+                   "n_replicates_max": int(summary["n_replicates"].max()), "held_out": half == "test"}
         return StepResult(artifacts={"table": Artifact("table", empty)}, metrics=metrics,
                           tables={"markers": empty, "de_summary": summary})
     table = pd.concat(results, ignore_index=True)
@@ -160,7 +241,8 @@ def _run_de(ctx, inputs, p: DEParams) -> StepResult:
                "loo_stable_fraction": float(marks["loo_stable"].mean()) if n_markers else None,
                "median_sign_consistency": float(marks["sign_consistency"].median()) if n_markers else None,
                "n_replicates_min": int(summary.loc[summary["status"] == "tested", "n_replicates"].min()),
-               "n_replicates_max": int(summary.loc[summary["status"] == "tested", "n_replicates"].max())}
+               "n_replicates_max": int(summary.loc[summary["status"] == "tested", "n_replicates"].max()),
+               "held_out": half == "test"}
     if p.naive_comparison:
         metrics["n_markers_naive"] = int(table["naive_significant"].sum())
         metrics["naive_inflation"] = float(metrics["n_markers_naive"] / max(1, n_markers))
@@ -177,10 +259,12 @@ register(ToolSpec(
     name="differential_expression", origin="new", source=SOURCE,
     summary="Markers of every label against the rest with the replicate (patient) as the unit: pseudobulk "
             "log-CPM, paired moderated t, BH; sign consistency, leave-one-replicate-out stability, and the naive "
-            "sample-level Wilcoxon test for comparison.",
+            "sample-level Wilcoxon test for comparison. Without a replicate grouping: the sample-level test, BH, "
+            "and a split-half check of each marker's direction.",
     consumes=(Port("counts", ("counts",), doc="counts to test (the held-out half after a count split)"),
               Port("labels", ("labels",), doc="groups to compare, one against the rest"),
-              Port("replicate", ("groups",), doc="independent unit (patient, donor)")),
+              Port("replicate", ("groups",), required=False,
+                   doc="independent unit (patient, donor); without one the sample is the unit")),
     produces=(Port("table", ("table",), doc="all tests: log2fc, t, p, q, flags, naive p/q"),),
     params=DEParams, answers=("differential_analysis",), addresses=("nested_sampling", "multiple_testing"),
     criteria=(Criterion("n_markers", "report", doc="label-feature pairs at the FDR and fold-change bar"),
