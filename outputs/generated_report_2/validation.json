@@ -1,0 +1,20 @@
+{
+ "valid": true,
+ "issues": [],
+ "estimated_seconds": 7229.58678701891,
+ "step_seconds": {
+  "image_qc": 321.156,
+  "text_qc": 2.5957600000000003,
+  "features": 3521.56,
+  "imbalance_concepts": 1.0797889999999999,
+  "imbalance_concepts_manual": 1.0797889999999999,
+  "duplicates": 321.1808682989102,
+  "label_sources": 1.0797889999999999,
+  "caption_labels": 9.9788,
+  "image_text": 852.555904,
+  "atypical": 913.833856,
+  "predict": 535.45642136,
+  "predict_manual": 535.45642136,
+  "map": 212.573389
+ }
+}

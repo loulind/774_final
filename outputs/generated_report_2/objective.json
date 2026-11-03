@@ -1,0 +1,64 @@
+{
+ "text": "Determine which clinical concepts can be reliably predicted from images, and identify data-quality issues such as class imbalance, near-duplicates, and noisy captions.",
+ "questions": [
+  {
+   "type": "predictive_modelling",
+   "phrase": "Determine which clinical concepts can be reliably predicted from images",
+   "targets": {
+    "features": [
+     "images.image_path"
+    ],
+    "labels": [
+     "multilabel.concepts"
+    ],
+    "reference": [
+     "multilabel.concepts_manual"
+    ]
+   },
+   "challenges": [],
+   "implied": false,
+   "evidence": "predicted"
+  },
+  {
+   "type": "data_quality_audit",
+   "phrase": "identify data-quality issues such as class imbalance, near-duplicates, and noisy captions",
+   "targets": {
+    "images": [
+     "images.image_path"
+    ],
+    "text": [
+     "text.caption"
+    ],
+    "labels": [
+     "multilabel.concepts",
+     "multilabel.concepts_manual"
+    ]
+   },
+   "challenges": [
+    "class_imbalance",
+    "near_duplicates",
+    "text_noise",
+    "label_noise"
+   ],
+   "implied": false,
+   "evidence": "data-quality"
+  },
+  {
+   "type": "visualization",
+   "phrase": "(maps for the report)",
+   "targets": {
+    "features": [
+     "images.image_path"
+    ]
+   },
+   "challenges": [],
+   "implied": true,
+   "evidence": "every report shows maps"
+  }
+ ],
+ "constraints": {
+  "reliability_rule": ">= 20 positive evaluation samples, lower 95% DeLong bound of AUROC >= 0.8, BH-adjusted p < 0.05 against AUROC 0.5; fewer positives: too rare to assess"
+ },
+ "source": "rules",
+ "notes": []
+}

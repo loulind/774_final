@@ -1,0 +1,4 @@
+group,n,removed,unreadable,tiny,extreme_aspect,blank,fraction_removed
+test,9927,2,0,0,2,0,0.00020147073637554144
+train,59958,1,0,0,1,0,1.667834150572067e-05
+val,9904,2,0,0,2,0,0.00020193861066235866

@@ -6,7 +6,7 @@ Python applies the revision, re-runs only the changed step and the steps downstr
 
 - **Prefer no revision** when the results answer the objective, or when no available change is likely to help within budget. A revision costs compute and can make things worse.
 - **Do not chase noise.** A difference within its uncertainty, or one that changes direction across groups, is not a reason to revise.
-- **Only label-free, non-test criteria may judge a revision.** Never name a report-only metric (agreement with external labels, test-split scores) as the criterion.
+- **Only label-free, non-test criteria with a declared direction may judge a revision.** Name a criterion the step declares with goal `max` or `min`, and use that goal. Metrics marked report-only (agreement with external labels, test-split scores) or declared without a direction (goal `report`) cannot judge a revision.
 - Typical revisions:
   - groups confined to single patients or slides, so markers cannot be tested across them: change the batch-correction scope;
   - unstable groups, or a number of groups at the edge of the searched range: widen the range or add a clustering method;

@@ -1,21 +1,22 @@
 {
  "summary": {
-  "backend": "claude_cli",
+  "backend": "offline",
   "model_requested": "claude-opus-5-5",
   "models_used": [
    "claude-opus-5-5"
   ],
-  "replay_from": null,
+  "replay_from": "/private/tmp/claude-501/-Users-loulindsley-Projects-774-Projects/7ff2d4be-088b-4a2f-87d9-99d8d29208c4/scratchpad/replay_report_1/llm_transcript.json",
   "n_calls": 3,
-  "n_from_cache": 0,
-  "total_cost_usd": 0.785,
+  "n_from_cache": 3,
+  "total_cost_usd": 0,
   "max_budget_usd": 3.0,
+  "recorded_cost_usd": 0.785,
   "disabled": null,
   "notes": []
  },
  "calls": [
   {
-   "key": "planner_0d184c8d0088cc17.json",
+   "key": "planner_b27fb9e698ae6df8.json",
    "role": "planner",
    "sequence": 0,
    "backend": "claude_cli",
@@ -661,7 +662,7 @@
    }
   },
   {
-   "key": "critic_b2e77242a5a3feeb.json",
+   "key": "critic_72bb74fe2133ec1e.json",
    "role": "critic",
    "sequence": 0,
    "backend": "claude_cli",
@@ -975,7 +976,7 @@
    }
   },
   {
-   "key": "writer_c355114a9923f5dd.json",
+   "key": "writer_d38accea48039d36.json",
    "role": "writer",
    "sequence": 0,
    "backend": "claude_cli",

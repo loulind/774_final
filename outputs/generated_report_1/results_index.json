@@ -630,7 +630,7 @@
     "step": "system",
     "decision": "hardware",
     "chosen": "mps",
-    "rationale": "{'device': 'mps', 'device_name': 'Apple GPU (MPS) on arm64', 'cpu': 'arm', 'n_cpu': 10, 'memory_gb': 17.2, 'disk_free_gb': 24.2, 'torch_version': '2.15.0'}; full budgets",
+    "rationale": "{'device': 'mps', 'device_name': 'Apple GPU (MPS) on arm64', 'cpu': 'arm', 'n_cpu': 10, 'memory_gb': 17.2, 'disk_free_gb': 22.7, 'torch_version': '2.15.0'}; full budgets",
     "source": "system"
    },
    {
@@ -1164,7 +1164,7 @@
      "stopped_because": "early_stop",
      "best_epoch": 125,
      "val_neg_elbo_per_gene": 0.430376220703125,
-     "train_seconds": 75.6
+     "train_seconds": 78.7
     },
     "error": null,
     "skipped": null,

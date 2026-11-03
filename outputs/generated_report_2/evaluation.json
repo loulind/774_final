@@ -1,0 +1,702 @@
+{
+ "image_qc": {
+  "tool": "qc_images",
+  "metrics": {
+   "n_input": 79789,
+   "n_removed": 5,
+   "fraction_removed": 6.266527967514319e-05,
+   "max_group_fraction_removed": 0.00020193861066235866,
+   "n_unreadable": 0,
+   "n_tiny": 0,
+   "n_extreme_aspect": 5,
+   "n_blank": 0,
+   "width_median": 294.0,
+   "height_median": 256.0,
+   "size_iqr_ratio": 1.0
+  },
+  "criteria": [
+   {
+    "metric": "fraction_removed",
+    "goal": "min",
+    "threshold": 0.1,
+    "value": 6.266527967514319e-05,
+    "passed": true,
+    "selection": true,
+    "doc": "share of images removed"
+   },
+   {
+    "metric": "max_group_fraction_removed",
+    "goal": "min",
+    "threshold": 0.5,
+    "value": 0.00020193861066235866,
+    "passed": true,
+    "selection": true,
+    "doc": "largest share removed from one split/group"
+   },
+   {
+    "metric": "size_iqr_ratio",
+    "goal": "report",
+    "threshold": null,
+    "value": 1.0,
+    "passed": null,
+    "selection": true,
+    "doc": "spread of image sizes (Q3/Q1 of the shorter side)"
+   }
+  ],
+  "seconds": 0.06,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "text_qc": {
+  "tool": "qc_text",
+  "metrics": {
+   "n_input": 79788,
+   "fraction_removed": 0.0092871108437359,
+   "fraction_empty": 0.0,
+   "fraction_too_short": 0.0092871108437359,
+   "fraction_duplicate": 0.018398756705268964,
+   "fraction_boilerplate": 0.004862886649621497,
+   "fraction_panel_reference": 0.011981751641850905,
+   "words_median": 17.0,
+   "words_p95": 49.0,
+   "cross_split_duplicate_fraction": 0.27613412228796846,
+   "n_boilerplate_texts": 34
+  },
+  "criteria": [
+   {
+    "metric": "fraction_removed",
+    "goal": "min",
+    "threshold": 0.1,
+    "value": 0.0092871108437359,
+    "passed": true,
+    "selection": true,
+    "doc": "share of texts removed"
+   },
+   {
+    "metric": "fraction_duplicate",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.018398756705268964,
+    "passed": null,
+    "selection": true,
+    "doc": "share of texts repeated elsewhere"
+   },
+   {
+    "metric": "fraction_panel_reference",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.011981751641850905,
+    "passed": null,
+    "selection": true,
+    "doc": "share referring to figure panels"
+   },
+   {
+    "metric": "cross_split_duplicate_fraction",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.27613412228796846,
+    "passed": null,
+    "selection": true,
+    "doc": "repeated texts present in more than one split"
+   }
+  ],
+  "seconds": 0.91,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "features": {
+  "tool": "multimodal_features",
+  "metrics": {
+   "image_encoder": "biomedclip_image",
+   "text_encoder": "biomedclip_text",
+   "domain": "greyscale_imaging",
+   "rank_by": "alignment",
+   "greyscale_fraction": 0.7541666666666667,
+   "stain_hue_fraction": 0.025982797910654602,
+   "colour_between_group_share": null,
+   "colour_normalised": false,
+   "n_candidates": 6,
+   "n_failed": 0,
+   "n_images": 79784,
+   "screen_metric": "alignment_recall_at_10",
+   "screen_score": 0.955,
+   "screen_chance": 0.02,
+   "screen_clear_of_chance": true,
+   "screen_recall_at_10": 0.955,
+   "zero_shot_recall_at_10": 0.955,
+   "n_screen_train": 2000,
+   "n_screen_val": 500
+  },
+  "criteria": [
+   {
+    "metric": "screen_recall_at_10",
+    "goal": "max",
+    "threshold": null,
+    "value": 0.955,
+    "passed": null,
+    "selection": true,
+    "doc": "held-out recall@10 of the chosen encoder pair after CCA, or zero-shot (label-free)"
+   },
+   {
+    "metric": "zero_shot_recall_at_10",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.955,
+    "passed": null,
+    "selection": true,
+    "doc": "recall@10 in a dual encoder's own space; a very high value suggests pretraining overlap"
+   }
+  ],
+  "seconds": 1.32,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "imbalance_concepts": {
+  "tool": "label_imbalance",
+  "metrics": {
+   "n_samples": 79789,
+   "n_labels": 1947,
+   "n_labels_used": 1947,
+   "imbalance_ratio": 27798.0,
+   "gini": 0.8127542208090018,
+   "effective_labels": 208.1159063271181,
+   "top10pct_share": 0.7690746950025549,
+   "n_assessable": 221,
+   "n_below_support": 1726,
+   "labels_per_sample_median": 3.0,
+   "unannotated_fraction": 0.0,
+   "multilabel": true,
+   "n_modelable": 1721
+  },
+  "criteria": [
+   {
+    "metric": "imbalance_ratio",
+    "goal": "report",
+    "threshold": null,
+    "value": 27798.0,
+    "passed": null,
+    "selection": true,
+    "doc": ""
+   },
+   {
+    "metric": "gini",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.8127542208090018,
+    "passed": null,
+    "selection": true,
+    "doc": ""
+   },
+   {
+    "metric": "n_assessable",
+    "goal": "report",
+    "threshold": null,
+    "value": 221,
+    "passed": null,
+    "selection": true,
+    "doc": "labels with enough training and test positives"
+   }
+  ],
+  "seconds": 0.04,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "imbalance_concepts_manual": {
+  "tool": "label_imbalance",
+  "metrics": {
+   "n_samples": 79061,
+   "n_labels": 18,
+   "n_labels_used": 18,
+   "imbalance_ratio": 544.0588235294117,
+   "gini": 0.5716271370265719,
+   "effective_labels": 10.208191554339312,
+   "top10pct_share": 0.2375802722835859,
+   "n_assessable": 17,
+   "n_below_support": 1,
+   "labels_per_sample_median": 1.0,
+   "unannotated_fraction": 0.00912406472070082,
+   "multilabel": true,
+   "n_modelable": 18
+  },
+  "criteria": [
+   {
+    "metric": "imbalance_ratio",
+    "goal": "report",
+    "threshold": null,
+    "value": 544.0588235294117,
+    "passed": null,
+    "selection": true,
+    "doc": ""
+   },
+   {
+    "metric": "gini",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.5716271370265719,
+    "passed": null,
+    "selection": true,
+    "doc": ""
+   },
+   {
+    "metric": "n_assessable",
+    "goal": "report",
+    "threshold": null,
+    "value": 17,
+    "passed": null,
+    "selection": true,
+    "doc": "labels with enough training and test positives"
+   }
+  ],
+  "seconds": 0.03,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "duplicates": {
+  "tool": "near_duplicates",
+  "metrics": {
+   "n_images": 79784,
+   "n_hash_informative": 79780,
+   "n_hash_candidates": 57627,
+   "n_hash_pairs": 217,
+   "n_embedding_pairs": 3311,
+   "n_pairs_both": 92,
+   "pair_agreement": 0.02677532013969732,
+   "embedding_threshold": 0.9472596645355225,
+   "n_clusters": 3373,
+   "n_in_clusters": 6782,
+   "fraction_in_clusters": 0.08500451218289382,
+   "largest_cluster": 6,
+   "skipped_hash_buckets": 0,
+   "hash_pair_median_cosine": 0.9472596645355225,
+   "cross_split_clusters": 949,
+   "cross_split_cluster_fraction": 0.2813519122442929,
+   "test_with_train_duplicate_fraction": 0.06387909319899245,
+   "cross_group_cluster_fraction": 0.5757485917580789
+  },
+  "criteria": [
+   {
+    "metric": "fraction_in_clusters",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.08500451218289382,
+    "passed": null,
+    "selection": true,
+    "doc": "share of images with a near-duplicate"
+   },
+   {
+    "metric": "test_with_train_duplicate_fraction",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.06387909319899245,
+    "passed": null,
+    "selection": true,
+    "doc": "test images with a training duplicate"
+   },
+   {
+    "metric": "pair_agreement",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.02677532013969732,
+    "passed": null,
+    "selection": true,
+    "doc": "Jaccard of hash and embedding pairs"
+   },
+   {
+    "metric": "cross_group_cluster_fraction",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.5757485917580789,
+    "passed": null,
+    "selection": true,
+    "doc": "clusters spanning groups"
+   }
+  ],
+  "seconds": 7.21,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "label_sources": {
+  "tool": "label_agreement",
+  "metrics": {
+   "n_samples_both": 79061,
+   "n_shared_labels": 18,
+   "kappa_micro": 0.9643390667187545,
+   "kappa_median": 1.0,
+   "precision_micro": 0.9367856197511851,
+   "recall_micro": 1.0,
+   "disagreement_rate": 0.005537917978944528,
+   "first_source_coverage": 0.4683833446668144
+  },
+  "criteria": [
+   {
+    "metric": "kappa_micro",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.9643390667187545,
+    "passed": null,
+    "selection": true,
+    "doc": "kappa over all (sample, shared label) pairs"
+   },
+   {
+    "metric": "kappa_median",
+    "goal": "report",
+    "threshold": null,
+    "value": 1.0,
+    "passed": null,
+    "selection": true,
+    "doc": ""
+   },
+   {
+    "metric": "precision_micro",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.9367856197511851,
+    "passed": null,
+    "selection": true,
+    "doc": ""
+   },
+   {
+    "metric": "recall_micro",
+    "goal": "report",
+    "threshold": null,
+    "value": 1.0,
+    "passed": null,
+    "selection": true,
+    "doc": ""
+   }
+  ],
+  "seconds": 0.52,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "caption_labels": {
+  "tool": "caption_label_consistency",
+  "metrics": {
+   "n_texts": 79047,
+   "n_texts_without_words": 12,
+   "n_labels_checked": 300,
+   "unsupported_rate": 0.20345141612399836,
+   "negated_rate": 0.005624224895775653,
+   "n_labels_checked_for_missing": 70,
+   "possible_missing_rate": 0.0012114423155476035,
+   "texts_with_flag_fraction": 0.45464090983845057,
+   "unsupported_rate_heldout": 0.19656082716139914,
+   "reference_absent_given_flagged": 0.02297319340982002,
+   "reference_absent_given_supported": 0.08134596915101654,
+   "n_reference_labels": 17
+  },
+  "criteria": [
+   {
+    "metric": "unsupported_rate",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.20345141612399836,
+    "passed": null,
+    "selection": true,
+    "doc": "positive labels with none of their words in the text"
+   },
+   {
+    "metric": "negated_rate",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.005624224895775653,
+    "passed": null,
+    "selection": true,
+    "doc": "positive labels whose words appear only negated"
+   },
+   {
+    "metric": "reference_absent_given_flagged",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.02297319340982002,
+    "passed": null,
+    "selection": false,
+    "doc": "flagged labels the second source lacks"
+   },
+   {
+    "metric": "reference_absent_given_supported",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.08134596915101654,
+    "passed": null,
+    "selection": false,
+    "doc": "supported labels the second source lacks"
+   }
+  ],
+  "seconds": 1.39,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "image_text": {
+  "tool": "multimodal_agreement",
+  "metrics": {
+   "aligner": "zero_shot",
+   "val_recall_at_10": 0.88725,
+   "chance_recall_at_10": 0.005,
+   "cross_fitted": false,
+   "n_pairs": 79042,
+   "n_flagged": 14,
+   "flagged_fraction": 0.00017712102426558032,
+   "median_percentile": 1.0,
+   "flagged_fraction_test": 0.0006091370558375635,
+   "flagged_fraction_train": 8.422045546422316e-05,
+   "flagged_fraction_val": 0.0003053745928338762
+  },
+  "criteria": [
+   {
+    "metric": "val_recall_at_10",
+    "goal": "max",
+    "threshold": null,
+    "value": 0.88725,
+    "passed": null,
+    "selection": true,
+    "doc": "validation recall@10 of the chosen alignment"
+   },
+   {
+    "metric": "flagged_fraction",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.00017712102426558032,
+    "passed": null,
+    "selection": true,
+    "doc": "share of pairs flagged as disagreeing"
+   }
+  ],
+  "seconds": 22.14,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "atypical": {
+  "tool": "generative_density",
+  "metrics": {
+   "model": "maf",
+   "dim": 57,
+   "val_loglik": -54.704402923583984,
+   "val_loglik_gaussian": -81.71885681152344,
+   "val_loglik_gain": 27.014453887939453,
+   "flag_threshold": 84.72789001464844,
+   "cross_fitted": true,
+   "flagged_fraction": 0.00818459841572245,
+   "n_flagged": 653,
+   "epochs_run": 63,
+   "stopped_because": "early_stop",
+   "flagged_fraction_test": 0.01017632241813602,
+   "flagged_fraction_train": 0.007538736094200844,
+   "flagged_fraction_val": 0.010098969905069683
+  },
+  "criteria": [
+   {
+    "metric": "val_loglik_gain",
+    "goal": "max",
+    "threshold": 0.0,
+    "value": 27.014453887939453,
+    "passed": true,
+    "selection": true,
+    "doc": "held-out log-likelihood gain over a Gaussian"
+   },
+   {
+    "metric": "flagged_fraction",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.00818459841572245,
+    "passed": null,
+    "selection": true,
+    "doc": "share of samples flagged as atypical"
+   }
+  ],
+  "seconds": 221.92,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "predict": {
+  "tool": "predict_targets",
+  "metrics": {
+   "model": "ridge",
+   "evaluation": "test split",
+   "n_train": 61938,
+   "n_eval": 9925,
+   "n_targets": 300,
+   "n_too_rare_to_train": 1647,
+   "n_assessed": 214,
+   "n_reliable": 176,
+   "n_not_reliable": 38,
+   "n_too_rare_to_assess": 86,
+   "median_auroc": 0.9402292088824996,
+   "cv_auroc_median": 0.9425610561675439,
+   "median_auprc_lift": 20.97086439047886,
+   "median_brier_skill": 0.0461122727519116,
+   "n_set_aside": 7921,
+   "test_with_group_mates_fraction": 0.6552141057934509,
+   "leakage_gap_median": 0.0005407248323893166
+  },
+  "criteria": [
+   {
+    "metric": "cv_auroc_median",
+    "goal": "max",
+    "threshold": null,
+    "value": 0.9425610561675439,
+    "passed": null,
+    "selection": true,
+    "doc": "median inner cross-validation AUROC (training data)"
+   },
+   {
+    "metric": "n_reliable",
+    "goal": "report",
+    "threshold": null,
+    "value": 176,
+    "passed": null,
+    "selection": false,
+    "doc": "targets meeting the reliability rule"
+   },
+   {
+    "metric": "median_auroc",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.9402292088824996,
+    "passed": null,
+    "selection": false,
+    "doc": "median evaluation AUROC"
+   },
+   {
+    "metric": "leakage_gap_median",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.0005407248323893166,
+    "passed": null,
+    "selection": false,
+    "doc": "AUROC gain when fitting also uses samples sharing a group with test samples"
+   }
+  ],
+  "seconds": 24.31,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "predict_manual": {
+  "tool": "predict_targets",
+  "metrics": {
+   "model": "logistic",
+   "evaluation": "test split",
+   "n_train": 61425,
+   "n_eval": 9820,
+   "n_targets": 18,
+   "n_too_rare_to_train": 0,
+   "n_assessed": 17,
+   "n_reliable": 17,
+   "n_not_reliable": 0,
+   "n_too_rare_to_assess": 1,
+   "median_auroc": 0.9963814589665652,
+   "cv_auroc_median": 0.995668859089559,
+   "median_auprc_lift": 21.609388592970713,
+   "median_brier_skill": 0.7735514153116416,
+   "n_set_aside": 7811,
+   "test_with_group_mates_fraction": 0.6526476578411405,
+   "leakage_gap_median": 0.00010474906367041736
+  },
+  "criteria": [
+   {
+    "metric": "cv_auroc_median",
+    "goal": "max",
+    "threshold": null,
+    "value": 0.995668859089559,
+    "passed": null,
+    "selection": true,
+    "doc": "median inner cross-validation AUROC (training data)"
+   },
+   {
+    "metric": "n_reliable",
+    "goal": "report",
+    "threshold": null,
+    "value": 17,
+    "passed": null,
+    "selection": false,
+    "doc": "targets meeting the reliability rule"
+   },
+   {
+    "metric": "median_auroc",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.9963814589665652,
+    "passed": null,
+    "selection": false,
+    "doc": "median evaluation AUROC"
+   },
+   {
+    "metric": "leakage_gap_median",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.00010474906367041736,
+    "passed": null,
+    "selection": false,
+    "doc": "AUROC gain when fitting also uses samples sharing a group with test samples"
+   }
+  ],
+  "seconds": 286.44,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ },
+ "map": {
+  "tool": "dimreduce_map",
+  "metrics": {
+   "method": "umap",
+   "n_candidates": 2,
+   "trustworthiness@10": 0.9766687999106495,
+   "continuity@10": 0.971785447031887,
+   "distance_spearman": 0.35262124252564814,
+   "stability": 0.53252
+  },
+  "criteria": [
+   {
+    "metric": "trustworthiness@10",
+    "goal": "max",
+    "threshold": 0.8,
+    "value": 0.9766687999106495,
+    "passed": true,
+    "selection": true,
+    "doc": "share of map neighbours that are true neighbours (rank-weighted)"
+   },
+   {
+    "metric": "continuity@10",
+    "goal": "max",
+    "threshold": null,
+    "value": 0.971785447031887,
+    "passed": null,
+    "selection": true,
+    "doc": "share of true neighbours kept in the map"
+   },
+   {
+    "metric": "stability",
+    "goal": "max",
+    "threshold": 0.5,
+    "value": 0.53252,
+    "passed": true,
+    "selection": true,
+    "doc": "k-NN overlap of two fits with different seeds"
+   },
+   {
+    "metric": "distance_spearman",
+    "goal": "report",
+    "threshold": null,
+    "value": 0.35262124252564814,
+    "passed": null,
+    "selection": true,
+    "doc": "rank correlation of pairwise distances"
+   }
+  ],
+  "seconds": 62.55,
+  "cached": false,
+  "error": null,
+  "skipped": null
+ }
+}

@@ -1,0 +1,1089 @@
+{
+ "questions": [
+  "predictive_modelling",
+  "data_quality_audit",
+  "visualization"
+ ],
+ "thresholds": {
+  "qc_flagged": {
+   "metric": "share of samples failing the default count-QC rule",
+   "low": 0.005,
+   "medium": 0.03,
+   "high": 0.1,
+   "higher_is_worse": true
+  },
+  "unusable_images": {
+   "metric": "share of unreadable, tiny, strip-shaped or blank images",
+   "low": 0.001,
+   "medium": 0.01,
+   "high": 0.05,
+   "higher_is_worse": true
+  },
+  "library_iqr": {
+   "metric": "interquartile range of log2 library size",
+   "low": 0.5,
+   "medium": 1.0,
+   "high": 2.0,
+   "higher_is_worse": true
+  },
+  "depth_pc1": {
+   "metric": "|Spearman rho| of PC1 with log depth after library-size scaling",
+   "low": 0.1,
+   "medium": 0.3,
+   "high": 0.5,
+   "higher_is_worse": true
+  },
+  "features_per_sample": {
+   "metric": "features per sample (p / n)",
+   "low": 0.1,
+   "medium": 1.0,
+   "high": 10.0,
+   "higher_is_worse": true
+  },
+  "sparsity": {
+   "metric": "share of zero entries",
+   "low": 0.5,
+   "medium": 0.9,
+   "high": 0.99,
+   "higher_is_worse": true
+  },
+  "group_silhouette": {
+   "metric": "silhouette width by group",
+   "low": 0.02,
+   "medium": 0.05,
+   "high": 0.15,
+   "higher_is_worse": true
+  },
+  "group_mixing": {
+   "metric": "neighbour mixing of groups (1 = as mixed as overall)",
+   "low": 0.9,
+   "medium": 0.8,
+   "high": 0.5,
+   "higher_is_worse": false
+  },
+  "colour_share": {
+   "metric": "between-group share of image colour variance",
+   "low": 0.05,
+   "medium": 0.2,
+   "high": 0.5,
+   "higher_is_worse": true
+  },
+  "cramers_v": {
+   "metric": "Cram\u00e9r's V between group and label",
+   "low": 0.1,
+   "medium": 0.3,
+   "high": 0.5,
+   "higher_is_worse": true
+  },
+  "samples_per_unit": {
+   "metric": "samples per independent unit (coarsest grouping)",
+   "low": 1.2,
+   "medium": 2.0,
+   "high": 10.0,
+   "higher_is_worse": true
+  },
+  "autocorrelated": {
+   "metric": "share of variable features with significant Moran's I",
+   "low": 0.05,
+   "medium": 0.2,
+   "high": 0.5,
+   "higher_is_worse": true
+  },
+  "annotated": {
+   "metric": "share of samples with a label",
+   "low": 0.99,
+   "medium": 0.5,
+   "high": 0.1,
+   "higher_is_worse": false
+  },
+  "class_ratio": {
+   "metric": "largest / smallest class size",
+   "low": 3.0,
+   "medium": 10.0,
+   "high": 50.0,
+   "higher_is_worse": true
+  },
+  "too_rare": {
+   "metric": "share of labels too rare to assess",
+   "low": 0.1,
+   "medium": 0.5,
+   "high": 0.9,
+   "higher_is_worse": true
+  },
+  "kappa": {
+   "metric": "Cohen's kappa between label sources",
+   "low": 0.95,
+   "medium": 0.8,
+   "high": 0.6,
+   "higher_is_worse": false
+  },
+  "duplicates": {
+   "metric": "share of images in a near-duplicate pair",
+   "low": 0.005,
+   "medium": 0.02,
+   "high": 0.1,
+   "higher_is_worse": true
+  },
+  "group_overlap": {
+   "metric": "share of a held-out split whose group also occurs in another split",
+   "low": 0.001,
+   "medium": 0.05,
+   "high": 0.2,
+   "higher_is_worse": true
+  },
+  "text_flagged": {
+   "metric": "share of texts empty, very short, repeated, boilerplate or referring to panels",
+   "low": 0.01,
+   "medium": 0.05,
+   "high": 0.2,
+   "higher_is_worse": true
+  },
+  "missing": {
+   "metric": "share of samples without the modality",
+   "low": 0.01,
+   "medium": 0.1,
+   "high": 0.3,
+   "higher_is_worse": true
+  },
+  "size_spread": {
+   "metric": "Q3 / Q1 of the shorter image side",
+   "low": 1.5,
+   "medium": 2.0,
+   "high": 4.0,
+   "higher_is_worse": true
+  },
+  "colour_mix": {
+   "metric": "share of the minority colour mode (greyscale vs colour)",
+   "low": 0.05,
+   "medium": 0.2,
+   "high": 0.4,
+   "higher_is_worse": true
+  },
+  "hypotheses": {
+   "metric": "hypotheses the questions imply",
+   "low": 2.0,
+   "medium": 20.0,
+   "high": 1000.0,
+   "higher_is_worse": true
+  },
+  "compute_share": {
+   "metric": "largest declared tool cost / step budget",
+   "low": 0.25,
+   "medium": 0.5,
+   "high": 1.0,
+   "higher_is_worse": true
+  }
+ },
+ "entries": [
+  {
+   "id": "low_quality_samples:images.image_path",
+   "type": "low_quality_samples",
+   "subject": [
+    "images.image_path"
+   ],
+   "summary": "0.0% of the 79,789 measured images in images.image_path are unreadable, tiny, strip-shaped or blank.",
+   "status": "not_detected",
+   "severity": "none",
+   "evidence": [
+    {
+     "metric": "share of unreadable, tiny, strip-shaped or blank images",
+     "value": 6.266527967514319e-05,
+     "rule": "low >= 0.001, medium >= 0.01, high >= 0.05",
+     "source": "images[images.image_path]"
+    },
+    {
+     "metric": "unreadable images",
+     "value": 0,
+     "rule": "",
+     "source": "images[images.image_path]"
+    },
+    {
+     "metric": "tiny images",
+     "value": 0,
+     "rule": "",
+     "source": "images[images.image_path]"
+    },
+    {
+     "metric": "extreme_aspect images",
+     "value": 5,
+     "rule": "",
+     "source": "images[images.image_path]"
+    },
+    {
+     "metric": "blank images",
+     "value": 0,
+     "rule": "",
+     "source": "images[images.image_path]"
+    }
+   ],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "cross_modal_association",
+    "differential_analysis",
+    "batch_assessment",
+    "predictive_modelling",
+    "representation_learning",
+    "generative_modelling",
+    "data_quality_audit",
+    "visualization"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "generative_density",
+    "qc_counts",
+    "qc_images"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "depth_variation",
+   "type": "depth_variation",
+   "subject": [],
+   "summary": "No count matrix: sequencing depth does not apply.",
+   "status": "not_applicable",
+   "severity": "none",
+   "evidence": [],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "differential_analysis",
+    "batch_assessment",
+    "representation_learning",
+    "visualization"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "generative_batch_vae",
+    "normalize_counts"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "high_dimensionality",
+   "type": "high_dimensionality",
+   "subject": [],
+   "summary": "No feature matrix; images and texts are reduced by encoders.",
+   "status": "not_applicable",
+   "severity": "none",
+   "evidence": [],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "predictive_modelling",
+    "representation_learning",
+    "generative_modelling",
+    "visualization"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "dimreduce_map",
+    "dimreduce_pca",
+    "generative_batch_vae",
+    "multimodal_features",
+    "normalize_counts"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "batch_effect",
+   "type": "batch_effect",
+   "subject": [],
+   "summary": "Groups are too small to compare image colour; group effects in learned features are measured after feature extraction.",
+   "status": "not_measurable",
+   "severity": "none",
+   "evidence": [],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "cross_modal_association",
+    "differential_analysis",
+    "batch_assessment",
+    "predictive_modelling",
+    "representation_learning"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "batch_assess",
+    "batch_correct",
+    "generative_batch_vae",
+    "multimodal_features"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "batch_confounding",
+   "type": "batch_confounding",
+   "subject": [],
+   "summary": "No single-label column with groups large enough to cross-tabulate.",
+   "status": "not_measurable",
+   "severity": "none",
+   "evidence": [],
+   "affects": [
+    "structure_discovery",
+    "differential_analysis",
+    "batch_assessment",
+    "predictive_modelling"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "batch_assess"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "nested_sampling:groups.article",
+   "type": "nested_sampling",
+   "subject": [
+    "groups.article"
+   ],
+   "summary": "The 79,789 samples come from 44,975 article levels (1.77 per level); 68% of samples share their article with others, so the independent unit is the article.",
+   "status": "detected",
+   "severity": "low",
+   "evidence": [
+    {
+     "metric": "samples per independent unit (coarsest grouping)",
+     "value": 1.7740744858254587,
+     "rule": "low >= 1.2, medium >= 2, high >= 10",
+     "source": "groups[groups.article]"
+    },
+    {
+     "metric": "article levels",
+     "value": 44975,
+     "rule": "",
+     "source": "groups[groups.article]"
+    },
+    {
+     "metric": "share of samples sharing their article",
+     "value": 0.6762836982541454,
+     "rule": "",
+     "source": "groups[groups.article]"
+    }
+   ],
+   "affects": [
+    "differential_analysis",
+    "predictive_modelling",
+    "cross_modal_association",
+    "batch_assessment"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "batch_assess",
+    "differential_expression",
+    "multimodal_predictability",
+    "predict_targets"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "predict",
+    "predict_manual"
+   ],
+   "handling": "predict (predict_targets): model ridge, n reliable 176, n assessed 214; predict_manual (predict_targets): model logistic, n reliable 17, n assessed 17",
+   "residual_risk": "folds and comparisons keep the independent unit whole"
+  },
+  {
+   "id": "double_dipping",
+   "type": "double_dipping",
+   "subject": [],
+   "summary": "No count matrix to find groups in and then test them on.",
+   "status": "not_applicable",
+   "severity": "none",
+   "evidence": [],
+   "affects": [
+    "differential_analysis"
+   ],
+   "relevant": false,
+   "mitigations": [
+    "count_split"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "spatial_autocorrelation",
+   "type": "spatial_autocorrelation",
+   "subject": [],
+   "summary": "No spatial coordinates.",
+   "status": "not_applicable",
+   "severity": "none",
+   "evidence": [],
+   "affects": [
+    "spatial_structure",
+    "structure_discovery",
+    "differential_analysis",
+    "predictive_modelling"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "spatial_domains",
+    "spatial_svg"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "partial_labels:multilabel.concepts",
+   "type": "partial_labels",
+   "subject": [
+    "multilabel.concepts"
+   ],
+   "summary": "100% of samples carry 'concepts'.",
+   "status": "not_detected",
+   "severity": "none",
+   "evidence": [
+    {
+     "metric": "share of samples with a label",
+     "value": 1.0,
+     "rule": "low <= 0.99, medium <= 0.5, high <= 0.1",
+     "source": "labels[multilabel.concepts]"
+    },
+    {
+     "metric": "article levels labelled",
+     "value": "44975 of 44975",
+     "rule": "",
+     "source": "labels[multilabel.concepts]"
+    }
+   ],
+   "affects": [
+    "predictive_modelling",
+    "structure_discovery",
+    "cross_modal_association"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "label_association"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "partial_labels:multilabel.concepts_manual",
+   "type": "partial_labels",
+   "subject": [
+    "multilabel.concepts_manual"
+   ],
+   "summary": "99% of samples carry 'concepts_manual' (article: 44633 of 44975 levels labelled).",
+   "status": "not_detected",
+   "severity": "none",
+   "evidence": [
+    {
+     "metric": "share of samples with a label",
+     "value": 0.9908759352792992,
+     "rule": "low <= 0.99, medium <= 0.5, high <= 0.1",
+     "source": "labels[multilabel.concepts_manual]"
+    },
+    {
+     "metric": "article levels labelled",
+     "value": "44633 of 44975",
+     "rule": "",
+     "source": "labels[multilabel.concepts_manual]"
+    }
+   ],
+   "affects": [
+    "predictive_modelling",
+    "structure_discovery",
+    "cross_modal_association"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "label_association"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "class_imbalance:multilabel.concepts",
+   "type": "class_imbalance",
+   "subject": [
+    "multilabel.concepts"
+   ],
+   "summary": "'concepts' has 1,947 labels, the largest 27,798 times the smallest; 221 have the support to be modelled and judged (89% are too rare to assess).",
+   "status": "detected",
+   "severity": "high",
+   "evidence": [
+    {
+     "metric": "largest / smallest class size",
+     "value": 27798.0,
+     "rule": "low >= 3, medium >= 10, high >= 50",
+     "source": "labels[multilabel.concepts]"
+    },
+    {
+     "metric": "share of labels too rare to assess",
+     "value": 0.8864920390344119,
+     "rule": "low >= 0.1, medium >= 0.5, high >= 0.9",
+     "source": "labels[multilabel.concepts]"
+    },
+    {
+     "metric": "labels with support to model and judge",
+     "value": 221,
+     "rule": "",
+     "source": "labels[multilabel.concepts]"
+    },
+    {
+     "metric": "Gini of label frequencies",
+     "value": 0.8127542208090018,
+     "rule": "",
+     "source": "labels[multilabel.concepts]"
+    }
+   ],
+   "affects": [
+    "predictive_modelling",
+    "data_quality_audit"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "label_imbalance",
+    "multimodal_predictability",
+    "predict_targets"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "imbalance_concepts",
+    "predict"
+   ],
+   "handling": "imbalance_concepts (label_imbalance): n labels used 1,947, imbalance ratio 27,798, gini 0.813; predict (predict_targets): model ridge, n reliable 176, n assessed 214",
+   "residual_risk": "86 modelled targets too rare to assess"
+  },
+  {
+   "id": "class_imbalance:multilabel.concepts_manual",
+   "type": "class_imbalance",
+   "subject": [
+    "multilabel.concepts_manual"
+   ],
+   "summary": "'concepts_manual' has 18 labels, the largest 544 times the smallest; 17 have the support to be modelled and judged (6% are too rare to assess).",
+   "status": "detected",
+   "severity": "high",
+   "evidence": [
+    {
+     "metric": "largest / smallest class size",
+     "value": 544.0588235294117,
+     "rule": "low >= 3, medium >= 10, high >= 50",
+     "source": "labels[multilabel.concepts_manual]"
+    },
+    {
+     "metric": "share of labels too rare to assess",
+     "value": 0.05555555555555558,
+     "rule": "low >= 0.1, medium >= 0.5, high >= 0.9",
+     "source": "labels[multilabel.concepts_manual]"
+    },
+    {
+     "metric": "labels with support to model and judge",
+     "value": 17,
+     "rule": "",
+     "source": "labels[multilabel.concepts_manual]"
+    },
+    {
+     "metric": "Gini of label frequencies",
+     "value": 0.5716271370265719,
+     "rule": "",
+     "source": "labels[multilabel.concepts_manual]"
+    }
+   ],
+   "affects": [
+    "predictive_modelling",
+    "data_quality_audit"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "label_imbalance",
+    "multimodal_predictability",
+    "predict_targets"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "imbalance_concepts_manual",
+    "predict_manual"
+   ],
+   "handling": "imbalance_concepts_manual (label_imbalance): n labels used 18, imbalance ratio 544, gini 0.572; predict_manual (predict_targets): model logistic, n reliable 17, n assessed 17",
+   "residual_risk": "1 modelled targets too rare to assess"
+  },
+  {
+   "id": "label_noise:multilabel.concepts,multilabel.concepts_manual",
+   "type": "label_noise",
+   "subject": [
+    "multilabel.concepts",
+    "multilabel.concepts_manual"
+   ],
+   "summary": "multilabel.concepts and multilabel.concepts_manual agree with kappa 0.964 on 18 shared labels (precision 0.937, recall 1); those labels hold 47% of multilabel.concepts's assignments, so the rest is unmeasured.",
+   "status": "detected",
+   "severity": "low",
+   "evidence": [
+    {
+     "metric": "Cohen's kappa between label sources",
+     "value": 0.9643390667187545,
+     "rule": "low <= 0.95, medium <= 0.8, high <= 0.6",
+     "source": "label_agreement[multilabel.concepts]"
+    },
+    {
+     "metric": "share of the first source's assignments on shared labels",
+     "value": 0.4683833446668144,
+     "rule": "",
+     "source": "label_agreement[multilabel.concepts]"
+    }
+   ],
+   "affects": [
+    "predictive_modelling",
+    "data_quality_audit"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "caption_label_consistency",
+    "label_agreement",
+    "multimodal_agreement"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "label_sources",
+    "caption_labels"
+   ],
+   "handling": "label_sources (label_agreement): kappa micro 0.964, n shared labels 18, precision micro 0.937; caption_labels (caption_label_consistency): n labels checked 300, unsupported rate 0.203, negated rate 0.00562",
+   "residual_risk": "kappa between sources 0.964; the rest is unmeasured"
+  },
+  {
+   "id": "near_duplicates:images.image_path",
+   "type": "near_duplicates",
+   "subject": [
+    "images.image_path"
+   ],
+   "summary": "0.5% of the 79,785 hashed images in images.image_path have a near-copy (217 pairs: 64-bit difference-hash matches confirmed at 256 bits, of 57,627 64-bit matches); 57 pairs cross the predefined split.",
+   "status": "detected",
+   "severity": "medium",
+   "evidence": [
+    {
+     "metric": "share of images in a near-duplicate pair",
+     "value": 0.004524660023814,
+     "rule": "low >= 0.005, medium >= 0.02, high >= 0.1",
+     "source": "images[images.image_path]"
+    },
+    {
+     "metric": "near-duplicate pairs crossing the split",
+     "value": 57,
+     "rule": "",
+     "source": "images[images.image_path]"
+    },
+    {
+     "metric": "64-bit hash matches before confirmation",
+     "value": 57627,
+     "rule": "",
+     "source": "images[images.image_path]"
+    }
+   ],
+   "affects": [
+    "predictive_modelling",
+    "cross_modal_association",
+    "data_quality_audit"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "near_duplicates",
+    "predict_targets"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "duplicates",
+    "predict",
+    "predict_manual"
+   ],
+   "handling": "duplicates (near_duplicates): n clusters 3,373, fraction in clusters 0.085, n hash pairs 217; predict (predict_targets): model ridge, n reliable 176, n assessed 214; predict_manual (predict_targets): model logistic, n reliable 17, n assessed 17",
+   "residual_risk": "0.085 of images in duplicate clusters, kept together in folds and splits"
+  },
+  {
+   "id": "split_leakage:groups.article,split.split",
+   "type": "split_leakage",
+   "subject": [
+    "groups.article",
+    "split.split"
+   ],
+   "summary": "64% of the test split shares its article with another split; 64% of the val split shares its article with another split.",
+   "status": "detected",
+   "severity": "high",
+   "evidence": [
+    {
+     "metric": "share of the test split whose article occurs in another split",
+     "value": 0.6389644404150298,
+     "rule": "low >= 0.001, medium >= 0.05, high >= 0.2",
+     "source": "groups[groups.article]"
+    },
+    {
+     "metric": "share of the val split whose article occurs in another split",
+     "value": 0.6449919224555735,
+     "rule": "low >= 0.001, medium >= 0.05, high >= 0.2",
+     "source": "groups[groups.article]"
+    }
+   ],
+   "affects": [
+    "predictive_modelling",
+    "cross_modal_association",
+    "data_quality_audit"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "near_duplicates",
+    "predict_targets"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "duplicates",
+    "predict",
+    "predict_manual"
+   ],
+   "handling": "duplicates (near_duplicates): n clusters 3,373, fraction in clusters 0.085, n hash pairs 217; predict (predict_targets): model ridge, n reliable 176, n assessed 214; predict_manual (predict_targets): model logistic, n reliable 17, n assessed 17",
+   "residual_risk": "7921 fitting samples set aside; a fit with them gains 0.000541 median AUROC"
+  },
+  {
+   "id": "split_leakage:images.image_path,split.split",
+   "type": "split_leakage",
+   "subject": [
+    "images.image_path",
+    "split.split"
+   ],
+   "summary": "57 near-duplicate image pairs lie on different sides of the split.",
+   "status": "detected",
+   "severity": "medium",
+   "evidence": [
+    {
+     "metric": "near-duplicate pairs crossing the split",
+     "value": 57,
+     "rule": "",
+     "source": "images[images.image_path]"
+    }
+   ],
+   "affects": [
+    "predictive_modelling",
+    "cross_modal_association",
+    "data_quality_audit"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "near_duplicates",
+    "predict_targets"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "duplicates",
+    "predict",
+    "predict_manual"
+   ],
+   "handling": "duplicates (near_duplicates): n clusters 3,373, fraction in clusters 0.085, n hash pairs 217; predict (predict_targets): model ridge, n reliable 176, n assessed 214; predict_manual (predict_targets): model logistic, n reliable 17, n assessed 17",
+   "residual_risk": "7921 fitting samples set aside; a fit with them gains 0.000541 median AUROC"
+  },
+  {
+   "id": "text_noise:text.caption",
+   "type": "text_noise",
+   "subject": [
+    "text.caption"
+   ],
+   "summary": "3.6% of text.caption are flagged (too short 0.9%, duplicate 1.8%, boilerplate 0.5%, panel reference 1.2%); median 17 words.",
+   "status": "detected",
+   "severity": "low",
+   "evidence": [
+    {
+     "metric": "share of texts empty, very short, repeated, boilerplate or referring to panels",
+     "value": 0.035794856369378854,
+     "rule": "low >= 0.01, medium >= 0.05, high >= 0.2",
+     "source": "texts[text.caption]"
+    },
+    {
+     "metric": "share empty",
+     "value": 0.0,
+     "rule": "",
+     "source": "texts[text.caption]"
+    },
+    {
+     "metric": "share too short",
+     "value": 0.0092871108437359,
+     "rule": "",
+     "source": "texts[text.caption]"
+    },
+    {
+     "metric": "share duplicate",
+     "value": 0.018398756705268964,
+     "rule": "",
+     "source": "texts[text.caption]"
+    },
+    {
+     "metric": "share boilerplate",
+     "value": 0.004862886649621497,
+     "rule": "",
+     "source": "texts[text.caption]"
+    },
+    {
+     "metric": "share panel reference",
+     "value": 0.011981751641850905,
+     "rule": "",
+     "source": "texts[text.caption]"
+    }
+   ],
+   "affects": [
+    "cross_modal_association",
+    "predictive_modelling",
+    "data_quality_audit"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "caption_label_consistency",
+    "multimodal_agreement",
+    "qc_text"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "text_qc",
+    "caption_labels",
+    "image_text"
+   ],
+   "handling": "text_qc (qc_text): fraction removed 0.00929, fraction duplicate 0.0184, fraction panel reference 0.012; caption_labels (caption_label_consistency): n labels checked 300, unsupported rate 0.203, negated rate 0.00562; image_text (multimodal_agreement): aligner zero_shot, val recall at 10 0.887, flagged fraction 0.000177",
+   "residual_risk": "handled; see the steps' results"
+  },
+  {
+   "id": "missing_data:text",
+   "type": "missing_data",
+   "subject": [
+    "text"
+   ],
+   "summary": "1 of 79,789 samples (0.0%) have no text.",
+   "status": "not_detected",
+   "severity": "none",
+   "evidence": [
+    {
+     "metric": "share of samples without the modality",
+     "value": 1.2533055935071147e-05,
+     "rule": "low >= 0.01, medium >= 0.1, high >= 0.3",
+     "source": "modalities[text]"
+    }
+   ],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "cross_modal_association",
+    "differential_analysis",
+    "batch_assessment",
+    "predictive_modelling",
+    "representation_learning",
+    "generative_modelling",
+    "data_quality_audit"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "generative_impute"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "image_heterogeneity:images.image_path",
+   "type": "image_heterogeneity",
+   "subject": [
+    "images.image_path"
+   ],
+   "summary": "In images.image_path sizes are uniform (median 294 x 256 px) and 74% of 240 sampled images are greyscale, the rest colour.",
+   "status": "detected",
+   "severity": "medium",
+   "evidence": [
+    {
+     "metric": "Q3 / Q1 of the shorter image side",
+     "value": 1.0,
+     "rule": "low >= 1.5, medium >= 2, high >= 4",
+     "source": "images[images.image_path]"
+    },
+    {
+     "metric": "share of the minority colour mode (greyscale vs colour)",
+     "value": 0.2583333333333333,
+     "rule": "low >= 0.05, medium >= 0.2, high >= 0.4",
+     "source": "images[images.image_path]"
+    }
+   ],
+   "affects": [
+    "cross_modal_association",
+    "predictive_modelling",
+    "representation_learning",
+    "structure_discovery",
+    "data_quality_audit"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "generative_density",
+    "multimodal_features",
+    "qc_images"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "image_qc",
+    "features",
+    "atypical"
+   ],
+   "handling": "image_qc (qc_images): n removed 5, fraction removed 6.27e-05; features (multimodal_features): image encoder biomedclip_image, text encoder biomedclip_text, screen score 0.955; atypical (generative_density): model maf, val loglik gain 27, flagged fraction 0.00818",
+   "residual_risk": "handled; see the steps' results"
+  },
+  {
+   "id": "multiple_testing",
+   "type": "multiple_testing",
+   "subject": [],
+   "summary": "1,721 targets modelled: without error control, false positives are expected among them.",
+   "status": "detected",
+   "severity": "high",
+   "evidence": [
+    {
+     "metric": "hypotheses the questions imply: targets modelled",
+     "value": 1721,
+     "rule": "low >= 2, medium >= 20, high >= 1000",
+     "source": "profile"
+    }
+   ],
+   "affects": [
+    "differential_analysis",
+    "spatial_structure",
+    "predictive_modelling"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "differential_expression",
+    "predict_targets",
+    "spatial_enrichment",
+    "spatial_svg"
+   ],
+   "stage": "profile",
+   "handled_by": [
+    "predict",
+    "predict_manual"
+   ],
+   "handling": "predict (predict_targets): model ridge, n reliable 176, n assessed 214; predict_manual (predict_targets): model logistic, n reliable 17, n assessed 17",
+   "residual_risk": "low: Benjamini-Hochberg FDR within every family of tests"
+  },
+  {
+   "id": "compute",
+   "type": "compute",
+   "subject": [],
+   "summary": "The most expensive tool on these data, multimodal_features, is estimated at 3,522 s, 98% of the 3,600 s step budget on mps.",
+   "status": "detected",
+   "severity": "medium",
+   "evidence": [
+    {
+     "metric": "largest declared tool cost / step budget",
+     "value": 0.9782111111111111,
+     "rule": "low >= 0.25, medium >= 0.5, high >= 1",
+     "source": "compute"
+    },
+    {
+     "metric": "estimated seconds: multimodal_features",
+     "value": 3521.6,
+     "rule": "",
+     "source": "compute"
+    },
+    {
+     "metric": "estimated seconds: generative_density",
+     "value": 742.0,
+     "rule": "",
+     "source": "compute"
+    },
+    {
+     "metric": "estimated seconds: multimodal_agreement",
+     "value": 738.0,
+     "rule": "",
+     "source": "compute"
+    },
+    {
+     "metric": "estimated seconds: near_duplicates",
+     "value": 321.2,
+     "rule": "",
+     "source": "compute"
+    }
+   ],
+   "affects": [
+    "structure_discovery",
+    "spatial_structure",
+    "cross_modal_association",
+    "differential_analysis",
+    "batch_assessment",
+    "predictive_modelling",
+    "representation_learning",
+    "generative_modelling",
+    "data_quality_audit",
+    "visualization"
+   ],
+   "relevant": true,
+   "mitigations": [],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": "not handled: no step of the plan applies"
+  },
+  {
+   "id": "pretraining_overlap:images.image_path,text.caption",
+   "type": "pretraining_overlap",
+   "subject": [
+    "images.image_path",
+    "text.caption"
+   ],
+   "summary": "Pretrained encoders may have seen these images or texts; this is judged after encoder screening, from zero-shot retrieval far above what the training split supports.",
+   "status": "not_measurable",
+   "severity": "none",
+   "evidence": [],
+   "affects": [
+    "cross_modal_association",
+    "predictive_modelling"
+   ],
+   "relevant": true,
+   "mitigations": [
+    "multimodal_features"
+   ],
+   "stage": "profile",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": null
+  },
+  {
+   "id": "pretraining_overlap:features",
+   "type": "pretraining_overlap",
+   "subject": [
+    "@image_qc.images",
+    "@text_qc.text"
+   ],
+   "summary": "Zero-shot retrieval reaches recall@10 0.95 on held-out pairs: the encoder may have been pretrained on these or very similar pairs.",
+   "status": "detected",
+   "severity": "medium",
+   "evidence": [
+    {
+     "metric": "zero-shot recall@10 on held-out pairs",
+     "value": 0.955,
+     "rule": "flag >= 0.5",
+     "source": "results[features]"
+    }
+   ],
+   "affects": [
+    "cross_modal_association",
+    "predictive_modelling"
+   ],
+   "relevant": true,
+   "mitigations": [],
+   "stage": "execution",
+   "handled_by": [],
+   "handling": null,
+   "residual_risk": "zero-shot and retrieval scores may be optimistic"
+  }
+ ]
+}

@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Analysis report</title><style>
+:root { color-scheme: light; --bg: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e;
+  --muted: #898781; --rule: #e1e0d9; --accent: #2a78d6; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; --bg: #0d0d0d;
+  --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781; --rule: #2c2c2a; --accent: #3987e5; } }
+:root[data-theme="dark"] { color-scheme: dark; --bg: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7;
+  --muted: #898781; --rule: #2c2c2a; --accent: #3987e5; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+  margin: 0; padding: 24px 16px; }
+main { max-width: 980px; margin: 0 auto; background: var(--surface); padding: 24px 28px; border-radius: 8px; }
+h1 { font-size: 1.6em; line-height: 1.25; } h2 { margin-top: 1.8em; border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px; } h3 { margin-top: 1.4em; }
+a { color: var(--accent); } code { font-size: 0.92em; }
+table { border-collapse: collapse; font-size: 13px; margin: 10px 0 18px; display: block; overflow-x: auto; }
+th, td { border-bottom: 1px solid var(--rule); padding: 4px 10px; text-align: left; vertical-align: top;
+  font-variant-numeric: tabular-nums; } th { color: var(--ink2); font-weight: 600; }
+img { max-width: 100%; height: auto; background: #fcfcfb; border-radius: 6px; }
+blockquote { margin: 0; padding: 4px 14px; border-left: 3px solid var(--rule); color: var(--ink2); }
+@media (max-width: 640px) { body { padding: 0; } main { padding: 16px; border-radius: 0; } }
+</style></head><body><main>
+<h1>Analysis report</h1>
+<p>table data, 79,789 samples; full mode; plan by the llm planner; LLM: claude-opus-5-5, 3 calls, $0.69 (3 replayed from the run's transcript at no new cost); 2026-11-02 19:03:27.</p>
+<h2>Objective</h2>
+<blockquote>
+<p>Determine which clinical concepts can be reliably predicted from images, and identify data-quality issues such as class imbalance, near-duplicates, and noisy captions.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>question</th>
+<th>read from</th>
+<th>about</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>predictive modelling</td>
+<td>Determine which clinical concepts can be reliably predicted from images</td>
+<td>features: images.image_path; labels: multilabel.concepts; reference: multilabel.concepts_manual</td>
+</tr>
+<tr>
+<td>data quality audit</td>
+<td>identify data-quality issues such as class imbalance, near-duplicates, and noisy captions</td>
+<td>images: images.image_path; text: text.caption; labels: multilabel.concepts, multilabel.concepts_manual</td>
+</tr>
+<tr>
+<td>visualization (implied)</td>
+<td>(maps for the report)</td>
+<td>features: images.image_path</td>
+</tr>
+</tbody>
+</table>
+<p>Fixed before any result (reliability rule): &gt;= 20 positive evaluation samples, lower 95% DeLong bound of AUROC &gt;= 0.8, BH-adjusted p &lt; 0.05 against AUROC 0.5; fewer positives: too rare to assess.</p>
+<h2>Executive summary</h2>
+<p>The run asked two questions: which clinical concepts can be reliably predicted from images, and what data-quality problems the set has (class imbalance, near-duplicates, noisy captions). It used 79,789 image–caption samples from 44,975 articles.</p>
+<ul>
+<li><strong>Automatic labels ('concepts').</strong> Of 1,947 labels, 300 were modelled and 214 had at least 20 test positives, enough to judge. Under the pre-specified rule, <strong>176 of those 214 were reliably predicted</strong> and 38 were not. Test median AUROC was 0.940 (cross-validated median 0.943). 86 modelled targets and 1,647 untrained labels are too rare to assess.</li>
+<li><strong>Curated labels ('concepts_manual').</strong> <strong>All 17 assessable labels met the rule</strong>, with test median AUROC 0.996.</li>
+<li><strong>Data quality.</strong> Imbalance is severe (Gini 0.813; 89% of labels too rare to assess). 8.5% of images sit in near-duplicate clusters, and 6.4% of test images have a duplicate in training. About 64% of test and val samples share their article with another split. The two label sources agree closely (kappa 0.964), but that only covers 47% of the automatic label assignments. Caption-level flags are rare except a 20.3% "label unsupported by caption" rate.</li>
+<li><strong>Leakage.</strong> Leakage-safe fitting changed median AUROC by only 0.000541 (concepts) and 0.000105 (manual).</li>
+</ul>
+<p>Bottom line: a large subset of the frequent concepts is predictable from the image features. Two cautions apply. The verdicts are aggregate counts, with no per-concept intervals reported here. And the image encoder may have been pretrained on very similar figure–caption pairs.</p>
+<h2>Data and challenges</h2>
+<p><strong>What the data profile showed, and the challenges it raised</strong></p>
+<ul>
+<li><strong>Article is the independent unit (low severity).</strong> The 79,789 samples come from 44,975 articles, about 1.774 per article, and 67.6% of samples share their article with others. Handled in <code>predict</code> and <code>predict_manual</code> by grouped folds.</li>
+<li><strong>Article leakage across the predefined split (high).</strong> 63.9% of the test split and 64.5% of the val split share their article with another split. Handled by setting fitting samples aside in both prediction steps (see the plan section).</li>
+<li><strong>Class imbalance in 'concepts' (high).</strong></li>
+<li>1,947 labels; the largest is 27,798 times the smallest; Gini 0.813.</li>
+<li>The top 10% of labels hold 76.9% of assignments, and the effective number of labels is 208.116.</li>
+<li>Only 221 labels have the support to be modelled and judged; 1,726 are below support (88.6%).</li>
+<li><strong>Class imbalance in 'concepts_manual' (high).</strong> 18 labels, imbalance ratio 544.059, Gini 0.572, 17 assessable. 0.9% of samples carry no manual label.</li>
+<li><strong>Near-duplicate images (medium).</strong> 0.5% of hashed images have a confirmed pixel-level near-copy (217 pairs out of 57,627 64-bit hash matches), and 57 of those pairs cross the split. With embedding-based pairs added, the <code>duplicates</code> step found:</li>
+<li>3,373 clusters containing 6,782 images (8.5%), largest cluster 6;</li>
+<li>949 clusters (28.1%) crossing splits and 57.6% crossing articles;</li>
+<li>6.4% of test images with a training duplicate.</li>
+<li>Hash pairs and embedding pairs agree poorly: 92 pairs found by both methods, pair agreement 0.027. The two methods find largely different duplicates.</li>
+<li><strong>Label noise (low).</strong> On the 18 shared labels across 79,061 samples, the two sources agree with micro kappa 0.964 (median 1.0). Taking the manual labels as reference, precision is 0.937 and recall 1.0, so the automatic labels over-assign rather than miss. Those labels cover only 46.8% of the automatic assignments; noise in the rest is unmeasured.</li>
+<li><strong>Caption noise (low).</strong> 3.6% of captions are flagged:</li>
+<li>too short 0.9% (removed);</li>
+<li>duplicate 1.8%, of which 27.6% cross the split;</li>
+<li>boilerplate 0.5%;</li>
+<li>panel reference 1.2%.</li>
+<li>The median caption is 17 words (95th percentile 49).</li>
+<li><strong>Image heterogeneity (medium).</strong> Sizes are uniform: median 294 × 256 px, IQR ratio 1.0. In the profile sample 74% of images were greyscale; the feature step measured 75.4%. Image QC removed only 5 images, all for extreme aspect ratio (fraction 6.27e-05).</li>
+<li><strong>Multiple testing (high).</strong> Handled by Benjamini–Hochberg within each family. The register quotes 1,721 modellable targets, but only 300 were actually modelled, and BH ran across the 214 assessable ones.</li>
+<li><strong>Not handled by any step:</strong></li>
+<li><em>Compute (medium):</em> the feature extraction was estimated at 3,521.6 s, 97.8% of the step budget.</li>
+<li><em>Pretraining overlap (medium, raised during execution):</em> zero-shot recall@10 reached 0.955 on held-out pairs, which suggests the encoder may have seen these or very similar pairs in pretraining.</li>
+</ul>
+<p><img alt="Relevant challenges by severity." src="figures/challenges.png" /></p>
+<p>Relevant challenges (all checks, including those that found nothing, are in challenge_register.md):</p>
+<table>
+<thead>
+<tr>
+<th>challenge</th>
+<th>severity</th>
+<th>evidence</th>
+<th>handled by</th>
+<th>remaining risk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>class_imbalance:multilabel.concepts</td>
+<td>high</td>
+<td>largest / smallest class size 27,798; share of labels too rare to assess 0.886</td>
+<td>imbalance_concepts, predict</td>
+<td>86 modelled targets too rare to assess</td>
+</tr>
+<tr>
+<td>class_imbalance:multilabel.concepts_manual</td>
+<td>high</td>
+<td>largest / smallest class size 544; share of labels too rare to assess 0.0556</td>
+<td>imbalance_concepts_manual, predict_manual</td>
+<td>1 modelled targets too rare to assess</td>
+</tr>
+<tr>
+<td>multiple_testing</td>
+<td>high</td>
+<td>hypotheses the questions imply: targets modelled 1,721</td>
+<td>predict, predict_manual</td>
+<td>low: Benjamini-Hochberg FDR within every family of tests</td>
+</tr>
+<tr>
+<td>split_leakage:groups.article,split.split</td>
+<td>high</td>
+<td>share of the test split whose article occurs in another split 0.639; share of the val split whose article occurs in another split 0.645</td>
+<td>duplicates, predict, predict_manual</td>
+<td>7921 fitting samples set aside; a fit with them gains 0.000541 median AUROC</td>
+</tr>
+<tr>
+<td>compute</td>
+<td>medium</td>
+<td>largest declared tool cost / step budget 0.978; estimated seconds: multimodal_features 3,522</td>
+<td>-</td>
+<td>not handled: no step of the plan applies</td>
+</tr>
+<tr>
+<td>image_heterogeneity:images.image_path</td>
+<td>medium</td>
+<td>Q3 / Q1 of the shorter image side 1; share of the minority colour mode (greyscale vs colour) 0.258</td>
+<td>image_qc, features, atypical</td>
+<td>handled; see the steps' results</td>
+</tr>
+<tr>
+<td>near_duplicates:images.image_path</td>
+<td>medium</td>
+<td>share of images in a near-duplicate pair 0.00452; near-duplicate pairs crossing the split 57</td>
+<td>duplicates, predict, predict_manual</td>
+<td>0.085 of images in duplicate clusters, kept together in folds and splits</td>
+</tr>
+<tr>
+<td>pretraining_overlap:features</td>
+<td>medium</td>
+<td>zero-shot recall@10 on held-out pairs 0.955</td>
+<td>-</td>
+<td>zero-shot and retrieval scores may be optimistic</td>
+</tr>
+<tr>
+<td>split_leakage:images.image_path,split.split</td>
+<td>medium</td>
+<td>near-duplicate pairs crossing the split 57</td>
+<td>duplicates, predict, predict_manual</td>
+<td>7921 fitting samples set aside; a fit with them gains 0.000541 median AUROC</td>
+</tr>
+<tr>
+<td>label_noise:multilabel.concepts,multilabel.concepts_manual</td>
+<td>low</td>
+<td>Cohen's kappa between label sources 0.964; share of the first source's assignments on shared labels 0.468</td>
+<td>label_sources, caption_labels</td>
+<td>kappa between sources 0.964; the rest is unmeasured</td>
+</tr>
+<tr>
+<td>nested_sampling:groups.article</td>
+<td>low</td>
+<td>samples per independent unit (coarsest grouping) 1.77; article levels 44,975</td>
+<td>predict, predict_manual</td>
+<td>folds and comparisons keep the independent unit whole</td>
+</tr>
+<tr>
+<td>text_noise:text.caption</td>
+<td>low</td>
+<td>share of texts empty, very short, repeated, boilerplate or referring to panels 0.0358; share empty 0</td>
+<td>text_qc, caption_labels, image_text</td>
+<td>handled; see the steps' results</td>
+</tr>
+</tbody>
+</table>
+<h2>Plan</h2>
+<p><strong>Audit steps</strong></p>
+<ul>
+<li><code>image_qc</code> and <code>text_qc</code> removed only images that cannot be encoded (unreadable, shorter side under 32 px, aspect ratio over 5, blank) and only empty or very short captions. Repeated, boilerplate and panel-referencing captions were kept and reported, because they still carry information.</li>
+<li><code>imbalance_concepts</code> and <code>imbalance_concepts_manual</code> counted which labels are assessable. A label needs at least 10 training positives to be modelled and at least 20 test positives to be judged.</li>
+<li><code>duplicates</code> combined two methods:</li>
+<li>difference-hash matches within 4 bits, confirmed at 256 bits;</li>
+<li>mutual nearest neighbours in embedding space with cosine ≥ 0.947, a cutoff set at the median embedding cosine of the 217 confirmed pixel-level pairs.</li>
+<li><code>label_sources</code> estimated label noise by agreement with the manual labels. <code>caption_labels</code> checked 300 labels against their captions (a label needs at least 20 positive training texts and a word with association z ≥ 3).</li>
+<li><code>image_text</code> flagged image–caption pairs that match worse than random partners. <code>atypical</code> scored how unusual each image is with a cross-fitted density model on 57 principal components (90% of variance). The MAF density model was chosen over a Gaussian because its held-out log-likelihood was higher: −54.704 vs −81.719.</li>
+</ul>
+<p><strong>Features</strong></p>
+<p>Six candidate encoders were screened on held-out pairs without using labels. BiomedCLIP (pretrained on 15M PubMed Central figure–caption pairs) gave the best recall@10, 0.955 against a chance level of 0.02. No colour normalisation was applied because most images are greyscale.</p>
+<p><strong>Prediction design (the main safeguards)</strong></p>
+<ul>
+<li><strong>Grouped folds.</strong> Folds keep each article and near-duplicate cluster whole. Penalties were tuned by 3-fold inner cross-validation on training samples only. Models were fitted on the non-test splits and scored once on the test split.</li>
+<li><strong>Setting aside linked samples.</strong> 7,921 non-test samples (11.3%; 7,811 in the manual run) share an article or duplicate cluster with test samples. They were left out of fitting, so no test sample was scored by a model that had seen its group. A second fit that kept them in measured how much the leak would inflate AUROC.</li>
+<li><strong>Reliability rule, fixed before any results.</strong> A concept counts as reliably predicted if it has ≥ 20 test positives, the lower 95% DeLong bound of its AUROC is ≥ 0.8, and its BH-adjusted one-sided p-value against AUROC 0.5 is &lt; 0.05.</li>
+<li><strong>Models.</strong> Closed-form ridge with Platt scaling was used for the 300 most frequent concepts, because one eigendecomposition per fold fits all targets. Per-target logistic regression was used for the 18 manual labels.</li>
+</ul>
+<p><strong>Changes the LLM planner made to the rule-based plan</strong></p>
+<ul>
+<li>It added <code>predict_manual</code>, reasoning that label noise in 'concepts' (precision 0.937) could push a concept's lower DeLong bound below 0.8. The cost was estimated at about 67 s.</li>
+<li>It bound article groups to <code>image_text</code>, because article-mates and captions repeated across splits (27.6% of duplicate captions) would otherwise inflate alignment scores. The zero-shot aligner was chosen in the end (<code>cross_fitted</code> false), so this grouping did not come into play.</li>
+</ul>
+<p><strong>Map</strong></p>
+<p>UMAP was chosen over the other candidate for the highest mean of trustworthiness and continuity among maps with seed stability ≥ 0.5.</p>
+<p><strong>Not addressed:</strong> the compute and pretraining-overlap challenges. Nothing was formally accepted as an open risk (0 accepted).</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>step</th>
+<th>tool</th>
+<th>purpose</th>
+<th>handles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>image_qc</td>
+<td>qc_images</td>
+<td>Flag and remove unreadable, tiny, strip-shaped and blank images; the pass also hashes every image for the duplicate audit.</td>
+<td>image_heterogeneity:images.image_path</td>
+</tr>
+<tr>
+<td>2</td>
+<td>text_qc</td>
+<td>qc_text</td>
+<td>Remove empty and very short captions; flag repeated, boilerplate and panel-referencing ones.</td>
+<td>text_noise:text.caption</td>
+</tr>
+<tr>
+<td>3</td>
+<td>features</td>
+<td>multimodal_features</td>
+<td>Screen pretrained encoders on held-out pairs (label-free) and extract image and caption features.</td>
+<td>image_heterogeneity:images.image_path</td>
+</tr>
+<tr>
+<td>4</td>
+<td>imbalance_concepts</td>
+<td>label_imbalance</td>
+<td>Frequency audit of 'concepts': imbalance, long tail and how many labels have the support to be judged.</td>
+<td>class_imbalance:multilabel.concepts</td>
+</tr>
+<tr>
+<td>5</td>
+<td>imbalance_concepts_manual</td>
+<td>label_imbalance</td>
+<td>Frequency audit of 'concepts_manual': imbalance, long tail and how many labels have the support to be judged.</td>
+<td>class_imbalance:multilabel.concepts_manual</td>
+</tr>
+<tr>
+<td>6</td>
+<td>duplicates</td>
+<td>near_duplicates</td>
+<td>Find near-duplicate images (confirmed hashes, calibrated embedding cosine); clusters crossing splits or articles are leakage.</td>
+<td>near_duplicates:images.image_path, split_leakage:groups.article,split.split, split_leakage:images.image_path,split.split</td>
+</tr>
+<tr>
+<td>7</td>
+<td>label_sources</td>
+<td>label_agreement</td>
+<td>Agreement of 'concepts' with 'concepts_manual' per shared label: an estimate of label noise.</td>
+<td>label_noise:multilabel.concepts,multilabel.concepts_manual</td>
+</tr>
+<tr>
+<td>8</td>
+<td>caption_labels</td>
+<td>caption_label_consistency</td>
+<td>Flag labels their caption does not support or negates, and captions naming a label the sample lacks.</td>
+<td>label_noise:multilabel.concepts,multilabel.concepts_manual, text_noise:text.caption</td>
+</tr>
+<tr>
+<td>9</td>
+<td>image_text</td>
+<td>multimodal_agreement</td>
+<td>Flag image-caption pairs that match worse than random partners (noisy or mismatched captions), with articles kept together in cross-fitting.</td>
+<td>text_noise:text.caption</td>
+</tr>
+<tr>
+<td>10</td>
+<td>atypical</td>
+<td>generative_density</td>
+<td>Score how atypical every image is under a cross-fitted density model, as a quality signal next to the QC flags.</td>
+<td>image_heterogeneity:images.image_path</td>
+</tr>
+<tr>
+<td>11</td>
+<td>predict</td>
+<td>predict_targets</td>
+<td>Predict 'concepts' from image features with article- and duplicate-grouped folds, a single test evaluation, BH control and the configured reliability rule.</td>
+<td>nested_sampling:groups.article, class_imbalance:multilabel.concepts, near_duplicates:images.image_path, split_leakage:groups.article,split.split, split_leakage:images.image_path,split.split, multiple_testing</td>
+</tr>
+<tr>
+<td>12</td>
+<td>predict_manual</td>
+<td>predict_targets</td>
+<td>Predict the 18 manually curated concepts from image features under the same leakage-safe design, to check reliability verdicts against cleaner labels.</td>
+<td>nested_sampling:groups.article, class_imbalance:multilabel.concepts_manual, near_duplicates:images.image_path, split_leakage:groups.article,split.split, split_leakage:images.image_path,split.split, multiple_testing</td>
+</tr>
+<tr>
+<td>13</td>
+<td>map</td>
+<td>dimreduce_map</td>
+<td>A two-dimensional map of the image features for the report.</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h2>Results</h2>
+<p><strong>Predictive modelling: 'concepts' (test split, 9,925 samples)</strong></p>
+<ul>
+<li>300 targets were modelled and 1,647 were too rare to train. Of the 300, 214 were assessable and 86 were too rare to assess.</li>
+<li>176 of the 214 met the reliability rule and 38 did not.</li>
+<li>Test median AUROC was 0.940, far above chance (0.5) and above the rule's 0.8 bar. It agrees closely with the cross-validated median of 0.943, so the single test evaluation is consistent with model selection.</li>
+<li>Median AUPRC lift over prevalence was 20.971. Median Brier skill was only 0.046: the calibrated probabilities improve only slightly on a prevalence-only forecast, even though ranking (AUROC) is strong.</li>
+<li>The record reports medians and counts only. It does not report per-concept AUROCs, DeLong intervals, or which concepts are reliable, so this section cannot list them.</li>
+</ul>
+<p><strong>Predictive modelling: 'concepts_manual' (test split, 9,820 samples)</strong></p>
+<ul>
+<li>All 17 assessable labels were reliable; 1 was too rare to assess.</li>
+<li>Test median AUROC was 0.996 (cross-validated 0.996), AUPRC lift 21.609, Brier skill 0.774.</li>
+<li>This agrees with the verdicts on the automatic labels. However, the manual set has 18 broad labels against the 300 finest-grained frequent concepts, so the higher scores probably reflect coarser targets as well as cleaner labels.</li>
+</ul>
+<p><strong>Leakage</strong></p>
+<p>65.5% of test samples (65.3% in the manual run) have an article or duplicate group-mate outside the test split. Keeping those mates in the fit raised median AUROC by only 0.000541 (concepts) and 0.000105 (manual). So, on the median, leakage does not inflate the reported performance. Effects on individual concepts are not reported.</p>
+<p><strong>Data-quality audit</strong></p>
+<ul>
+<li><strong>Imbalance.</strong> Severe, as described in the data section. Most of the label vocabulary (88.6%) cannot be assessed at all.</li>
+<li><strong>Near-duplicates.</strong> 8.5% of images are in clusters, and 6.4% of test images have a training duplicate. The two detection methods agree weakly (pair agreement 0.027), so the cluster count depends on the method.</li>
+<li><strong>Captions against labels.</strong></li>
+<li>20.3% of checked labels are not supported by their caption (19.7% on held-out texts); 0.6% are negated by it; 0.1% may be missing.</li>
+<li>45.5% of captions carry at least one flag.</li>
+<li>Validated against the manual labels, the flag points the wrong way. Flagged labels were absent from the manual set in 2.3% of cases, compared with 8.1% for labels the caption supports. "Unsupported by caption" therefore does not indicate a label error; it mostly reflects captions that leave visible content unstated.</li>
+<li><strong>Image–caption mismatch.</strong> The zero-shot aligner reached validation recall@10 of 0.887 (chance 0.005). Only 14 pairs (0.018%) matched worse than random partners. The rate was slightly higher in the test split (0.061%) than in training (0.008%).</li>
+<li><strong>Atypical images.</strong> The density model flagged 653 images (0.8%). The rate is similar across splits: 0.8% train, 1.0% val, 1.0% test.</li>
+</ul>
+<p><strong>Map</strong></p>
+<p>The UMAP map preserves local neighbourhoods well: trustworthiness 0.977 and continuity 0.972 at k=10. It is only marginally stable across seeds (0.533 against a 0.5 threshold), and global distances are weakly preserved (Spearman 0.353). It should be read for local structure only.</p>
+<h3>Predictive modelling</h3>
+<ul>
+<li><strong>predict</strong> (predict_targets): model ridge, n reliable 176, n assessed 214, n too rare to assess 86, median auroc 0.94, cv auroc median 0.943</li>
+<li>criteria: cv_auroc_median 0.943; n_reliable 176 [report only]; median_auroc 0.94 [report only]; leakage_gap_median 0.000541 [report only]</li>
+</ul>
+<p><img alt="Test AUROC with DeLong intervals for the assessable targets (at most the 20 highest and 20 lowest)." src="figures/predictability.png" /></p>
+<ul>
+<li><strong>predict_manual</strong> (predict_targets): model logistic, n reliable 17, n assessed 17, n too rare to assess 1, median auroc 0.996, cv auroc median 0.996</li>
+<li>criteria: cv_auroc_median 0.996; n_reliable 17 [report only]; median_auroc 0.996 [report only]; leakage_gap_median 0.000105 [report only]</li>
+</ul>
+<p><img alt="Test AUROC with DeLong intervals for the assessable targets (at most the 20 highest and 20 lowest)." src="figures/predictability_predict_manual.png" /></p>
+<h3>Data quality audit</h3>
+<ul>
+<li><strong>image_qc</strong> (qc_images): n removed 5, fraction removed 6.27e-05</li>
+<li>criteria: fraction_removed 6.27e-05 (met); max_group_fraction_removed 0.000202 (met); size_iqr_ratio 1</li>
+<li><strong>text_qc</strong> (qc_text): fraction removed 0.00929, fraction duplicate 0.0184, fraction panel reference 0.012</li>
+<li>criteria: fraction_removed 0.00929 (met); fraction_duplicate 0.0184; fraction_panel_reference 0.012; cross_split_duplicate_fraction 0.276</li>
+<li><strong>imbalance_concepts</strong> (label_imbalance): n labels used 1,947, imbalance ratio 27,798, gini 0.813, n assessable 221</li>
+<li>criteria: imbalance_ratio 27,798; gini 0.813; n_assessable 221</li>
+</ul>
+<p><img alt="Rank-frequency of labels; the dashed line marks the assessable ones." src="figures/imbalance.png" /></p>
+<ul>
+<li><strong>imbalance_concepts_manual</strong> (label_imbalance): n labels used 18, imbalance ratio 544, gini 0.572, n assessable 17</li>
+<li>criteria: imbalance_ratio 544; gini 0.572; n_assessable 17</li>
+<li><strong>duplicates</strong> (near_duplicates): n clusters 3,373, fraction in clusters 0.085, n hash pairs 217, n embedding pairs 3,311, cross split clusters 949</li>
+<li>criteria: fraction_in_clusters 0.085; test_with_train_duplicate_fraction 0.0639; pair_agreement 0.0268; cross_group_cluster_fraction 0.576</li>
+<li><strong>label_sources</strong> (label_agreement): kappa micro 0.964, n shared labels 18, precision micro 0.937, recall micro 1</li>
+<li>criteria: kappa_micro 0.964; kappa_median 1; precision_micro 0.937; recall_micro 1</li>
+<li><strong>caption_labels</strong> (caption_label_consistency): n labels checked 300, unsupported rate 0.203, negated rate 0.00562, possible missing rate 0.00121</li>
+<li>criteria: unsupported_rate 0.203; negated_rate 0.00562; reference_absent_given_flagged 0.023 [report only]; reference_absent_given_supported 0.0813 [report only]</li>
+<li><strong>image_text</strong> (multimodal_agreement): aligner zero_shot, val recall at 10 0.887, flagged fraction 0.000177</li>
+<li>criteria: val_recall_at_10 0.887; flagged_fraction 0.000177</li>
+<li><strong>atypical</strong> (generative_density): model maf, val loglik gain 27, flagged fraction 0.00818</li>
+<li>criteria: val_loglik_gain 27 (met); flagged_fraction 0.00818</li>
+</ul>
+<h3>Visualization</h3>
+<ul>
+<li><strong>map</strong> (dimreduce_map): method umap, trustworthiness@10 0.977, continuity@10 0.972, stability 0.533</li>
+<li>criteria: trustworthiness@10 0.977 (met); continuity@10 0.972; stability 0.533 (met); distance_spearman 0.353</li>
+</ul>
+<p><img alt="Two-dimensional map of the main representation." src="figures/map.png" /></p>
+<h2>Critic and revision</h2>
+<p>The critic found 0 triggers and did not try a revision.</p>
+<p>Its assessment was that the results answer the objective:
+- 176 of 214 assessable concepts are reliable (test median AUROC 0.940, cross-validated 0.943);
+- all 17 manual concepts are reliable (AUROC 0.996);
+- leakage gaps are negligible (≤ 0.0005), so the grouped, duplicate-aware design holds;
+- the audit covers imbalance (Gini 0.81), near-duplicates (8.5% of images) and the other named issues.</p>
+<p>Because no revision ran, the reported results are those of the original plan. The critic did not comment on two open challenges: possible pretraining overlap of the encoder and the compute budget.</p>
+<h2>Limitations</h2>
+<ul>
+<li><strong>Aggregate results only.</strong> Results are medians and counts. Per-concept AUROCs, DeLong intervals and the names of the 176 reliable concepts are not in this record, and the medians have no uncertainty intervals.</li>
+<li><strong>Most of the vocabulary goes unjudged.</strong> Only 300 of 1,947 concepts were modelled and 214 assessed. The 1,647 untrained labels and 86 too-rare labels, roughly 89% of the vocabulary, have no verdict. "Not assessed" does not mean "not predictable".</li>
+<li><strong>Count mismatch.</strong> The imbalance audit counted 221 assessable labels, but the prediction step assessed 214. The record does not explain the difference.</li>
+<li><strong>Weak probabilistic skill.</strong> Median Brier skill for 'concepts' was 0.046, so probability outputs should not be used as calibrated risks, despite the high AUROC.</li>
+<li><strong>Possible pretraining overlap (not handled).</strong> BiomedCLIP was pretrained on PubMed Central figure–caption pairs, and zero-shot recall@10 of 0.955 suggests these or similar pairs may have been seen. Image–text agreement scores, and possibly the predictive performance, may be optimistic. No step tested this.</li>
+<li><strong>Partial label-noise coverage.</strong> The manual reference covers only 46.8% of automatic label assignments, so noise in the rest is unmeasured. The comparison with manual labels also mixes label quality with label granularity.</li>
+<li><strong>Caption-consistency flag not validated.</strong> It does not track label errors in the reference (2.3% vs 8.1% reference-absent), so the 20.3% unsupported rate should not be read as a label-error rate.</li>
+<li><strong>Duplicate detection depends on method.</strong> Hash and embedding pairs agree poorly (0.027), and the embedding cutoff of 0.947 was calibrated on only 217 pairs. Some duplicates may be missed or spurious.</li>
+<li><strong>Leakage measured only at the median.</strong> The gaps of 0.000541 and 0.000105 are medians; individual concepts may be affected more.</li>
+<li><strong>Compute challenge not handled.</strong> The record shows no consequence, but the feature step had little budget margin.</li>
+<li><strong>Map caveats.</strong> Seed stability was only 0.533 and global distances are weakly preserved (Spearman 0.353).</li>
+</ul>
+<h2>Reproducibility</h2>
+<ul>
+<li>Seed 774; full budgets; device mps; Python 3.12.14; run time 646 s.</li>
+<li>Planner: llm; LLM calls 3 (3 from cache); replay with <code>--replay</code> on this run's directory or transcript.</li>
+<li>Files: profile.json, objective.json, challenge_register.(json|md), analysis_plan.(json|md), evaluation.json, decision_log.json, methods_summary.md, 15 tables in tables/, 5 figures in figures/, 5 result files in results/.</li>
+</ul>
+<h2>Numbers not found in the outputs</h2>
+<p>196 numbers in the prose were checked against the computed record (LLM (claude-opus-5-5)); 0 not found.</p>
+</main></body></html>

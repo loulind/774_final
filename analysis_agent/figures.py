@@ -218,7 +218,12 @@ def forest(table: pd.DataFrame, path: Path, bar: float | None = None, max_rows: 
     t = table[table["status"] != "too rare to assess"].dropna(subset=["auroc"])
     if t.empty:
         return None
-    t = t.sort_values("auroc", ascending=False).head(max_rows).iloc[::-1]
+    t = t.sort_values("auroc", ascending=False)
+    n, title = len(t), "Which targets can be predicted reliably"
+    if n > max_rows:                                   # the best and the weakest, so failures show too
+        t = pd.concat([t.head(max_rows // 2), t.tail(max_rows // 2)])
+        title += f" (the {max_rows // 2} highest and {max_rows // 2} lowest of {n})"
+    t = t.iloc[::-1]
     plt = _plt()
     fig, ax = plt.subplots(figsize=(6.0, 0.22 * len(t) + 1.0))
     colour = np.where(t["status"] == "reliable", SERIES[0], MUTED)
@@ -230,9 +235,11 @@ def forest(table: pd.DataFrame, path: Path, bar: float | None = None, max_rows: 
     if bar is not None:
         ax.axvline(bar, color=MUTED, lw=1, ls="--")
     ax.set_xlim(0.4, 1.02)
+    if n > max_rows:
+        ax.axhline(max_rows // 2 - 0.5, color=GRID, lw=1)
     ax.set_xlabel("test AUROC with 95% DeLong interval (blue: reliably predicted"
                   + (f"; dashed: lower bound needed, {bar:g}" if bar is not None else "") + ")")
-    ax.set_title("Which targets can be predicted reliably")
+    ax.set_title(title)
     return _save(fig, path)
 
 
@@ -267,6 +274,9 @@ def make_figures(ws: Workspace, plan, results: dict, register, out_dir: Path, se
     fdir = out_dir / "figures"
 
     def add(name, step, caption, fn, *args):
+        if name in figs and step is not None:           # a second step of the same kind keeps its own figure
+            name = f"{name}_{step}"
+            args = tuple(a.with_name(f"{name}.png") if isinstance(a, Path) else a for a in args)
         try:
             rel = fn(*args)
         except Exception as err:                       # a figure must never fail the run
@@ -331,7 +341,8 @@ def make_figures(ws: Workspace, plan, results: dict, register, out_dir: Path, se
             add("markers", s.id, "Top markers per discovered group.", markers_heatmap, r.tables.get("markers"),
                 fdir / "markers.png")
         elif s.tool == "predict_targets":
-            add("predictability", s.id, "Test AUROC with DeLong intervals for every assessable target.", forest,
+            add("predictability", s.id, "Test AUROC with DeLong intervals for the assessable targets (at most the "
+                "20 highest and 20 lowest).", forest,
                 r.tables.get("target_predictability"), fdir / "predictability.png", reliable_bar)
         elif s.tool == "label_imbalance" and "label_frequencies" in r.tables and "imbalance" not in figs:
             add("imbalance", s.id, "Rank-frequency of labels; the dashed line marks the assessable ones.",

@@ -1,0 +1,307 @@
+{
+ "objective": "Determine which clinical concepts can be reliably predicted from images, and identify data-quality issues such as class imbalance, near-duplicates, and noisy captions.",
+ "questions": [
+  "predictive_modelling",
+  "data_quality_audit",
+  "visualization"
+ ],
+ "steps": [
+  {
+   "id": "image_qc",
+   "tool": "qc_images",
+   "inputs": {
+    "images": "images.image_path",
+    "split": "split.split"
+   },
+   "params": {},
+   "purpose": "Flag and remove unreadable, tiny, strip-shaped and blank images; the pass also hashes every image for the duplicate audit.",
+   "answers": [
+    "data_quality_audit"
+   ],
+   "addresses": [
+    "image_heterogeneity:images.image_path"
+   ],
+   "alternatives_rejected": [],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "text_qc",
+   "tool": "qc_text",
+   "inputs": {
+    "text": "text.caption",
+    "split": "split.split"
+   },
+   "params": {},
+   "purpose": "Remove empty and very short captions; flag repeated, boilerplate and panel-referencing ones.",
+   "answers": [
+    "data_quality_audit"
+   ],
+   "addresses": [
+    "text_noise:text.caption"
+   ],
+   "alternatives_rejected": [],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "features",
+   "tool": "multimodal_features",
+   "inputs": {
+    "images": "@image_qc.images",
+    "text": "@text_qc.text",
+    "split": "split.split"
+   },
+   "params": {},
+   "purpose": "Screen pretrained encoders on held-out pairs (label-free) and extract image and caption features.",
+   "answers": [],
+   "addresses": [
+    "image_heterogeneity:images.image_path"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "one fixed encoder",
+     "reason": "the best encoder depends on the image domain (74% greyscale, 26% colour)"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "imbalance_concepts",
+   "tool": "label_imbalance",
+   "inputs": {
+    "target": "multilabel.concepts",
+    "split": "split.split"
+   },
+   "params": {},
+   "purpose": "Frequency audit of 'concepts': imbalance, long tail and how many labels have the support to be judged.",
+   "answers": [
+    "data_quality_audit"
+   ],
+   "addresses": [
+    "class_imbalance:multilabel.concepts"
+   ],
+   "alternatives_rejected": [],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "imbalance_concepts_manual",
+   "tool": "label_imbalance",
+   "inputs": {
+    "target": "multilabel.concepts_manual",
+    "split": "split.split"
+   },
+   "params": {},
+   "purpose": "Frequency audit of 'concepts_manual': imbalance, long tail and how many labels have the support to be judged.",
+   "answers": [
+    "data_quality_audit"
+   ],
+   "addresses": [
+    "class_imbalance:multilabel.concepts_manual"
+   ],
+   "alternatives_rejected": [],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "duplicates",
+   "tool": "near_duplicates",
+   "inputs": {
+    "images": "@image_qc.images",
+    "embedding": "@features.image_features",
+    "split": "split.split",
+    "groups": "groups.article"
+   },
+   "params": {},
+   "purpose": "Find near-duplicate images (confirmed hashes, calibrated embedding cosine); clusters crossing splits or articles are leakage.",
+   "answers": [
+    "data_quality_audit"
+   ],
+   "addresses": [
+    "near_duplicates:images.image_path",
+    "split_leakage:groups.article,split.split",
+    "split_leakage:images.image_path,split.split"
+   ],
+   "alternatives_rejected": [],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "label_sources",
+   "tool": "label_agreement",
+   "inputs": {
+    "labels": "multilabel.concepts",
+    "reference": "multilabel.concepts_manual"
+   },
+   "params": {},
+   "purpose": "Agreement of 'concepts' with 'concepts_manual' per shared label: an estimate of label noise.",
+   "answers": [
+    "data_quality_audit"
+   ],
+   "addresses": [
+    "label_noise:multilabel.concepts,multilabel.concepts_manual"
+   ],
+   "alternatives_rejected": [],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "caption_labels",
+   "tool": "caption_label_consistency",
+   "inputs": {
+    "text": "@text_qc.text",
+    "labels": "multilabel.concepts",
+    "split": "split.split",
+    "reference": "multilabel.concepts_manual"
+   },
+   "params": {},
+   "purpose": "Flag labels their caption does not support or negates, and captions naming a label the sample lacks.",
+   "answers": [
+    "data_quality_audit"
+   ],
+   "addresses": [
+    "label_noise:multilabel.concepts,multilabel.concepts_manual",
+    "text_noise:text.caption"
+   ],
+   "alternatives_rejected": [],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "image_text",
+   "tool": "multimodal_agreement",
+   "inputs": {
+    "image": "@features.image_features",
+    "text": "@features.text_features",
+    "split": "split.split",
+    "groups": "groups.article"
+   },
+   "params": {},
+   "purpose": "Flag image-caption pairs that match worse than random partners (noisy or mismatched captions), with articles kept together in cross-fitting.",
+   "answers": [
+    "data_quality_audit"
+   ],
+   "addresses": [
+    "text_noise:text.caption"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "no grouping",
+     "reason": "68% of samples share an article with near-identical captions; cross-fitting across article-mates would inflate alignment"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "atypical",
+   "tool": "generative_density",
+   "inputs": {
+    "features": "@features.image_features",
+    "split": "split.split"
+   },
+   "params": {},
+   "purpose": "Score how atypical every image is under a cross-fitted density model, as a quality signal next to the QC flags.",
+   "answers": [
+    "data_quality_audit"
+   ],
+   "addresses": [
+    "image_heterogeneity:images.image_path"
+   ],
+   "alternatives_rejected": [],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "predict",
+   "tool": "predict_targets",
+   "inputs": {
+    "features": "@features.image_features",
+    "target": "multilabel.concepts",
+    "split": "split.split",
+    "groups": "groups.article",
+    "leakage": "@duplicates.clusters"
+   },
+   "params": {},
+   "purpose": "Predict 'concepts' from image features with article- and duplicate-grouped folds, a single test evaluation, BH control and the configured reliability rule.",
+   "answers": [
+    "predictive_modelling"
+   ],
+   "addresses": [
+    "nested_sampling:groups.article",
+    "class_imbalance:multilabel.concepts",
+    "near_duplicates:images.image_path",
+    "split_leakage:groups.article,split.split",
+    "split_leakage:images.image_path,split.split",
+    "multiple_testing"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "random folds",
+     "reason": "related samples on both sides of a split inflate the scores"
+    },
+    {
+     "option": "fit on every non-test sample",
+     "reason": "group-mates of test samples would leak (64% of test shares an article with another split)"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "predict_manual",
+   "tool": "predict_targets",
+   "inputs": {
+    "features": "@features.image_features",
+    "target": "multilabel.concepts_manual",
+    "split": "split.split",
+    "groups": "groups.article",
+    "leakage": "@duplicates.clusters"
+   },
+   "params": {},
+   "purpose": "Predict the 18 manually curated concepts from image features under the same leakage-safe design, to check reliability verdicts against cleaner labels.",
+   "answers": [
+    "predictive_modelling"
+   ],
+   "addresses": [
+    "nested_sampling:groups.article",
+    "class_imbalance:multilabel.concepts_manual",
+    "near_duplicates:images.image_path",
+    "split_leakage:groups.article,split.split",
+    "split_leakage:images.image_path,split.split",
+    "multiple_testing"
+   ],
+   "alternatives_rejected": [
+    {
+     "option": "only predict 'concepts'",
+     "reason": "on shared labels 'concepts' has precision 0.937 against the manual source, so label noise could depress AUROC; a cleaner-label comparison costs ~67 s"
+    }
+   ],
+   "criteria": [],
+   "validation_only": false
+  },
+  {
+   "id": "map",
+   "tool": "dimreduce_map",
+   "inputs": {
+    "embedding": "@features.image_features"
+   },
+   "params": {},
+   "purpose": "A two-dimensional map of the image features for the report.",
+   "answers": [
+    "visualization"
+   ],
+   "addresses": [],
+   "alternatives_rejected": [],
+   "criteria": [],
+   "validation_only": false
+  }
+ ],
+ "accepted": [],
+ "notes": [
+  "compute (medium): declared costs \u2248 3522+742+738+321+321+213+2\u00d767 \u2248 5990 s plus small audit steps, within 10,800 s total; multimodal_features at 98% of the step budget is kept at defaults."
+ ],
+ "source": "llm"
+}

@@ -1,0 +1,10 @@
+image_encoder,partner,cca_recall_at_10,zero_shot_recall_at_10,alignment_recall_at_10
+biomedclip_image,biomedclip_text,0.901,0.955,0.955
+biomedclip_image,pubmedbert,0.669,,0.669
+biomedclip_image,clip_b16_text,0.643,,0.643
+dinov2_base,biomedclip_text,0.474,,0.474
+dinov2_base,pubmedbert,0.315,,0.315
+dinov2_base,clip_b16_text,0.28200000000000003,,0.28200000000000003
+clip_b16_image,biomedclip_text,0.5640000000000001,,0.5640000000000001
+clip_b16_image,pubmedbert,0.352,,0.352
+clip_b16_image,clip_b16_text,0.367,0.34199999999999997,0.367

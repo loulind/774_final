@@ -281,7 +281,9 @@ def report_markdown(run: dict, record: dict, prose: dict, figs: dict, tables: di
              + (f" ({run['n_used']:,} used in quick mode)" if run.get("n_used") else "")
              + f"; {record['mode']} mode; plan by the {plan.source} planner; LLM: "
              + (f"{', '.join(llm['models_used']) or llm['model_requested']}, {llm['n_calls']} calls, "
-                f"${llm['total_cost_usd']:.2f}" if llm["n_calls"] else "not used") + f"; {man['created']}.", "",
+                f"${llm['recorded_cost_usd']:.2f}"
+                + (f" ({llm['n_from_cache']} replayed from the run's transcript at no new cost)"
+                   if llm["n_from_cache"] else "") if llm["n_calls"] else "not used") + f"; {man['created']}.", "",
              "## Objective", "", f"> {obj.text}", "",
              md_table([{"question": q.type.replace("_", " ") + (" (implied)" if q.implied else ""),
                         "read from": q.phrase,

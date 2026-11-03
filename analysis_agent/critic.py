@@ -185,8 +185,10 @@ def find_triggers(plan: AnalysisPlan, results: dict[str, dict], register: Challe
     return out
 
 
-def validate_revision(rev: Revision, plan: AnalysisPlan) -> tuple[Revision | None, str]:
-    """A revision the executor can apply, or None and why not."""
+def validate_revision(rev: Revision, plan: AnalysisPlan, allow_report: bool = False) -> tuple[Revision | None, str]:
+    """A revision the executor can apply, or None and why not. Its criterion must be declared
+    with the same direction (max / min); report-only metrics have no better direction, so only
+    the deterministic triggers, which choose one on purpose, may use them (``allow_report``)."""
     step = plan.step(rev.step)
     if step is None:
         return None, f"no step '{rev.step}'"
@@ -198,6 +200,10 @@ def validate_revision(rev: Revision, plan: AnalysisPlan) -> tuple[Revision | Non
         return None, f"'{judge.tool}' declares no criterion '{rev.criterion}'"
     if not crit.selection:
         return None, f"'{rev.criterion}' uses external labels or the test split: it may not judge a revision"
+    if crit.goal == "report" and not allow_report:
+        return None, f"'{rev.criterion}' is declared report-only: it has no better direction to judge a revision by"
+    if crit.goal in ("max", "min") and crit.goal != rev.goal:
+        return None, f"'{rev.criterion}' is declared '{crit.goal}', not '{rev.goal}'"
     if rev.criterion_step != rev.step and rev.criterion_step not in downstream(plan, rev.step):
         return None, f"'{rev.criterion_step}' does not depend on '{rev.step}'"
     if rev.action == "set_params":
@@ -273,7 +279,7 @@ def critique(plan: AnalysisPlan, results: dict[str, dict], objective: Objective,
     suggested = next((t.suggestion for t in triggers if t.suggestion is not None), None)
     rule_choice = None
     if suggested is not None:
-        rule_choice, why = validate_revision(suggested, plan)
+        rule_choice, why = validate_revision(suggested, plan, allow_report=True)
         if rule_choice is None:
             log.add("critic", "suggested revision", "dropped", why, source="critic")
     if client is not None and client.available:

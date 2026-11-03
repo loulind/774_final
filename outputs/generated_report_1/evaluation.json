@@ -34,7 +34,7 @@
     "doc": "largest share removed from one group: removal concentrated in a group is a warning"
    }
   ],
-  "seconds": 0.31,
+  "seconds": 0.23,
   "cached": false,
   "error": null,
   "skipped": null
@@ -68,7 +68,7 @@
     "doc": "share of all counts in the fit half"
    }
   ],
-  "seconds": 1.55,
+  "seconds": 1.52,
   "cached": false,
   "error": null,
   "skipped": null
@@ -107,7 +107,7 @@
     "doc": "the same for log1p of raw counts"
    }
   ],
-  "seconds": 1.75,
+  "seconds": 1.77,
   "cached": false,
   "error": null,
   "skipped": null
@@ -140,7 +140,7 @@
     "doc": "analysis dimension"
    }
   ],
-  "seconds": 15.69,
+  "seconds": 15.88,
   "cached": false,
   "error": null,
   "skipped": null
@@ -225,7 +225,7 @@
     "doc": "association of batch and external label"
    }
   ],
-  "seconds": 0.82,
+  "seconds": 0.83,
   "cached": false,
   "error": null,
   "skipped": null
@@ -241,7 +241,7 @@
    "stopped_because": "early_stop",
    "best_epoch": 125,
    "val_neg_elbo_per_gene": 0.430376220703125,
-   "train_seconds": 75.6
+   "train_seconds": 78.7
   },
   "criteria": [
    {
@@ -272,7 +272,7 @@
     "doc": ""
    }
   ],
-  "seconds": 86.35,
+  "seconds": 89.77,
   "cached": false,
   "error": null,
   "skipped": null
@@ -331,7 +331,7 @@
     "doc": "external labels (report only)"
    }
   ],
-  "seconds": 2.31,
+  "seconds": 2.29,
   "cached": false,
   "error": null,
   "skipped": null
@@ -379,7 +379,7 @@
     "doc": "recall@10 in a dual encoder's own space; a very high value suggests pretraining overlap"
    }
   ],
-  "seconds": 2.7,
+  "seconds": 2.69,
   "cached": false,
   "error": null,
   "skipped": null
@@ -450,7 +450,7 @@
     "doc": "association of domains with the groups (0 = spread evenly, 1 = one group each)"
    }
   ],
-  "seconds": 117.18,
+  "seconds": 120.36,
   "cached": false,
   "error": null,
   "skipped": null
@@ -548,7 +548,7 @@
     "doc": "the same for log1p of raw counts"
    }
   ],
-  "seconds": 8.18,
+  "seconds": 8.91,
   "cached": false,
   "error": null,
   "skipped": null
@@ -595,7 +595,7 @@
     "doc": "share of permuted features with p < 0.05 (about 0.05 when calibrated)"
    }
   ],
-  "seconds": 2.61,
+  "seconds": 2.77,
   "cached": false,
   "error": null,
   "skipped": null
@@ -640,7 +640,7 @@
     "doc": "how strongly labels cluster with themselves"
    }
   ],
-  "seconds": 0.42,
+  "seconds": 0.41,
   "cached": false,
   "error": null,
   "skipped": null
@@ -716,7 +716,7 @@
     "doc": "1 / number of classes"
    }
   ],
-  "seconds": 34.29,
+  "seconds": 34.3,
   "cached": false,
   "error": null,
   "skipped": null
@@ -775,7 +775,7 @@
     "doc": "naive discoveries per pseudobulk discovery"
    }
   ],
-  "seconds": 10.96,
+  "seconds": 10.95,
   "cached": false,
   "error": null,
   "skipped": null
@@ -828,7 +828,7 @@
     "doc": "rank correlation of pairwise distances"
    }
   ],
-  "seconds": 204.89,
+  "seconds": 203.32,
   "cached": false,
   "error": null,
   "skipped": null

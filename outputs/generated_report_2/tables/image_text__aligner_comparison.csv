@@ -1,0 +1,4 @@
+aligner,val_recall_at_10,k,best_epoch,epochs_run,stopped_because
+zero_shot,0.88725,,,,
+cca,0.772,32.0,,,
+contrastive,0.88725,,0.0,15.0,no validation improvement for 15 epochs

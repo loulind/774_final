@@ -1,0 +1,1948 @@
+label,count,prevalence,n_test,n_train,n_val,modelable,assessable
+X-Ray Computed Tomography,27798,0.3483938888819261,3621,20495,3682,True,True
+Plain x-ray,21998,0.27570216445876,2724,16604,2670,True,True
+Magnetic Resonance Imaging,12671,0.15880635175274788,1426,9796,1449,True,True
+Ultrasonography,11430,0.14325282933737735,1596,8306,1528,True,True
+Chest,10233,0.12825076138314806,1345,7508,1380,True,True
+Anterior-Posterior,9605,0.12038000225595007,1253,7111,1241,True,True
+angiogram,4799,0.06014613543220244,420,3958,421,True,True
+Postero-Anterior,4303,0.05392973968842823,465,3393,445,True,True
+Abdomen,4283,0.05367907856972766,565,3176,542,True,True
+Bone structure of cranium,4112,0.05153592600483776,391,3326,395,True,True
+Pelvis,3662,0.04589605083407487,521,2676,465,True,True
+Lower Extremity,3231,0.04049430372607753,458,2336,437,True,True
+Sagittal,2842,0.035618944967351386,325,2177,340,True,True
+Fluid behavior,1779,0.022296306508415947,255,1264,260,True,True
+Neoplasms,1705,0.02136886036922383,150,1392,163,True,True
+Vertebral column,1647,0.020641943124992165,175,1288,184,True,True
+Upper Extremity,1478,0.018523856671972327,175,1119,184,True,True
+Cystic,1469,0.018411059168557068,176,1152,141,True,True
+Heart,1288,0.016142576044316886,210,906,172,True,True
+Liver,1244,0.015591121583175625,125,986,133,True,True
+Pathological Dilatation,1084,0.013585832633571044,141,805,138,True,True
+C1266909,1077,0.013498101242025844,119,821,137,True,True
+Brain,1058,0.013259973179260299,150,756,152,True,True
+Left ventricular structure,1051,0.0131722417877151,132,786,133,True,True
+Pleural effusion disorder,1049,0.013147175675845042,151,746,152,True,True
+Nodule,1032,0.012934113724949554,139,738,155,True,True
+soft tissue,990,0.012407725375678351,112,758,120,True,True
+Pulmonary artery structure,981,0.012294927872263094,111,760,110,True,True
+Calcinosis,926,0.01160560979583652,120,704,102,True,True
+Aorta,924,0.011580543683966462,99,711,114,True,True
+Edema,891,0.011166952838110516,132,608,151,True,True
+Right ventricular structure,867,0.010866159495669828,117,656,94,True,True
+Occluded,825,0.010339771146398627,101,599,125,True,True
+Cavitation,809,0.010139242251438169,110,589,110,True,True
+Neck,808,0.010126709195503139,115,590,103,True,True
+Urinary Bladder,808,0.010126709195503139,86,634,88,True,True
+Mediastinum,797,0.009988845580217825,104,596,97,True,True
+Thrombus,766,0.009600320846231936,103,554,109,True,True
+Heart Ventricle,761,0.009537655566556794,101,542,118,True,True
+Enlarged,751,0.009412325007206507,102,545,104,True,True
+"Intestines, Small",746,0.009349659727531365,96,557,93,True,True
+Irregular,743,0.009312060559726278,91,577,75,True,True
+"Stent, device",732,0.009174196944440964,83,567,82,True,True
+Mandible,699,0.008760606098585018,73,564,62,True,True
+catheter device,692,0.008672874707039818,82,527,83,True,True
+pathologic fistula,689,0.008635275539234731,67,546,76,True,True
+Hepatic,682,0.008547544147689531,79,507,96,True,True
+Stomach structure,681,0.008535011091754502,89,516,76,True,True
+Stenosis,676,0.00847234581207936,98,483,95,True,True
+Femur,669,0.008384614420534158,78,499,92,True,True
+Positron-Emission Tomography,664,0.008321949140859016,83,512,69,True,True
+Anterior descending branch of left coronary artery,620,0.007770494679717755,78,480,62,True,True
+Kidney,616,0.007720362455977641,52,492,72,True,True
+Spleen,610,0.007645164120367469,75,458,77,True,True
+Gallbladder,602,0.00754489967288724,79,452,71,True,True
+Left atrial structure,582,0.007294238554186668,72,435,75,True,True
+Right atrial structure,571,0.007156374938901353,77,428,66,True,True
+Cerebral cortex,571,0.007156374938901353,69,431,71,True,True
+Structure of left lower lobe of lung,570,0.007143841882966324,59,425,86,True,True
+Hematoma,558,0.00699344521174598,70,433,55,True,True
+Compressed structure,557,0.0069809121558109515,74,419,64,True,True
+Nodular (qualifier value),555,0.006955846043940894,69,418,68,True,True
+Infiltration,545,0.006830515484590608,63,417,65,True,True
+Aneurysm,540,0.0067678502049154645,70,416,54,True,True
+Pericardial effusion,528,0.006617453533695121,85,366,77,True,True
+Implants,522,0.006542255198084949,50,404,68,True,True
+Heart Atrium,520,0.006517189086214892,61,393,66,True,True
+Atrophic,520,0.006517189086214892,57,391,72,True,True
+Right kidney,516,0.006467056862474777,43,432,41,True,True
+Duodenum,508,0.006366792414994548,76,367,65,True,True
+Pseudoaneurysm,505,0.006329193247189462,57,393,55,True,True
+Hemorrhage,492,0.0061662635200340895,57,376,59,True,True
+Uterus,486,0.006091065184423918,63,376,47,True,True
+Vessel Positions,483,0.006053466016618833,48,393,42,True,True
+Needle device,482,0.006040932960683804,61,347,74,True,True
+Body tissue,479,0.006003333792878718,62,373,44,True,True
+frontal lobe,479,0.006003333792878718,55,360,64,True,True
+Shadow,470,0.00589053628946346,69,338,63,True,True
+Joint Capsule,460,0.005765205730113174,54,351,55,True,True
+Pneumothorax,458,0.005740139618243116,72,313,73,True,True
+Structure of parenchyma of lung,457,0.005727606562308088,62,334,61,True,True
+Bilateral lungs,452,0.0056649412826329446,57,321,74,True,True
+Respiratory Diaphragm,446,0.005589742947022773,56,346,44,True,True
+Right lung,446,0.005589742947022773,50,345,51,True,True
+Maxilla,445,0.005577209891087744,43,352,50,True,True
+Screw,443,0.005552143779217687,65,332,46,True,True
+Inferior vena cava structure,439,0.005502011555477572,59,332,48,True,True
+Spinal Cord,438,0.0054894784995425435,46,330,62,True,True
+Muscle Tissue,435,0.005451879331737458,62,309,64,True,True
+Necrosis,434,0.005439346275802429,54,327,53,True,True
+Right coronary artery structure,431,0.005401747107997343,45,323,63,True,True
+lymph nodes,419,0.005251350436776999,45,322,52,True,True
+Calculi,412,0.005163619045231799,52,316,44,True,True
+Lymphadenopathy,408,0.005113486821491684,56,300,52,True,True
+Structure of right lower lobe of lung,403,0.005050821541816541,61,287,55,True,True
+Metastatic to,402,0.005038288485881512,50,298,54,True,True
+Esophagus,396,0.00496309015027134,45,298,53,True,True
+Colon structure (body structure),393,0.0049254909824662544,47,302,44,True,True
+effusion,392,0.004912957926531226,43,285,64,True,True
+Left lung,386,0.004837759590921054,50,289,47,True,True
+Calcified nodule,383,0.004800160423115968,50,291,42,True,True
+Secondary Neoplasm,382,0.004787627367180939,40,304,38,True,True
+Left kidney,380,0.004762561255310882,27,316,37,True,True
+Complete obstruction,379,0.004750028199375853,42,289,48,True,True
+Structure of right upper lobe of lung,371,0.004649763751895625,62,261,48,True,True
+Tooth structure,371,0.004649763751895625,51,283,37,True,True
+Mesentery,366,0.004587098472220482,51,262,53,True,True
+Lung field,358,0.004486834024740253,49,264,45,True,True
+Trachea,353,0.0044241687450651095,37,276,40,True,True
+Caudal,352,0.004411635689130081,46,257,49,True,True
+Bone plates,351,0.004399102633195052,50,261,40,True,True
+Acute abscess,350,0.0043865695772600235,39,272,39,True,True
+Common bile duct structure,349,0.004374036521324995,46,261,42,True,True
+Axis vertebra,340,0.004261239017909737,62,211,67,True,True
+Head of femur,335,0.004198573738234594,42,244,49,True,True
+Tooth root structure,333,0.0041735076263645365,49,246,38,True,True
+Veins,332,0.004160974570429508,35,251,46,True,True
+Pulmonary Embolism,332,0.004160974570429508,58,205,69,True,True
+Cervical spine,331,0.004148441514494479,44,242,45,True,True
+Thyroid Gland,331,0.004148441514494479,48,233,50,True,True
+Intestines,319,0.0039980448432741355,46,231,42,True,True
+Inflammatory disorder,315,0.003947912619534021,38,229,48,True,True
+Mitral Valve,315,0.003947912619534021,37,245,33,True,True
+Ascites,315,0.003947912619534021,34,249,32,True,True
+Cor bovinum (disorder),312,0.003910313451728935,44,228,40,True,True
+Entire left atrium,308,0.0038601812279888204,39,225,44,True,True
+Infarction,307,0.0038476481720537917,53,212,42,True,True
+Head of pancreas,304,0.003810049004248706,38,223,43,True,True
+Mediastinal Emphysema,304,0.003810049004248706,43,222,39,True,True
+Right lobe of liver,295,0.0036972515008334484,34,243,18,True,True
+Bone structure of ilium,293,0.003672185388963391,33,233,27,True,True
+Portal vein structure,292,0.0036596523330283625,34,226,32,True,True
+Pancreas,290,0.003634586221158305,42,209,39,True,True
+Atelectasis,290,0.003634586221158305,42,193,55,True,True
+Retroperitoneal Space,287,0.0035969870533532193,31,228,28,True,True
+C0747635,285,0.003571920941483162,44,193,48,True,True
+Thrombosis,281,0.0035217887177430474,39,203,39,True,True
+Aortic valve structure,281,0.0035217887177430474,43,200,38,True,True
+Bronchi,281,0.0035217887177430474,30,217,34,True,True
+Sigmoid colon,277,0.003471656494002933,32,212,33,True,True
+Pneumonia,276,0.003459123438067904,42,178,56,True,True
+Abscess,274,0.003434057326197847,33,206,35,True,True
+Body of vertebra,273,0.003421524270262818,36,200,37,True,True
+COVID19 (disease),261,0.0032711275990424745,63,141,57,True,True
+Localized Edema,259,0.003246061487172417,44,172,43,True,True
+Structure of left upper lobe of lung,258,0.0032335284312373885,29,195,34,True,True
+Rectum,257,0.00322099537530236,35,197,25,True,True
+Collateral branch of vessel,255,0.0031959292634323026,20,203,32,True,True
+Subcutaneous Emphysema,255,0.0031959292634323026,20,205,30,True,True
+Sacral Region,253,0.0031708631515622453,31,181,41,True,True
+Inflammation,253,0.0031708631515622453,50,180,23,True,True
+Ocular orbit,252,0.0031583300956272166,30,194,28,True,True
+Entire right atrium,251,0.003145797039692188,35,178,38,True,True
+Bone structure of humerus,245,0.003070598704082016,30,192,23,True,True
+Cerebral white matter structure,244,0.0030580656481469875,39,180,25,True,True
+Carotid Arteries,243,0.003045532592211959,30,191,22,True,True
+C0333307,241,0.003020466480341902,25,191,25,True,True
+Aortic arch structure,241,0.003020466480341902,25,190,26,True,True
+Probes,235,0.00294526814473173,50,138,47,True,True
+Lumbar Region,233,0.002920202032861673,34,171,28,True,True
+Dissecting hemorrhage,233,0.002920202032861673,26,176,31,True,True
+Superior vena cava structure,224,0.002807404529446415,34,151,39,True,True
+Tail of pancreas,219,0.0027447392497712718,28,162,29,True,True
+Left coronary artery structure,218,0.002732206193836243,29,169,20,True,True
+Cecum,217,0.0027196731379012145,29,168,20,True,True
+Tumor tissue sample,215,0.002694607026031157,31,162,22,True,True
+Ascending aorta structure,214,0.0026820739700961285,31,157,26,True,True
+Breast,211,0.0026444748022910426,40,131,40,True,True
+Ventricular septum,210,0.002631941746356014,27,157,26,True,True
+Structure of circumflex branch of left coronary artery,209,0.0026194086904209853,27,153,29,True,True
+Communicable Diseases,208,0.0026068756344859566,38,131,39,True,True
+PET/CT scan,208,0.0026068756344859566,26,145,37,True,True
+Lumbar spine structure,206,0.0025818095226158994,30,143,33,True,True
+Right hip region structure,205,0.0025692764666808707,22,162,21,True,True
+Jejunum,204,0.002556743410745842,23,149,32,True,True
+Hydronephrosis,203,0.0025442103548108134,22,163,18,True,True
+Hilar lymph node,202,0.0025316772988757848,27,147,28,True,True
+Superior mesenteric artery structure,201,0.002519144242940756,22,137,42,True,True
+Appendix,199,0.002494078131070699,31,131,37,True,True
+Occipital lobe,198,0.00248154507513567,24,153,21,True,True
+Structure of left hip,196,0.002456478963265613,23,153,20,True,True
+Skin,196,0.002456478963265613,29,142,25,True,True
+Bone structure of clavicle,190,0.002381280627655441,22,148,20,True,True
+Right pulmonary artery,188,0.002356214515785384,13,160,15,True,False
+C0006826,182,0.0022810161801752123,20,141,21,True,True
+Chest wall structure,180,0.002255950068305155,24,144,12,True,True
+ileum,179,0.0022434170123701263,20,139,20,True,True
+Abdominal wall structure,177,0.002218350900500069,25,130,22,True,True
+Structure of cortex of kidney,177,0.002218350900500069,24,139,14,True,True
+Pulmonary Edema,173,0.0021682186767599545,18,128,27,True,False
+permanent premolar tooth,172,0.002155685620824926,13,147,12,True,False
+Right thorax structure,172,0.002155685620824926,21,125,26,True,True
+Internal jugular vein structure,171,0.002143152564889897,25,124,22,True,True
+Ascending colon,169,0.00211808645301984,19,124,26,True,False
+Spinal Canal,169,0.00211808645301984,16,133,20,True,False
+Uterine cavity,168,0.0021055533970848112,14,140,14,True,False
+Biliary calculi,167,0.0020930203411497826,26,112,29,True,True
+Tricuspid valve structure,166,0.002080487285214754,26,121,19,True,True
+Structure of hemidiaphragm,164,0.0020554211733446967,19,127,18,True,False
+Adrenal Glands,164,0.0020554211733446967,17,123,24,True,False
+Pneumoperitoneum,163,0.002042888117409668,19,121,23,True,False
+Descending aorta,163,0.002042888117409668,17,134,12,True,False
+Left lobe of liver,162,0.0020303550614746394,24,119,19,True,True
+Structure of middle lobe of right lung,162,0.0020303550614746394,16,118,28,True,False
+Maxillary Sinus,162,0.0020303550614746394,20,125,17,True,True
+C0008034,160,0.002005288949604582,14,124,22,True,False
+peritoneal,160,0.002005288949604582,20,121,19,True,True
+Tendon structure,160,0.002005288949604582,23,114,23,True,True
+Structure of right knee region,159,0.0019927558936695534,20,117,22,True,True
+Hypertrophy,157,0.001967689781799496,18,125,14,True,False
+Internal carotid artery structure,155,0.0019426236699294388,18,117,20,True,False
+Shoulder,154,0.0019300906139944102,16,115,23,True,False
+Sclerotic (qualifier value),153,0.0019175575580593815,17,111,25,True,False
+Prostate,153,0.0019175575580593815,27,113,13,True,True
+Bronchiectasis,152,0.001905024502124353,24,105,23,True,True
+Drain device,151,0.0018924914461893243,17,118,16,True,False
+Structure of neck of femur,150,0.0018799583902542956,18,116,16,True,False
+Medulla Oblongata,148,0.0018548922783842385,10,121,17,True,False
+Left pulmonary artery,147,0.0018423592224492099,19,111,17,True,False
+Bile duct structure,147,0.0018423592224492099,17,116,14,True,False
+Osteolysis,147,0.0018423592224492099,16,122,9,True,False
+Transverse colon,147,0.0018423592224492099,14,117,16,True,False
+Sclerosis,146,0.0018298261665141812,10,123,13,True,False
+Structure of upper lobe of lung,146,0.0018298261665141812,13,114,19,True,False
+Prosthesis,145,0.0018172931105791526,13,117,15,True,False
+Urethra,145,0.0018172931105791526,14,123,8,True,False
+Structure of right shoulder region,145,0.0018172931105791526,16,106,23,True,False
+Structure of left knee region,144,0.001804760054644124,9,121,14,True,False
+Air bubble,143,0.0017922269987090953,13,119,11,True,False
+peripheral blood,142,0.0017796939427740667,11,119,12,True,False
+Entire hepatic duct,140,0.0017546278309040094,22,107,11,True,True
+Parietal Lobe,137,0.0017170286630989234,22,105,10,True,True
+Thoracic spine structure,137,0.0017170286630989234,18,97,22,True,False
+Thalamic structure,134,0.0016794294952938375,21,100,13,True,True
+Mucous Membrane,133,0.0016668964393588088,24,87,22,True,True
+Wall of bladder,132,0.0016543633834237802,12,103,17,True,False
+Bone structure of acetabulum,131,0.0016418303274887516,16,101,14,True,False
+Cerebrospinal Fluid,130,0.001629297271553723,13,105,12,True,False
+Penetration,130,0.001629297271553723,13,95,22,True,False
+Pericardial body location,129,0.0016167642156186943,15,94,20,True,False
+Left thorax structure,129,0.0016167642156186943,18,95,16,True,False
+Right breast,129,0.0016167642156186943,25,84,20,True,True
+Temporal Lobe,128,0.0016042311596836656,22,95,11,True,True
+Cervix Uteri,128,0.0016042311596836656,13,102,13,True,False
+Arteries,127,0.001591698103748637,18,96,13,True,False
+Structure of psoas muscle,127,0.001591698103748637,24,82,21,True,True
+Articular space,126,0.0015791650478136083,18,91,17,True,False
+Sacroiliac joint structure,126,0.0015791650478136083,16,89,21,True,False
+Structure of left shoulder region,126,0.0015791650478136083,19,91,16,True,False
+Celiac Artery,125,0.0015666319918785797,17,83,25,True,False
+Structure of head of humerus,125,0.0015666319918785797,20,80,25,True,True
+Anastomosis,125,0.0015666319918785797,14,98,13,True,False
+Pancreatic duct,125,0.0015666319918785797,18,89,18,True,False
+Pericardial sac structure,125,0.0015666319918785797,17,93,15,True,False
+Abdominal aorta structure,124,0.001554098935943551,18,89,17,True,False
+Cerebellum,124,0.001554098935943551,13,97,14,True,False
+Valve (physical object),123,0.0015415658800085224,17,87,19,True,False
+Aortic Root,123,0.0015415658800085224,18,90,15,True,False
+Hepatic artery,123,0.0015415658800085224,11,92,20,True,False
+Periventricular white matter,123,0.0015415658800085224,22,85,16,True,True
+Obstructed,122,0.0015290328240734937,17,96,9,True,False
+Axilla,122,0.0015290328240734937,26,78,18,True,True
+Structure of left subclavian artery,121,0.0015164997681384653,9,95,17,True,False
+Shunt Device,121,0.0015164997681384653,19,91,11,True,False
+Osteopenia,121,0.0015164997681384653,12,91,18,True,False
+Interatrial septum,119,0.001491433656268408,14,89,16,True,False
+Cicatrix,119,0.001491433656268408,17,91,11,True,False
+Sternum,119,0.001491433656268408,15,82,22,True,False
+Left breast,118,0.0014789006003333794,21,82,15,True,True
+Trunk structure,118,0.0014789006003333794,12,93,13,True,False
+Pathological accumulation of air in tissues,117,0.0014663675443983507,12,89,16,True,False
+Ischemic,116,0.001453834488463322,22,71,23,True,True
+Ankle region,116,0.001453834488463322,12,93,11,True,False
+Ruptured behavior,116,0.001453834488463322,13,94,9,True,False
+Face,115,0.0014413014325282934,19,81,15,True,False
+Coronary sinus structure,114,0.0014287683765932648,14,90,10,True,False
+Cartilage,114,0.0014287683765932648,11,89,14,True,False
+Wrist,113,0.0014162353206582361,13,83,17,True,False
+Right frontal lobe structure,113,0.0014162353206582361,15,82,16,True,False
+Head and neck structure,112,0.0014037022647232075,21,75,16,True,True
+Upper abdomen structure,111,0.0013911692087881788,14,87,10,True,False
+Inguinal region,111,0.0013911692087881788,20,75,16,True,True
+Structure of wisdom tooth,111,0.0013911692087881788,14,83,14,True,False
+Lateral ventricle structure,111,0.0013911692087881788,18,73,20,True,False
+Nose,110,0.0013786361528531502,23,74,13,True,True
+Stifle bone,110,0.0013786361528531502,14,87,9,True,False
+Stomach wall structure,110,0.0013786361528531502,14,80,16,True,False
+Fibula,110,0.0013786361528531502,20,83,7,True,True
+Nasal sinus,109,0.0013661030969181216,23,60,26,True,True
+Bone structure of pubis,109,0.0013661030969181216,20,81,8,True,True
+Body Fluid Discharge,108,0.001353570040983093,20,71,17,True,True
+Scrotum,107,0.0013410369850480643,11,80,16,True,False
+Pontine structure,107,0.0013410369850480643,16,78,13,True,False
+Optic Nerve,106,0.0013285039291130356,17,72,17,True,False
+Fibrosis,106,0.0013285039291130356,17,73,16,True,False
+Subcutaneous Tissue,106,0.0013285039291130356,8,84,14,True,False
+Fascia,105,0.001315970873178007,18,72,15,True,False
+Ligaments,105,0.001315970873178007,13,74,18,True,False
+Structure of condyle,105,0.001315970873178007,12,83,10,True,False
+Hypoplasia,104,0.0013034378172429783,14,79,11,True,False
+Entire pulmonary vein,104,0.0013034378172429783,12,81,11,True,False
+Bronchial,103,0.0012909047613079497,10,78,15,True,False
+Brain Stem,103,0.0012909047613079497,11,84,8,True,False
+C0494165,103,0.0012909047613079497,15,79,9,True,False
+Biliary tract structure,102,0.001278371705372921,10,80,12,True,False
+Intracranial,101,0.0012658386494378924,15,79,7,True,False
+Base of skull structure,100,0.0012533055935028637,10,82,8,True,False
+Pleura,100,0.0012533055935028637,13,72,15,True,False
+C0018946,99,0.001240772537567835,14,67,18,True,False
+Structure of cavernous sinus,99,0.001240772537567835,11,72,16,True,False
+Subcostal,98,0.0012282394816328064,20,61,17,True,True
+Left temporal lobe structure,97,0.0012157064256977778,10,76,11,True,False
+C0302148,97,0.0012157064256977778,10,75,12,True,False
+Structure of right internal carotid artery,96,0.0012031733697627492,12,69,15,True,False
+Entire eye,95,0.0011906403138277205,13,67,15,True,False
+Body of pancreas,95,0.0011906403138277205,18,66,11,True,False
+Structure of superior mesenteric vein,95,0.0011906403138277205,12,68,15,True,False
+Structure of left renal vein,95,0.0011906403138277205,6,81,8,True,False
+Pregnancy,95,0.0011906403138277205,15,67,13,True,False
+Structure of left internal carotid artery,94,0.001178107257892692,14,65,15,True,False
+Ostium,94,0.001178107257892692,15,70,9,True,False
+Structure of splenic artery,94,0.001178107257892692,5,84,5,True,False
+Bone structure of calcaneum,94,0.001178107257892692,14,68,12,True,False
+Basal Ganglia,94,0.001178107257892692,11,73,10,True,False
+Structure of outflow tract of right ventricle,93,0.0011655742019576634,16,67,10,True,False
+"Central venous catheter, device",93,0.0011655742019576634,5,75,13,True,False
+Umbilicus (Anatomy),92,0.0011530411460226348,17,61,14,True,False
+Subcutaneous Fat,92,0.0011530411460226348,19,62,11,True,False
+Coronary artery,91,0.0011405080900876061,16,67,8,True,False
+Hemothorax,91,0.0011405080900876061,6,75,10,True,False
+Structure of middle cerebral artery,91,0.0011405080900876061,10,64,17,True,False
+myometrium,91,0.0011405080900876061,11,67,13,True,False
+Subarachnoid Hemorrhage,91,0.0011405080900876061,15,60,16,True,False
+Structure of carina,91,0.0011405080900876061,13,65,13,True,False
+Uterine Fibroids,90,0.0011279750341525775,11,70,9,True,False
+Nontraumatic hemoperitoneum,90,0.0011279750341525775,10,72,8,True,False
+Transverse Processes,90,0.0011279750341525775,18,55,17,True,False
+Digit structure,90,0.0011279750341525775,8,69,13,True,False
+Leaking,90,0.0011279750341525775,8,77,5,True,False
+Structure of left middle cerebral artery,90,0.0011279750341525775,12,65,13,True,False
+Pseudocyst,89,0.0011154419782175488,8,70,11,True,False
+Pneumonia caused by SARS-CoV-2,89,0.0011154419782175488,18,49,22,True,False
+Elbow,89,0.0011154419782175488,9,67,13,True,False
+Spinal epidural space,89,0.0011154419782175488,18,62,9,True,False
+Structure of iliopsoas muscle,88,0.0011029089222825202,17,59,12,True,False
+Parotid Gland,88,0.0011029089222825202,8,71,9,True,False
+Hypoperfusion,88,0.0011029089222825202,22,50,16,True,True
+Entire outflow tract of left ventricle,88,0.0011029089222825202,14,62,12,True,False
+Hip structure,88,0.0011029089222825202,9,68,11,True,False
+C0153676,87,0.0010903758663474916,12,68,7,True,False
+Medial aspect of knee,86,0.001077842810412463,5,63,18,True,False
+Dextrocardia,86,0.001077842810412463,10,62,14,True,False
+Bone structure of lumbar vertebra,86,0.001077842810412463,10,64,12,True,False
+Adipose tissue,85,0.0010653097544774343,11,69,5,True,False
+Costophrenic angle,85,0.0010653097544774343,12,58,15,True,False
+Degenerative polyarthritis,84,0.0010527766985424056,16,50,18,True,False
+Blood Vessel,84,0.0010527766985424056,10,67,7,True,False
+Foot,84,0.0010527766985424056,15,60,9,True,False
+Right maxillary sinus structure,84,0.0010527766985424056,17,57,10,True,False
+Large Intestine,83,0.001040243642607377,8,69,6,True,False
+Mediastinal lymph node group,83,0.001040243642607377,9,63,11,True,False
+Descending colon,83,0.001040243642607377,16,58,9,True,False
+Temporal bone structure,83,0.001040243642607377,14,58,11,True,False
+Thigh structure,83,0.001040243642607377,14,61,8,True,False
+Distal part of ileum,83,0.001040243642607377,13,64,6,True,False
+Structure of brachiocephalic artery,82,0.0010277105866723483,6,65,11,True,False
+Myocardium,82,0.0010277105866723483,10,65,7,True,False
+Congenital scoliosis,81,0.0010151775307373197,8,66,7,True,False
+Fourth ventricle structure,81,0.0010151775307373197,9,64,8,True,False
+Structure of left hand,80,0.001002644474802291,7,65,8,True,False
+Retroperitoneal mass,80,0.001002644474802291,10,68,2,True,False
+"Bullet, device",80,0.001002644474802291,8,68,4,True,False
+Common ventricle,80,0.001002644474802291,9,64,7,True,False
+Pleural cavity,80,0.001002644474802291,10,61,9,True,False
+Nerve root structure,79,0.0009901114188672624,15,58,6,True,False
+Metacarpal bone,79,0.0009901114188672624,9,63,7,True,False
+Body of uterus,79,0.0009901114188672624,6,63,10,True,False
+Talus,79,0.0009901114188672624,8,65,6,True,False
+Cerebellar hemisphere structure,78,0.0009775783629322337,7,59,12,True,False
+Entire proximal femur,78,0.0009775783629322337,9,59,10,True,False
+Edema of bone marrow,78,0.0009775783629322337,8,65,5,True,False
+Fundus,78,0.0009775783629322337,8,63,7,True,False
+Cardiac chamber structure,78,0.0009775783629322337,9,59,10,True,False
+Ethmoid bone structure,78,0.0009775783629322337,11,56,11,True,False
+Osteophyte,77,0.0009650453069972051,13,59,5,True,False
+Structure of right adrenal gland,77,0.0009650453069972051,7,60,10,True,False
+Corpus Callosum,77,0.0009650453069972051,6,64,7,True,False
+Embolization coil,77,0.0009650453069972051,12,58,7,True,False
+Bone structure of thoracic vertebra,77,0.0009650453069972051,9,56,12,True,False
+Cystic duct structure,77,0.0009650453069972051,8,63,6,True,False
+Both kidneys,76,0.0009525122510621765,8,61,7,True,False
+Entire maxillary right lateral incisor tooth,76,0.0009525122510621765,9,61,6,True,False
+Peritoneum,76,0.0009525122510621765,5,58,13,True,False
+Structure of articular surface of bone,76,0.0009525122510621765,10,56,10,True,False
+Vagina,76,0.0009525122510621765,8,61,7,True,False
+Bone structure of scapula,75,0.0009399791951271478,11,59,5,True,False
+Pelvic cavity structure,75,0.0009399791951271478,8,61,6,True,False
+Renal parenchyma,75,0.0009399791951271478,5,60,10,True,False
+"Pancreatitis, Acute",75,0.0009399791951271478,15,47,13,True,False
+Cervical segment of spinal cord,75,0.0009399791951271478,9,55,11,True,False
+Structure of renal artery,75,0.0009399791951271478,8,60,7,True,False
+Metatarsal bone structure,75,0.0009399791951271478,7,57,11,True,False
+Pineal gland,75,0.0009399791951271478,7,62,6,True,False
+Thoracic cavity structure,74,0.0009274461391921193,13,57,4,True,False
+Availability of,74,0.0009274461391921193,19,31,24,True,False
+Metaphysis,74,0.0009274461391921193,4,59,11,True,False
+Sphenoidal sinus,74,0.0009274461391921193,9,53,12,True,False
+C2239176,74,0.0009274461391921193,5,64,5,True,False
+Pancreatitis,74,0.0009274461391921193,14,45,15,True,False
+Structure of right ureter,74,0.0009274461391921193,3,65,6,True,False
+Radionuclide Imaging,74,0.0009274461391921193,11,53,10,True,False
+Limb structure,74,0.0009274461391921193,9,57,8,True,False
+Left maxillary sinus structure,73,0.0009149130832570906,9,56,8,True,False
+Pneumopericardium,73,0.0009149130832570906,13,50,10,True,False
+"Prostheses, Dental, Fixed, Crown, Total, Temporary",72,0.000902380027322062,9,54,9,True,False
+Intrahepatic bile duct,72,0.000902380027322062,10,54,8,True,False
+Adverse event,72,0.000902380027322062,11,48,13,True,False
+Structure of right hand,72,0.000902380027322062,9,57,6,True,False
+Structure of brachiocephalic vein,72,0.000902380027322062,11,49,12,True,False
+Hemopoietic tissue,71,0.0008898469713870333,9,51,11,True,False
+Exophthalmos,71,0.0008898469713870333,8,54,9,True,False
+Structure of left foot,71,0.0008898469713870333,8,55,8,True,False
+Structure of splenic vein,71,0.0008898469713870333,7,57,7,True,False
+Peritoneal Cavity,71,0.0008898469713870333,7,60,4,True,False
+Abnormal shape,71,0.0008898469713870333,6,58,7,True,False
+Skeletal bone,70,0.0008773139154520047,13,50,7,True,False
+Artificial cardiac pacemaker,70,0.0008773139154520047,12,45,13,True,False
+Cephalometric point A,70,0.0008773139154520047,10,50,10,True,False
+Structure of left vertebral artery,70,0.0008773139154520047,9,50,11,True,False
+Midbrain structure,70,0.0008773139154520047,9,54,7,True,False
+Structure of lower lobe of lung,70,0.0008773139154520047,11,42,17,True,False
+Right iliac fossa,70,0.0008773139154520047,7,53,10,True,False
+Dissecting aortic aneurysm,69,0.000864780859516976,9,50,10,True,False
+Anterior mediastinum,69,0.000864780859516976,7,61,1,True,False
+Right temporal lobe structure,68,0.0008522478035819474,9,51,8,True,False
+Entire left auricular appendage,68,0.0008522478035819474,13,45,10,True,False
+Pituitary Gland,68,0.0008522478035819474,9,54,5,True,False
+Cardiac border,67,0.0008397147476469187,8,52,7,True,False
+Nerve,67,0.0008397147476469187,13,43,11,True,False
+Descending thoracic aorta,67,0.0008397147476469187,13,47,7,True,False
+Hernia of abdominal cavity,67,0.0008397147476469187,9,53,5,True,False
+Clip,67,0.0008397147476469187,10,52,5,True,False
+Renal Cell Carcinoma,66,0.0008271816917118901,4,58,4,True,False
+Structure of erector spinae muscle,66,0.0008271816917118901,23,26,17,True,True
+Anterior abdominal wall,66,0.0008271816917118901,11,50,5,True,False
+Lipoma,66,0.0008271816917118901,13,43,10,True,False
+Structure of hepatic vein,66,0.0008271816917118901,8,49,9,True,False
+Surface region of side of chest,65,0.0008146486357768615,5,51,9,True,False
+Pathological fracture,65,0.0008146486357768615,7,51,7,True,False
+Column (anatomic),65,0.0008146486357768615,10,47,8,True,False
+Entire maxillary right central incisor tooth,65,0.0008146486357768615,6,51,8,True,False
+Tricuspid Valve Insufficiency,65,0.0008146486357768615,13,41,11,True,False
+Kirschner Wires,64,0.0008021155798418328,10,47,7,True,False
+penis,64,0.0008021155798418328,10,41,13,True,False
+Renal pelvis,64,0.0008021155798418328,5,48,11,True,False
+Left main bronchus structure,64,0.0008021155798418328,6,52,6,True,False
+Mediastinal lymphadenopathy,64,0.0008021155798418328,9,50,5,True,False
+Hilar lymphadenopathy,64,0.0008021155798418328,10,43,11,True,False
+Cortex of bone,64,0.0008021155798418328,6,51,7,True,False
+Pulmonary valve structure,64,0.0008021155798418328,4,56,4,True,False
+Structure of sternocleidomastoid muscle,64,0.0008021155798418328,8,49,7,True,False
+Ovary,63,0.0007895825239068042,10,41,12,True,False
+Liver cyst,63,0.0007895825239068042,11,44,8,True,False
+"Chest, abdomen, and pelvis",63,0.0007895825239068042,15,34,14,True,False
+Mass lesion of brain,63,0.0007895825239068042,9,44,10,True,False
+Surgical sutures,63,0.0007895825239068042,8,48,7,True,False
+Hippocampus (Brain),63,0.0007895825239068042,2,56,5,True,False
+Feces,63,0.0007895825239068042,9,50,4,True,False
+Lingual - Oral site descriptor,63,0.0007895825239068042,7,47,9,True,False
+Structure of epidural space,62,0.0007770494679717755,6,50,6,True,False
+Intervertebral disc structure,62,0.0007770494679717755,13,43,6,True,False
+Structure of subclavian artery,62,0.0007770494679717755,3,52,7,True,False
+Caudate nucleus structure,62,0.0007770494679717755,15,41,6,True,False
+Structure of suprasellar region,62,0.0007770494679717755,9,44,9,True,False
+Diaphyses,62,0.0007770494679717755,7,50,5,True,False
+Acquired deformity,62,0.0007770494679717755,7,47,8,True,False
+Forepaw,61,0.0007645164120367469,9,46,6,True,False
+Kyphosis deformity of spine,61,0.0007645164120367469,5,51,5,True,False
+Structure of left ureter,61,0.0007645164120367469,8,48,5,True,False
+Structure of left renal artery,61,0.0007645164120367469,4,47,10,True,False
+Thoracic aorta,61,0.0007645164120367469,8,46,7,True,False
+Forearm,61,0.0007645164120367469,6,46,9,True,False
+Liver Cirrhosis,60,0.0007519833561017183,6,49,5,True,False
+Structure of lobe of lung,60,0.0007519833561017183,17,35,8,True,False
+Left frontal lobe structure,60,0.0007519833561017183,11,40,9,True,False
+Structure of right ovary,60,0.0007519833561017183,11,42,7,True,False
+Frontal Sinus,60,0.0007519833561017183,5,47,8,True,False
+Structure of right foot,60,0.0007519833561017183,14,36,10,True,False
+Entire posterior fossa of cranial cavity,60,0.0007519833561017183,8,45,7,True,False
+Iliac crest structure,60,0.0007519833561017183,5,47,8,True,False
+Common Hepatic Duct,59,0.0007394503001666897,7,49,3,True,False
+Leptomeninges,59,0.0007394503001666897,6,42,11,True,False
+Hemangioma,59,0.0007394503001666897,2,52,5,True,False
+Avascular necrosis,59,0.0007394503001666897,9,42,8,True,False
+Embolism,59,0.0007394503001666897,6,39,14,True,False
+Entire symphysis pubis,59,0.0007394503001666897,10,41,8,True,False
+Right lower extremity,59,0.0007394503001666897,6,43,10,True,False
+Tibial plateau structure,59,0.0007394503001666897,8,39,12,True,False
+Left common carotid artery structure,59,0.0007394503001666897,4,49,6,True,False
+Soft tissue lesion,59,0.0007394503001666897,7,44,8,True,False
+Splenic Infarction,59,0.0007394503001666897,5,47,7,True,False
+Movement,59,0.0007394503001666897,7,43,9,True,False
+Epiphysial cartilage,58,0.000726917244231661,9,37,12,True,False
+Structure of anulus fibrosus of mitral orifice,58,0.000726917244231661,4,50,4,True,False
+Intramural hematoma,58,0.000726917244231661,10,37,11,True,False
+Clivus,58,0.000726917244231661,6,46,6,True,False
+Femoral vein,58,0.000726917244231661,10,46,2,True,False
+Right cardiac ventricular dilatation,58,0.000726917244231661,9,35,14,True,False
+Right eye,58,0.000726917244231661,12,37,9,True,False
+C0521158,57,0.0007143841882966324,3,47,7,True,False
+Empyema,57,0.0007143841882966324,7,41,9,True,False
+Ulnar (qualifier value),57,0.0007143841882966324,5,43,9,True,False
+Agenesis,57,0.0007143841882966324,4,47,6,True,False
+Cerebral hemisphere structure (body structure),57,0.0007143841882966324,9,43,5,True,False
+Aortic Valve Insufficiency,57,0.0007143841882966324,9,40,8,True,False
+Structure of porta hepatis,57,0.0007143841882966324,6,45,6,True,False
+Structure of right subclavian artery,57,0.0007143841882966324,7,42,8,True,False
+Endometrium,57,0.0007143841882966324,8,40,9,True,False
+Structure of papillary muscle,56,0.0007018511323616037,3,49,4,True,False
+Structure of left adrenal gland,56,0.0007018511323616037,11,40,5,True,False
+Third ventricle structure,56,0.0007018511323616037,10,44,2,True,False
+Tongue,56,0.0007018511323616037,8,45,3,True,False
+"Foramen Ovale, Patent",56,0.0007018511323616037,11,36,9,True,False
+Structure of vertebral artery,56,0.0007018511323616037,4,46,6,True,False
+Surgical Flaps,56,0.0007018511323616037,9,41,6,True,False
+"Aortic Aneurysm, Abdominal",56,0.0007018511323616037,11,38,7,True,False
+Endoleak,56,0.0007018511323616037,6,48,2,True,False
+RIght parietal lobe structure,56,0.0007018511323616037,11,34,11,True,False
+Structure of achilles tendon,55,0.0006893180764265751,8,39,8,True,False
+Contraction (finding),55,0.0006893180764265751,4,48,3,True,False
+Liver segment,55,0.0006893180764265751,4,46,5,True,False
+Retroperitoneal hematoma,55,0.0006893180764265751,3,44,8,True,False
+Structure of transverse sinus,55,0.0006893180764265751,8,43,4,True,False
+Right side of heart,55,0.0006893180764265751,5,45,5,True,False
+Myocardial Infarction,55,0.0006893180764265751,6,43,6,True,False
+Structure of greater trochanter of femur,54,0.0006767850204915465,7,40,7,True,False
+Palate,54,0.0006767850204915465,14,34,6,True,False
+Bone lesion,54,0.0006767850204915465,7,47,0,True,False
+Chest and abdomen,54,0.0006767850204915465,7,39,8,True,False
+Peripharyngeal area structure,53,0.0006642519645565178,6,39,8,True,False
+Cannula device,53,0.0006642519645565178,5,42,6,True,False
+Ulceration,53,0.0006642519645565178,3,39,11,True,False
+Atrial Septal Defects,52,0.0006517189086214892,5,39,8,True,False
+Common carotid artery,52,0.0006517189086214892,10,34,8,True,False
+Structure of anterior leaflet of mitral valve,52,0.0006517189086214892,3,38,11,True,False
+Structure of basilar artery,52,0.0006517189086214892,2,44,6,True,False
+Right common carotid artery structure,52,0.0006517189086214892,3,43,6,True,False
+Posterior segment,52,0.0006517189086214892,5,40,7,True,False
+Posterior chest wall,52,0.0006517189086214892,4,44,4,True,False
+"Lung Diseases, Interstitial",52,0.0006517189086214892,11,34,7,True,False
+Subarachnoid Space,52,0.0006517189086214892,9,39,4,True,False
+Structure of calyx,51,0.0006391858526864605,5,40,6,True,False
+Congestion,51,0.0006391858526864605,9,29,13,True,False
+Transverse - anatomical location,51,0.0006391858526864605,9,29,13,True,False
+Testis,51,0.0006391858526864605,8,35,8,True,False
+Cerebral Ventricles,51,0.0006391858526864605,10,31,10,True,False
+Ethmoid sinus uncinate process,51,0.0006391858526864605,3,36,12,True,False
+Traction bronchiectasis,51,0.0006391858526864605,6,43,2,True,False
+C0003486,51,0.0006391858526864605,3,45,3,True,False
+Structure of right renal artery,51,0.0006391858526864605,3,39,9,True,False
+Left eye structure,51,0.0006391858526864605,8,34,9,True,False
+Omentum,51,0.0006391858526864605,7,41,3,True,False
+Esophagogastric Junction,51,0.0006391858526864605,7,39,5,True,False
+Trachea displaced,51,0.0006391858526864605,7,36,8,True,False
+Congenital arteriovenous fistula,51,0.0006391858526864605,6,39,6,True,False
+Intracranial Meningioma,50,0.0006266527967514319,5,37,8,True,False
+Mastoid process,50,0.0006266527967514319,6,37,7,True,False
+Cerebral Edema,50,0.0006266527967514319,8,33,9,True,False
+Oropharyngeal,50,0.0006266527967514319,8,38,4,True,False
+Structure of lesser trochanter of femur,50,0.0006266527967514319,6,31,13,True,False
+Bone structure of shaft of femur,50,0.0006266527967514319,7,39,4,True,False
+Cochlear structure,50,0.0006266527967514319,8,34,8,True,False
+Structure of iliac artery,50,0.0006266527967514319,9,36,5,True,False
+Structure of lower uterine segment,50,0.0006266527967514319,9,32,9,True,False
+Temporomandibular Joint,50,0.0006266527967514319,12,32,6,True,False
+Hiatal Hernia,50,0.0006266527967514319,11,26,13,True,False
+Structure of putamen,50,0.0006266527967514319,9,36,5,True,False
+Structure of right middle cerebral artery,50,0.0006266527967514319,2,40,8,True,False
+Main pancreatic duct,50,0.0006266527967514319,6,32,12,True,False
+Cervical Atlas,50,0.0006266527967514319,5,43,2,True,False
+Hydrarthrosis,49,0.0006141197408164032,9,37,3,True,False
+Superior mediastinum,49,0.0006141197408164032,3,42,4,True,False
+Structure of pituitary fossa,49,0.0006141197408164032,6,40,3,True,False
+Structure of left ovary,49,0.0006141197408164032,6,39,4,True,False
+Rectus Abdominis,49,0.0006141197408164032,8,35,6,True,False
+Kidney Calculi,49,0.0006141197408164032,7,36,6,True,False
+Bladder Detrusor Muscle,49,0.0006141197408164032,6,39,4,True,False
+gastric fundus,49,0.0006141197408164032,3,43,3,True,False
+Morphologically altered structure,48,0.0006015866848813746,8,35,5,True,False
+Liver parenchyma,48,0.0006015866848813746,5,38,5,True,False
+Compression fracture,48,0.0006015866848813746,7,31,10,True,False
+Rectum and sigmoid colon,48,0.0006015866848813746,5,39,4,True,False
+Nasal septum structure,48,0.0006015866848813746,3,38,7,True,False
+C0006142,48,0.0006015866848813746,10,33,5,True,False
+Structure of jugular vein,48,0.0006015866848813746,11,31,6,True,False
+Portal Vein Thrombosis,48,0.0006015866848813746,7,33,8,True,False
+Structure of foramen magnum,48,0.0006015866848813746,6,36,6,True,False
+Joint structure of shoulder region,48,0.0006015866848813746,6,34,8,True,False
+Left colic flexure,47,0.000589053628946346,4,41,2,True,False
+Structure of median nerve,47,0.000589053628946346,9,26,12,True,False
+Compression of spinal cord,47,0.000589053628946346,5,38,4,True,False
+Ureterolithiasis,47,0.000589053628946346,11,33,3,True,False
+Structure of right testis,47,0.000589053628946346,7,36,4,True,False
+Discitis,47,0.000589053628946346,8,34,5,True,False
+Bone necrosis,47,0.000589053628946346,5,36,6,True,False
+Rectum wall structure,47,0.000589053628946346,5,34,8,True,False
+Arteriovenous fistula,46,0.0005765205730113174,9,31,6,True,False
+Insula of Reil,46,0.0005765205730113174,9,27,10,True,False
+Lobular,46,0.0005765205730113174,9,31,6,True,False
+Structure of sinus of Valsalva,46,0.0005765205730113174,4,40,2,True,False
+Right colon,46,0.0005765205730113174,7,34,5,True,False
+Birth,46,0.0005765205730113174,11,23,12,True,False
+Intrahepatic duct,46,0.0005765205730113174,6,34,6,True,False
+Optic Chiasms,46,0.0005765205730113174,4,37,5,True,False
+Structure of conus medullaris,46,0.0005765205730113174,4,36,6,True,False
+Structure of omental adipose tissue (body structure),45,0.0005639875170762887,5,35,5,True,False
+Oral region,45,0.0005639875170762887,6,34,5,True,False
+Cerebral atrophy,45,0.0005639875170762887,3,37,5,True,False
+Superior sagittal sinus,45,0.0005639875170762887,6,30,9,True,False
+Facet joint structure,45,0.0005639875170762887,4,32,9,True,False
+Thymus Gland,45,0.0005639875170762887,8,34,3,True,False
+Entire distal femur,45,0.0005639875170762887,3,36,6,True,False
+Secondary malignant neoplasm of bone,45,0.0005639875170762887,6,33,6,True,False
+Structure of femoral artery,45,0.0005639875170762887,10,32,3,True,False
+Knee joint,45,0.0005639875170762887,13,28,4,True,False
+Mandibular Condyle,44,0.0005514544611412601,5,31,8,True,False
+Sphenoid bone structure,44,0.0005514544611412601,2,36,6,True,False
+Pneumocephalus,44,0.0005514544611412601,5,35,4,True,False
+Structure of left internal thoracic artery,44,0.0005514544611412601,7,31,6,True,False
+Acromion,44,0.0005514544611412601,3,33,8,True,False
+Bone structure of proximal tibia,44,0.0005514544611412601,2,36,6,True,False
+Structure of odontoid process of axis,44,0.0005514544611412601,2,39,3,True,False
+Diaphragmatic Hernia,44,0.0005514544611412601,3,36,5,True,False
+Arthritis,44,0.0005514544611412601,6,32,6,True,False
+Ethmoid sinus structure,44,0.0005514544611412601,3,37,4,True,False
+Acquired lordosis deformity of spine due to poor posture,44,0.0005514544611412601,8,29,7,True,False
+Structure of ramus of mandible,44,0.0005514544611412601,2,40,2,True,False
+Tissue Adhesions,44,0.0005514544611412601,6,31,7,True,False
+Cerebral Hemorrhage,44,0.0005514544611412601,9,28,7,True,False
+Structure of right vertebral artery,44,0.0005514544611412601,5,34,5,True,False
+Lumbosacral spine,43,0.0005389214052062315,4,36,3,True,False
+Pharyngeal structure,43,0.0005389214052062315,5,33,5,True,False
+Sarcoidosis,43,0.0005389214052062315,2,36,5,True,False
+Myocarditis,43,0.0005389214052062315,6,30,7,True,False
+"Muscle, Striated",43,0.0005389214052062315,11,24,8,True,False
+Pylorus,43,0.0005389214052062315,7,30,6,True,False
+Pulmonary congestion,43,0.0005389214052062315,5,30,8,True,False
+Papillary,43,0.0005389214052062315,4,34,5,True,False
+Structure of right renal pelvis,43,0.0005389214052062315,9,32,2,True,False
+Tendon of supraspinatus muscle,43,0.0005389214052062315,4,36,3,True,False
+Hyoid bone structure,43,0.0005389214052062315,6,33,4,True,False
+Thyroid Nodule,43,0.0005389214052062315,4,29,10,True,False
+Structure of fissure of Sylvius,42,0.0005263883492712028,6,32,4,True,False
+Steatohepatitis,42,0.0005263883492712028,5,33,4,True,False
+Structure of azygous vein,42,0.0005263883492712028,5,33,4,True,False
+Microcalcification,42,0.0005263883492712028,7,30,5,True,False
+Invagination,42,0.0005263883492712028,4,33,5,True,False
+Structure of intercostal space,42,0.0005263883492712028,5,34,3,True,False
+Structure of sigmoid sinus,42,0.0005263883492712028,5,31,6,True,False
+Intestinal Volvulus,42,0.0005263883492712028,8,24,10,True,False
+Hyperdistention,42,0.0005263883492712028,8,30,4,True,False
+Entire proximal phalanx (body structure),42,0.0005263883492712028,8,29,5,True,False
+Posterior mediastinum,42,0.0005263883492712028,0,40,2,True,False
+Structure of right hepatic vein,42,0.0005263883492712028,6,31,5,True,False
+Myxoma,42,0.0005263883492712028,8,29,5,True,False
+Transplanted tissue,41,0.0005138552933361742,6,31,4,True,False
+"Lens, Crystalline",41,0.0005138552933361742,6,30,5,True,False
+Right elbow region structure,41,0.0005138552933361742,3,30,8,True,False
+"Hematoma, Epidural, Spinal",41,0.0005138552933361742,5,30,6,True,False
+Pectoralis Muscles,41,0.0005138552933361742,6,27,8,True,False
+Ovarian Cysts,41,0.0005138552933361742,6,27,8,True,False
+Anogenital region,41,0.0005138552933361742,7,27,7,True,False
+Structure of left testis,41,0.0005138552933361742,3,32,6,True,False
+Right Ventricular Hypertrophy,41,0.0005138552933361742,7,30,4,True,False
+Cerebellar vermis structure,41,0.0005138552933361742,7,31,3,True,False
+Structure of right cusp of aortic valve,41,0.0005138552933361742,5,28,8,True,False
+Posterior interventricular branch of right coronary artery,41,0.0005138552933361742,7,26,8,True,False
+Structure of right common iliac artery,41,0.0005138552933361742,6,31,4,True,False
+Pancreatic Pseudocyst,41,0.0005138552933361742,4,29,8,True,False
+Corpus callosum splenium,41,0.0005138552933361742,2,30,9,True,False
+Coronary Artery Disease,41,0.0005138552933361742,11,20,10,True,False
+Transplanted kidney,41,0.0005138552933361742,7,32,2,True,False
+Ventricular hemorrhage,41,0.0005138552933361742,5,32,4,True,False
+Structure of uterine artery,40,0.0005013222374011455,7,28,5,True,False
+Multiple cysts,40,0.0005013222374011455,1,37,2,True,False
+Pectoralis major muscle structure,40,0.0005013222374011455,6,32,2,True,False
+Structure of left parotid gland,40,0.0005013222374011455,4,31,5,True,False
+Dissecting,40,0.0005013222374011455,6,31,3,True,False
+Psoas Abscess,40,0.0005013222374011455,2,35,3,True,False
+Globus Pallidus,40,0.0005013222374011455,2,33,5,True,False
+Body of stomach,40,0.0005013222374011455,3,36,1,True,False
+Cephalometric point B,40,0.0005013222374011455,10,21,9,True,False
+Vena cava structure,40,0.0005013222374011455,1,31,8,True,False
+Lung Volumes,40,0.0005013222374011455,11,23,6,True,False
+Ptosis,40,0.0005013222374011455,4,31,5,True,False
+Renal cyst,40,0.0005013222374011455,4,32,4,True,False
+Left occipital lobe structure,40,0.0005013222374011455,7,29,4,True,False
+Hard Palate,39,0.0004887891814661169,3,31,5,True,False
+Entire distal phalanx (body structure),39,0.0004887891814661169,5,31,3,True,False
+Calvaria,39,0.0004887891814661169,5,32,2,True,False
+Iliac Vein,39,0.0004887891814661169,3,30,6,True,False
+Structure of patellar ligament,39,0.0004887891814661169,7,27,5,True,False
+Brachial plexus structure,39,0.0004887891814661169,6,28,5,True,False
+Bilateral hydronephrosis,39,0.0004887891814661169,6,30,3,True,False
+Optic nerve sheath,39,0.0004887891814661169,6,21,12,True,False
+Subdural space,39,0.0004887891814661169,3,34,2,True,False
+Patent ductus arteriosus,39,0.0004887891814661169,6,26,7,True,False
+Structure of left lower leg,39,0.0004887891814661169,4,31,4,True,False
+Structure of petrous part of temporal bone,38,0.0004762561255310882,9,25,4,True,False
+Bone structure of carpus,38,0.0004762561255310882,5,24,9,True,False
+Structure of transversus abdominis muscle,38,0.0004762561255310882,6,29,3,True,False
+Anterior chest wall structure,38,0.0004762561255310882,6,27,5,True,False
+Flank (surface region),38,0.0004762561255310882,6,28,4,True,False
+Duodenal ampulla,38,0.0004762561255310882,3,32,3,True,False
+Accumulation of fluid,38,0.0004762561255310882,6,30,2,True,False
+Structure of rectouterine pouch,38,0.0004762561255310882,2,30,6,True,False
+Ectopic Pregnancy,38,0.0004762561255310882,1,34,3,True,False
+Structure of right ankle,38,0.0004762561255310882,6,29,3,True,False
+Appendicitis,38,0.0004762561255310882,4,30,4,True,False
+Caudate lobe of liver,38,0.0004762561255310882,2,33,3,True,False
+Atrial myxoma,37,0.00046372306959605963,5,28,4,True,False
+Structure of apex of left ventricle,37,0.00046372306959605963,8,26,3,True,False
+Malignant neoplasm of dome of bladder,37,0.00046372306959605963,7,28,2,True,False
+Nipples,37,0.00046372306959605963,5,27,5,True,False
+Large tumor,37,0.00046372306959605963,3,33,1,True,False
+Structure of body of mandible,37,0.00046372306959605963,3,29,5,True,False
+Structure of sciatic nerve,37,0.00046372306959605963,2,29,6,True,False
+Structure of intervertebral foramen,37,0.00046372306959605963,1,31,5,True,False
+Renal function,37,0.00046372306959605963,2,33,2,True,False
+Structure of right thigh,37,0.00046372306959605963,2,31,4,True,False
+Left lateral ventricle structure,37,0.00046372306959605963,6,23,8,True,False
+Left Ventricular Hypertrophy,37,0.00046372306959605963,4,28,5,True,False
+Structure of ureteropelvic junction,37,0.00046372306959605963,5,30,2,True,False
+Structure of brachial artery,37,0.00046372306959605963,4,26,7,True,False
+Leaflet of mitral valve,37,0.00046372306959605963,5,27,5,True,False
+Structure of intervertebral space,37,0.00046372306959605963,3,32,2,True,False
+Thyroid cartilage structure,37,0.00046372306959605963,1,35,1,True,False
+Cavitation of lung,37,0.00046372306959605963,4,27,6,True,False
+Balloon dilatation catheter,37,0.00046372306959605963,6,27,4,True,False
+Epiglottis structure,37,0.00046372306959605963,8,25,4,True,False
+Encephalomalacia,37,0.00046372306959605963,8,26,3,True,False
+Physiological sludge,36,0.000451190013661031,7,25,4,True,False
+Bone structure of distal radius,36,0.000451190013661031,4,30,2,True,False
+Structure of trapezius muscle,36,0.000451190013661031,4,26,6,True,False
+Varicosity,36,0.000451190013661031,4,22,10,True,False
+Pyloric antrum,36,0.000451190013661031,3,29,4,True,False
+Structure of deltoid muscle,36,0.000451190013661031,6,26,4,True,False
+Cardiac Tamponade,36,0.000451190013661031,6,24,6,True,False
+Pleural fluid,36,0.000451190013661031,5,25,6,True,False
+Structure of left cusp of aortic valve,36,0.000451190013661031,4,25,7,True,False
+Hallux structure,36,0.000451190013661031,4,28,4,True,False
+Scaphoid bone,36,0.000451190013661031,3,29,4,True,False
+Structure of internal iliac artery,36,0.000451190013661031,4,27,5,True,False
+Structure of anterior cerebral artery,36,0.000451190013661031,5,28,3,True,False
+Structure of great blood vessel (organ),36,0.000451190013661031,5,25,6,True,False
+Pulmonary Fibrosis,36,0.000451190013661031,7,25,4,True,False
+Lymph Node Metastasis,36,0.000451190013661031,8,25,3,True,False
+Left hip joint structure,36,0.000451190013661031,2,30,4,True,False
+Diverticulitis,35,0.00043865695772600234,9,19,7,True,False
+Facial nerve structure,35,0.00043865695772600234,4,24,7,True,False
+Periarticular Route of Administration,35,0.00043865695772600234,8,21,6,True,False
+Structure of right wrist,35,0.00043865695772600234,4,28,3,True,False
+Structure of base of right lung,35,0.00043865695772600234,6,24,5,True,False
+Structure of left hepatic duct,35,0.00043865695772600234,3,28,4,True,False
+Structure of quadratus lumborum muscle,35,0.00043865695772600234,7,18,10,True,False
+"Bile Ducts, Extrahepatic",35,0.00043865695772600234,3,30,2,True,False
+Tension Pneumothorax,35,0.00043865695772600234,5,27,3,True,False
+External auditory canal structure,35,0.00043865695772600234,1,29,5,True,False
+Hydrosalpinx (disease),35,0.00043865695772600234,1,30,4,True,False
+Superficial femoral artery,35,0.00043865695772600234,4,27,4,True,False
+RIght lateral ventricle structure,35,0.00043865695772600234,9,23,3,True,False
+Muscle of orbit,34,0.0004261239017909737,6,25,3,True,False
+middle ear,34,0.0004261239017909737,8,23,3,True,False
+Structure of half of thorax lateral to midsagittal plane,34,0.0004261239017909737,5,24,5,True,False
+Structure of uterine wall,34,0.0004261239017909737,4,27,3,True,False
+Angiomyolipoma,34,0.0004261239017909737,2,29,3,True,False
+Root of tongue,34,0.0004261239017909737,3,28,3,True,False
+Lordosis deformity of lumbar spine,34,0.0004261239017909737,7,21,6,True,False
+Intestinal wall structure,34,0.0004261239017909737,3,22,9,True,False
+Right upper extremity,34,0.0004261239017909737,7,22,5,True,False
+Greater curvature of stomach,34,0.0004261239017909737,4,26,4,True,False
+Ureteric stent,34,0.0004261239017909737,1,28,5,True,False
+"Arteriovenous Malformations, Cerebral",34,0.0004261239017909737,2,27,5,True,False
+Descending part of duodenum,34,0.0004261239017909737,5,27,2,True,False
+Cholelithiasis,34,0.0004261239017909737,5,26,3,True,False
+Colitis,34,0.0004261239017909737,6,21,7,True,False
+Structure of medial condyle of femur,34,0.0004261239017909737,6,25,3,True,False
+Structure of common hepatic artery,34,0.0004261239017909737,6,26,2,True,False
+Liver neoplasms,34,0.0004261239017909737,3,29,2,True,False
+Structure of cerebellopontine angle,33,0.00041359084585594505,2,26,5,True,False
+Pneumatic mastoid cell,33,0.00041359084585594505,7,22,4,True,False
+Structure of left common iliac artery,33,0.00041359084585594505,3,28,2,True,False
+Adenoma,33,0.00041359084585594505,8,23,2,True,False
+Intrauterine Devices,33,0.00041359084585594505,7,25,1,True,False
+Structure of renal vein,33,0.00041359084585594505,3,25,5,True,False
+Biliary Stent Devices,33,0.00041359084585594505,6,24,3,True,False
+Abscess cavity,33,0.00041359084585594505,5,21,7,True,False
+Bone structure of shaft of humerus,33,0.00041359084585594505,9,20,4,True,False
+Medial meniscus structure,33,0.00041359084585594505,5,25,3,True,False
+Structure of axillary artery,33,0.00041359084585594505,4,28,1,True,False
+Epidural Abscess,33,0.00041359084585594505,4,24,5,True,False
+Structure of piriform recess,33,0.00041359084585594505,1,28,4,True,False
+Entire right main branch of portal vein,32,0.0004010577899209164,4,25,3,True,False
+Internal acoustic meatus of temporal bone,32,0.0004010577899209164,3,25,4,True,False
+Seminal Vesicles,32,0.0004010577899209164,4,26,2,True,False
+Structure of soft tissues of neck,32,0.0004010577899209164,7,15,10,True,False
+Incisor,32,0.0004010577899209164,3,25,4,True,False
+Structure of right hepatic duct,32,0.0004010577899209164,4,21,7,True,False
+Effusion (substance),32,0.0004010577899209164,3,24,5,True,False
+hypopharynx,32,0.0004010577899209164,5,22,5,True,False
+Hemoperitoneum,32,0.0004010577899209164,4,25,3,True,False
+Cervical lymph node group,32,0.0004010577899209164,0,29,3,True,False
+Structure of base of left lung,32,0.0004010577899209164,7,15,10,True,False
+Residual Tumor,32,0.0004010577899209164,3,25,4,True,False
+Structure of right subclavian vein,32,0.0004010577899209164,8,21,3,True,False
+Axillary lymphadenopathy,32,0.0004010577899209164,7,19,6,True,False
+Hydroureteronephrosis,32,0.0004010577899209164,0,28,4,True,False
+Demyelination,32,0.0004010577899209164,4,24,4,True,False
+Structure of popliteal artery,32,0.0004010577899209164,4,25,3,True,False
+Erythema Multiforme,32,0.0004010577899209164,4,23,5,True,False
+Prostate carcinoma,32,0.0004010577899209164,4,23,5,True,False
+Right main bronchus structure,32,0.0004010577899209164,3,28,1,True,False
+Phalanx Unspecified,32,0.0004010577899209164,2,27,3,True,False
+Structure of lateral condyle of femur,31,0.00038852473398588776,2,25,4,True,False
+Structure of left axillary region,31,0.00038852473398588776,5,22,4,True,False
+Symphysis structure,31,0.00038852473398588776,6,19,6,True,False
+Kidney Neoplasm,31,0.00038852473398588776,2,26,3,True,False
+Para-aortic node,31,0.00038852473398588776,5,25,1,True,False
+Fecalith,31,0.00038852473398588776,5,22,4,True,False
+Esophageal wall structure,31,0.00038852473398588776,9,21,1,True,False
+Cartilaginous exostosis,31,0.00038852473398588776,5,24,2,True,False
+Entire pulmonary artery,31,0.00038852473398588776,6,20,5,True,False
+Premature Cardiac Complex,31,0.00038852473398588776,3,23,5,True,False
+Structure of head of radius,31,0.00038852473398588776,0,29,2,True,False
+Hemangioma of liver,31,0.00038852473398588776,3,26,2,True,False
+Sacroiliitis,31,0.00038852473398588776,1,25,5,True,False
+Respiratory System,31,0.00038852473398588776,7,24,0,True,False
+Structure of subclavian vein,31,0.00038852473398588776,1,25,5,True,False
+Structure of gastroduodenal artery,31,0.00038852473398588776,8,18,5,True,False
+Late effect of medical intervention,31,0.00038852473398588776,3,20,8,True,False
+Sinusitis,31,0.00038852473398588776,4,26,1,True,False
+Masseter muscle structure,31,0.00038852473398588776,1,28,2,True,False
+External carotid artery structure,31,0.00038852473398588776,4,25,2,True,False
+Heterotopic Ossification,31,0.00038852473398588776,4,26,1,True,False
+Gastrocnemius muscle structure,31,0.00038852473398588776,6,20,5,True,False
+Tumor thrombus,31,0.00038852473398588776,1,27,3,True,False
+Endocardium,31,0.00038852473398588776,2,26,3,True,False
+Cephalometric nasion point,31,0.00038852473398588776,5,17,9,True,False
+Aortic coarctation,31,0.00038852473398588776,2,25,4,True,False
+Deep Vein Thrombosis,31,0.00038852473398588776,7,21,3,True,False
+Ventricular dilatation (disorder),30,0.00037599167805085917,2,22,6,True,False
+Trigeminal nerve structure,30,0.00037599167805085917,3,21,6,True,False
+Thoracic spinal cord structure,30,0.00037599167805085917,6,23,1,True,False
+Paraspinal Muscles,30,0.00037599167805085917,4,22,4,True,False
+"Carcinoma, Neuroendocrine",30,0.00037599167805085917,6,19,5,True,False
+Pancreatitis Necrotizing,30,0.00037599167805085917,8,16,6,True,False
+Structure of right ovarian vein,30,0.00037599167805085917,5,17,8,True,False
+Gliosis,30,0.00037599167805085917,8,18,4,True,False
+Cheek structure,30,0.00037599167805085917,4,18,8,True,False
+Entire right coronary artery,30,0.00037599167805085917,4,21,5,True,False
+Structure of left ankle,30,0.00037599167805085917,6,16,8,True,False
+Adult Teratoma,30,0.00037599167805085917,3,27,0,True,False
+Glenoid structure,30,0.00037599167805085917,6,18,6,True,False
+Structure of inferior wall of orbit,30,0.00037599167805085917,1,26,3,True,False
+Symphysis pubis structure,30,0.00037599167805085917,3,24,3,True,False
+Structure of posterior leaflet of mitral valve,30,0.00037599167805085917,2,26,2,True,False
+Structure of left thigh,30,0.00037599167805085917,3,24,3,True,False
+Cancellous Bone,30,0.00037599167805085917,11,16,3,True,False
+Structure of superior ophthalmic vein,30,0.00037599167805085917,4,23,3,True,False
+Congenital acetabular dysplasia,30,0.00037599167805085917,2,26,2,True,False
+Intracranial Hemorrhage,30,0.00037599167805085917,5,19,6,True,False
+Nasopharynx,30,0.00037599167805085917,2,24,4,True,False
+Lung Abscess,30,0.00037599167805085917,7,18,5,True,False
+Entire internal oblique,30,0.00037599167805085917,2,24,4,True,False
+Cerebellar tonsil,30,0.00037599167805085917,4,23,3,True,False
+Structure of iliacus muscle,30,0.00037599167805085917,3,22,5,True,False
+Bulla of lung,30,0.00037599167805085917,4,24,2,True,False
+Jejunal loop,29,0.0003634586221158305,5,19,5,True,False
+Structure of left common iliac vein,29,0.0003634586221158305,6,17,6,True,False
+Thoracic esophagus,29,0.0003634586221158305,5,23,1,True,False
+Ankle joint structure,29,0.0003634586221158305,6,19,4,True,False
+Metastatic malignant neoplasm to brain,29,0.0003634586221158305,2,20,7,True,False
+Vocal cord structure,29,0.0003634586221158305,5,23,1,True,False
+Neurilemmoma,29,0.0003634586221158305,2,22,5,True,False
+Dilatation of ureter,29,0.0003634586221158305,2,23,4,True,False
+Zygomatic Arch,29,0.0003634586221158305,2,20,7,True,False
+Molar tooth,29,0.0003634586221158305,1,22,6,True,False
+Structure of hilum of spleen,29,0.0003634586221158305,4,22,3,True,False
+"Implantable dental prosthesis, device",29,0.0003634586221158305,3,25,1,True,False
+Common iliac artery structure,29,0.0003634586221158305,3,24,2,True,False
+Lymph node of mesentery,29,0.0003634586221158305,1,23,5,True,False
+Structure of bronchial artery,29,0.0003634586221158305,1,24,4,True,False
+Saccular Aneurysm,29,0.0003634586221158305,6,20,3,True,False
+Ovarian Follicle,29,0.0003634586221158305,8,14,7,True,False
+Structure of posterior cerebral artery,29,0.0003634586221158305,5,19,5,True,False
+Structure of falx cerebri,29,0.0003634586221158305,4,23,2,True,False
+Mental Foramen,29,0.0003634586221158305,7,20,2,True,False
+Thumb structure,29,0.0003634586221158305,1,24,4,True,False
+Bone structure of manubrium,29,0.0003634586221158305,6,17,6,True,False
+Peripherally inserted central catheter (physical object),29,0.0003634586221158305,2,23,4,True,False
+Physiologic calcification,29,0.0003634586221158305,3,23,3,True,False
+Vertebral level,29,0.0003634586221158305,3,21,5,True,False
+Structure of right parotid gland,29,0.0003634586221158305,5,20,4,True,False
+Dento-alveolar joint,29,0.0003634586221158305,6,21,2,True,False
+Membranous,29,0.0003634586221158305,1,24,4,True,False
+Recovering from,28,0.0003509255661808019,6,18,4,True,False
+Perinephric hematoma,28,0.0003509255661808019,2,23,3,True,False
+Cerebral Infarction,28,0.0003509255661808019,3,21,4,True,False
+Structure of tibial tuberosity,28,0.0003509255661808019,3,20,5,True,False
+Carpal Tunnel Syndrome,28,0.0003509255661808019,11,10,7,True,False
+Pelvic kidney,28,0.0003509255661808019,5,21,2,True,False
+Structure of left gastric artery,28,0.0003509255661808019,2,22,4,True,False
+Structure of epicondyle,28,0.0003509255661808019,3,17,8,True,False
+Lingula of left lung,28,0.0003509255661808019,3,19,6,True,False
+Left upper arm structure,28,0.0003509255661808019,3,24,1,True,False
+Bone Resorption,28,0.0003509255661808019,5,20,3,True,False
+Condyle of femur,28,0.0003509255661808019,2,24,2,True,False
+Structure of inferior portion of duodenum,28,0.0003509255661808019,1,22,5,True,False
+Bone structure of distal tibia,28,0.0003509255661808019,2,22,4,True,False
+Late cortical cerebellar atrophy,28,0.0003509255661808019,3,22,3,True,False
+Osteosclerosis,27,0.0003383925102457732,5,19,3,True,False
+Structure of left wrist,27,0.0003383925102457732,5,18,4,True,False
+Sternoclavicular joint structure,27,0.0003383925102457732,3,18,6,True,False
+Left branch of portal vein,27,0.0003383925102457732,1,25,1,True,False
+Kidney Cortex Necrosis,27,0.0003383925102457732,4,19,4,True,False
+Structure of genu of corpus callosum,27,0.0003383925102457732,4,17,6,True,False
+Left lower extremity,27,0.0003383925102457732,1,25,1,True,False
+Neck of pancreas,27,0.0003383925102457732,4,21,2,True,False
+Metacarpophalangeal joint structure,27,0.0003383925102457732,4,17,6,True,False
+Structure of retropharyngeal area,27,0.0003383925102457732,3,21,3,True,False
+Intrauterine pregnancy,27,0.0003383925102457732,2,24,1,True,False
+Intestinal Perforation,27,0.0003383925102457732,5,18,4,True,False
+Cervical lymphadenopathy,27,0.0003383925102457732,4,18,5,True,False
+Infraspinatous muscle structure,27,0.0003383925102457732,5,14,8,True,False
+Splenic abscess,27,0.0003383925102457732,3,21,3,True,False
+Semilunar Bone,27,0.0003383925102457732,3,20,4,True,False
+Primary malignant neoplasm of lung,27,0.0003383925102457732,0,25,2,True,False
+Impacted tooth,27,0.0003383925102457732,4,22,1,True,False
+Functional disorder,27,0.0003383925102457732,3,22,2,True,False
+Tunica submucosa,27,0.0003383925102457732,6,19,2,True,False
+Hyperemia,27,0.0003383925102457732,5,18,4,True,False
+Right hip joint structure,27,0.0003383925102457732,4,19,4,True,False
+First metatarsal structure,26,0.0003258594543107446,4,19,3,True,False
+Medial rectus muscle structure,26,0.0003258594543107446,3,21,2,True,False
+Pericardial cavity,26,0.0003258594543107446,8,14,4,True,False
+Spinal Stenosis,26,0.0003258594543107446,3,22,1,True,False
+Sarcoma,26,0.0003258594543107446,2,20,4,True,False
+Structure of mandibular incisor tooth,26,0.0003258594543107446,2,20,4,True,False
+Right upper arm structure,26,0.0003258594543107446,4,21,1,True,False
+Arterial Dissection,26,0.0003258594543107446,1,20,5,True,False
+Pathologic mineralization,26,0.0003258594543107446,2,21,3,True,False
+Atelectatic,26,0.0003258594543107446,7,16,3,True,False
+Pituitary Stalk,26,0.0003258594543107446,0,22,4,True,False
+Structure of posterior tibial artery,26,0.0003258594543107446,4,15,7,True,False
+Structure of right axillary region,26,0.0003258594543107446,4,20,2,True,False
+Intercostal artery,26,0.0003258594543107446,4,20,2,True,False
+Scalp structure,26,0.0003258594543107446,1,19,6,True,False
+Lentiform nucleus structure,26,0.0003258594543107446,5,16,5,True,False
+melanoma,26,0.0003258594543107446,1,21,4,True,False
+Cauda Equina,26,0.0003258594543107446,3,21,2,True,False
+Synovial bursa,26,0.0003258594543107446,3,22,1,True,False
+Left ventricular thrombus,26,0.0003258594543107446,4,17,5,True,False
+Right basal ganglia,26,0.0003258594543107446,3,15,8,True,False
+Anterior displacement,26,0.0003258594543107446,3,20,3,True,False
+Hyperplasia,26,0.0003258594543107446,4,19,3,True,False
+Structure of retroperitoneal lymph node,26,0.0003258594543107446,7,16,3,True,False
+Arachnoid Cysts,26,0.0003258594543107446,1,24,1,True,False
+Fat pad,26,0.0003258594543107446,4,19,3,True,False
+Common femoral vein,26,0.0003258594543107446,3,18,5,True,False
+Internal capsule of brain,26,0.0003258594543107446,1,22,3,True,False
+Forelimb,25,0.00031332639837571593,4,19,2,True,False
+Structure of left renal pelvis,25,0.00031332639837571593,3,17,5,True,False
+"Tuberculosis, Pulmonary",25,0.00031332639837571593,2,21,2,True,False
+Empty Sella Syndrome,25,0.00031332639837571593,3,17,5,True,False
+Acoustic Neuroma,25,0.00031332639837571593,2,21,2,True,False
+Fatty degeneration,25,0.00031332639837571593,9,9,7,True,False
+Structure of middle hepatic vein,25,0.00031332639837571593,2,21,2,True,False
+Tentorium cerebelli,25,0.00031332639837571593,4,19,2,True,False
+Thoracic region (surface region of back),25,0.00031332639837571593,1,22,2,True,False
+Concha bullosa,25,0.00031332639837571593,2,22,1,True,False
+Maxillary Sinusitis,25,0.00031332639837571593,1,21,3,True,False
+Osteoporosis,25,0.00031332639837571593,1,21,3,True,False
+polyps,25,0.00031332639837571593,4,17,4,True,False
+Navicular Bone of Foot,25,0.00031332639837571593,2,21,2,True,False
+Structure of gallbladder fossa of liver,25,0.00031332639837571593,7,14,4,True,False
+ovarian neoplasm,25,0.00031332639837571593,6,13,6,True,False
+C6 level,25,0.00031332639837571593,5,17,3,True,False
+Plantar fascia structure,25,0.00031332639837571593,4,15,6,True,False
+Lower jaw region,25,0.00031332639837571593,3,22,0,True,False
+Fenestration (morphologic abnormality),25,0.00031332639837571593,3,19,3,True,False
+Interphalangeal joint structure,25,0.00031332639837571593,5,17,3,True,False
+Ampulla of Vater,25,0.00031332639837571593,5,13,7,True,False
+Para-aortic region,25,0.00031332639837571593,3,21,1,True,False
+Non-Small Cell Lung Carcinoma,25,0.00031332639837571593,0,22,3,True,False
+Bicuspid aortic valve,25,0.00031332639837571593,4,20,1,True,False
+Daughter cyst,25,0.00031332639837571593,1,21,3,True,False
+Level of the first sacral vertebra,25,0.00031332639837571593,2,20,3,True,False
+Structure of flexor tendon,25,0.00031332639837571593,4,19,2,True,False
+Structure of left optic nerve,25,0.00031332639837571593,2,20,3,True,False
+Coronary Aneurysm,25,0.00031332639837571593,3,15,7,True,False
+Distal tendon of biceps brachii,25,0.00031332639837571593,2,21,2,True,False
+Periodontal Route of Administration,25,0.00031332639837571593,3,22,0,True,False
+Gluteal Region,25,0.00031332639837571593,4,18,3,True,False
+Iliac vessel,25,0.00031332639837571593,3,17,5,True,False
+Structure of coronoid process of ulna,24,0.0003007933424406873,2,20,2,True,False
+Synovitis,24,0.0003007933424406873,1,18,5,True,False
+Structure of apex of heart,24,0.0003007933424406873,1,20,3,True,False
+Femoral component,24,0.0003007933424406873,0,20,4,True,False
+Structure of collateral ligament,24,0.0003007933424406873,4,12,8,True,False
+Left cardiac ventricular dilatation,24,0.0003007933424406873,5,15,4,True,False
+Structure of axillary vein,24,0.0003007933424406873,1,19,4,True,False
+Transrectal approach,24,0.0003007933424406873,4,19,1,True,False
+External Fixation Devices,24,0.0003007933424406873,2,19,3,True,False
+neurofibroma,24,0.0003007933424406873,3,17,4,True,False
+Structure of right optic nerve,24,0.0003007933424406873,1,20,3,True,False
+Structure of infundibular stem of neurohypophysis,24,0.0003007933424406873,3,20,1,True,False
+Leakage of bile,24,0.0003007933424406873,6,15,3,True,False
+Left upper extremity,24,0.0003007933424406873,3,18,3,True,False
+Structure of thoracic inlet,24,0.0003007933424406873,0,16,8,True,False
+Hypothalamic structure,24,0.0003007933424406873,2,21,1,True,False
+Syrinx formation,24,0.0003007933424406873,1,21,2,True,False
+Structure of external iliac vein,24,0.0003007933424406873,4,17,3,True,False
+Inferior nasal concha,24,0.0003007933424406873,3,17,4,True,False
+Common Bile Duct Calculi,24,0.0003007933424406873,3,20,1,True,False
+Palatine Tonsil,24,0.0003007933424406873,3,18,3,True,False
+Rectus femoris muscle structure,24,0.0003007933424406873,3,15,6,True,False
+Myositis,24,0.0003007933424406873,7,13,4,True,False
+Acute appendicitis NOS (disorder),24,0.0003007933424406873,4,17,3,True,False
+Measurement method,24,0.0003007933424406873,3,17,4,True,False
+Pancreatic Neoplasm,24,0.0003007933424406873,2,18,4,True,False
+Cuboid Bone,23,0.0002882602865056587,5,14,4,True,False
+Proliferative arthritis,23,0.0002882602865056587,4,15,4,True,False
+Structure of leaflet of tricuspid valve,23,0.0002882602865056587,1,18,4,True,False
+Rib Cage,23,0.0002882602865056587,1,20,2,True,False
+Single Photon Emission Computed Tomography Computed Tomography,23,0.0002882602865056587,3,13,7,True,False
+Bladder Diverticulum,23,0.0002882602865056587,8,8,7,True,False
+Structure of infratemporal fossa,23,0.0002882602865056587,2,21,0,True,False
+Pulmonary Hypertension,23,0.0002882602865056587,1,18,4,True,False
+Diagnostic Imaging,23,0.0002882602865056587,3,15,5,True,False
+Structure of anulus fibrosus of aorta,23,0.0002882602865056587,3,17,3,True,False
+Lobe of liver,23,0.0002882602865056587,0,22,1,True,False
+Staghorn Calculi,23,0.0002882602865056587,2,17,4,True,False
+Air cyst,23,0.0002882602865056587,1,17,5,True,False
+Structure of radial artery,23,0.0002882602865056587,8,10,5,True,False
+Neck of urinary bladder,23,0.0002882602865056587,3,20,0,True,False
+Cholecystitis,23,0.0002882602865056587,4,13,6,True,False
+Cardia of stomach,23,0.0002882602865056587,4,18,1,True,False
+dissection of coronary artery,23,0.0002882602865056587,6,15,2,True,False
+Fallopian Tubes,23,0.0002882602865056587,3,17,3,True,False
+Structure of anterior horn of lateral ventricle,23,0.0002882602865056587,3,16,4,True,False
+Hip Bone,23,0.0002882602865056587,4,19,0,True,False
+Urinary system,23,0.0002882602865056587,3,16,4,True,False
+Bile duct carcinoma,23,0.0002882602865056587,5,15,3,True,False
+Supraspinatus muscle structure,23,0.0002882602865056587,0,21,2,True,False
+Biceps brachii muscle structure,23,0.0002882602865056587,4,17,2,True,False
+Arterial system,23,0.0002882602865056587,3,19,1,True,False
+Structure of aortic bifurcation,23,0.0002882602865056587,3,18,2,True,False
+Structure of carotid bifurcation,23,0.0002882602865056587,3,19,1,True,False
+Structure of ligamentum flavum,23,0.0002882602865056587,3,17,3,True,False
+Celiac Disease,23,0.0002882602865056587,4,17,2,True,False
+Adrenal Gland Neoplasms,23,0.0002882602865056587,4,19,0,True,False
+Gastrointestinal Stromal Tumors,23,0.0002882602865056587,1,22,0,True,False
+Cerebrum,22,0.00027572723057063005,3,13,6,True,False
+Femoral epiphysis,22,0.00027572723057063005,3,19,0,True,False
+Greater omentum,22,0.00027572723057063005,2,18,2,True,False
+Acute Cholecystitis,22,0.00027572723057063005,0,20,2,True,False
+Granuloma,22,0.00027572723057063005,2,19,1,True,False
+Cirrhotic,22,0.00027572723057063005,1,20,1,True,False
+Pulp Chamber,22,0.00027572723057063005,1,21,0,True,False
+Pseudarthrosis,22,0.00027572723057063005,6,13,3,True,False
+Central cord canal structure,22,0.00027572723057063005,0,19,3,True,False
+Eye,22,0.00027572723057063005,2,17,3,True,False
+Crohn Disease,22,0.00027572723057063005,4,15,3,True,False
+Idiopathic Pulmonary Fibrosis,22,0.00027572723057063005,1,19,2,True,False
+Lateral malleolus,22,0.00027572723057063005,6,10,6,True,False
+Structure of lateral abdominal wall,22,0.00027572723057063005,1,19,2,True,False
+Structure of cribriform plate,22,0.00027572723057063005,3,17,2,True,False
+Bilateral pneumonia,22,0.00027572723057063005,5,15,2,True,False
+Left colon,22,0.00027572723057063005,4,17,1,True,False
+Middle nasal turbinate structure,22,0.00027572723057063005,5,14,3,True,False
+Equivocal,22,0.00027572723057063005,4,18,0,True,False
+Structure of external iliac artery,22,0.00027572723057063005,3,17,2,True,False
+Mitral valve vegetations,22,0.00027572723057063005,5,13,4,True,False
+Erosion of bone,22,0.00027572723057063005,3,19,0,True,False
+Acute infarct,22,0.00027572723057063005,4,15,3,True,False
+Structure of right sinus of Valsalva,22,0.00027572723057063005,0,21,1,True,False
+Structure of right renal vein,22,0.00027572723057063005,2,17,3,True,False
+Pulmonary hemorrhage,22,0.00027572723057063005,2,16,4,True,False
+Retroperitoneal lymphadenopathy,22,0.00027572723057063005,3,14,5,True,False
+Entire external oblique,22,0.00027572723057063005,3,17,2,True,False
+Pathologic Neovascularization,22,0.00027572723057063005,4,14,4,True,False
+Emphysematous pyelonephritis,22,0.00027572723057063005,4,13,5,True,False
+Anterior nasal spine,22,0.00027572723057063005,5,12,5,True,False
+Acromioclavicular joint structure,22,0.00027572723057063005,2,18,2,True,False
+Arthropathy,22,0.00027572723057063005,2,18,2,True,False
+Jugular foramen,22,0.00027572723057063005,0,20,2,True,False
+Bladder stone (substance),22,0.00027572723057063005,4,15,3,True,False
+Structure of calf of leg,21,0.0002631941746356014,0,20,1,True,False
+Septic embolus,21,0.0002631941746356014,6,12,3,True,False
+Bone structure of first rib,21,0.0002631941746356014,0,16,5,True,False
+Upper arm,21,0.0002631941746356014,3,14,4,True,False
+Structure of inferior mesenteric artery,21,0.0002631941746356014,3,15,3,True,False
+"Palate, Soft",21,0.0002631941746356014,4,15,2,True,False
+Structure of long bone,21,0.0002631941746356014,0,19,2,True,False
+glottis,21,0.0002631941746356014,2,16,3,True,False
+fundus uteri,21,0.0002631941746356014,3,15,3,True,False
+Intralesional Route of Drug Administration,21,0.0002631941746356014,1,19,1,True,False
+Entire internal carotid artery,21,0.0002631941746356014,8,10,3,True,False
+Pulmonary aspiration,21,0.0002631941746356014,0,18,3,True,False
+Structure of middle cerebellar peduncle,21,0.0002631941746356014,7,9,5,True,False
+Left elbow region structure,21,0.0002631941746356014,3,15,3,True,False
+Testicular Hydrocele,21,0.0002631941746356014,2,15,4,True,False
+Cricoid cartilage structure,21,0.0002631941746356014,1,18,2,True,False
+Parathyroid Adenoma,21,0.0002631941746356014,3,16,2,True,False
+Amniotic Fluid,21,0.0002631941746356014,3,16,2,True,False
+Aneurysm of splenic artery,21,0.0002631941746356014,0,20,1,True,False
+Structure of piriformis muscle,21,0.0002631941746356014,2,15,4,True,False
+Structure of right buttock,21,0.0002631941746356014,2,17,2,True,False
+Ileocecal Valve,21,0.0002631941746356014,1,19,1,True,False
+Separation of retinal layers,21,0.0002631941746356014,5,11,5,True,False
+Left side of heart,21,0.0002631941746356014,5,14,2,True,False
+Gonion,21,0.0002631941746356014,6,10,5,True,False
+L5 level,21,0.0002631941746356014,2,14,5,True,False
+Structure of left subclavian vein,21,0.0002631941746356014,0,17,4,True,False
+Occipital region,21,0.0002631941746356014,2,16,3,True,False
+Larynx,21,0.0002631941746356014,2,16,3,True,False
+Cerebral aqueduct,21,0.0002631941746356014,5,15,1,True,False
+Gastrointestinal tract structure,21,0.0002631941746356014,3,15,3,True,False
+leiomyosarcoma,21,0.0002631941746356014,3,16,2,True,False
+Structure of right pulmonary vein,21,0.0002631941746356014,5,15,1,True,False
+"Lymphoma, Non-Hodgkin",21,0.0002631941746356014,3,16,2,True,False
+Squamous cell carcinoma,21,0.0002631941746356014,1,19,1,True,False
+Frontal bone structure,21,0.0002631941746356014,2,18,1,True,False
+Structure of temporalis muscle,21,0.0002631941746356014,0,17,4,True,False
+Distal tooth root,21,0.0002631941746356014,1,17,3,True,False
+Pyloric obstruction,21,0.0002631941746356014,3,15,3,True,False
+Ischial tuberosity structure,21,0.0002631941746356014,2,12,7,True,False
+Multiple Myeloma,21,0.0002631941746356014,1,19,1,True,False
+Pancreatic Cyst,21,0.0002631941746356014,6,11,4,True,False
+Structure of gluteus maximus muscle,21,0.0002631941746356014,0,16,5,True,False
+Non-occlusive thrombus,21,0.0002631941746356014,4,14,3,True,False
+Structure of gastric lumen,20,0.00025066111870057276,0,19,1,True,False
+Anus,20,0.00025066111870057276,4,14,2,True,False
+Glioblastoma,20,0.00025066111870057276,7,10,3,True,False
+Medial malleolus,20,0.00025066111870057276,5,12,3,True,False
+Chondrosarcoma,20,0.00025066111870057276,3,15,2,True,False
+Osteosarcoma of bone,20,0.00025066111870057276,2,15,3,True,False
+Equilibrium,20,0.00025066111870057276,2,14,4,True,False
+Entire skeletal muscle of gluteal region,20,0.00025066111870057276,2,15,3,True,False
+Structure of ulnar artery,20,0.00025066111870057276,2,13,5,True,False
+Bone structure of rib,20,0.00025066111870057276,1,18,1,True,False
+Structure of profunda femoris artery,20,0.00025066111870057276,3,15,2,True,False
+Ureter,20,0.00025066111870057276,3,15,2,True,False
+Right fallopian tube,20,0.00025066111870057276,5,14,1,True,False
+Cornea,20,0.00025066111870057276,2,13,5,True,False
+Structure of upper respiratory tract cavity,20,0.00025066111870057276,6,12,2,True,False
+Entire body of third lumbar vertebra,20,0.00025066111870057276,1,16,3,True,False
+Structure of retroorbital region,20,0.00025066111870057276,2,12,6,True,False
+Hematoma of rectus sheath,20,0.00025066111870057276,1,16,3,True,False
+Vaginal wall,20,0.00025066111870057276,2,18,0,True,False
+Structure of inferior epigastric artery,20,0.00025066111870057276,4,10,6,True,False
+Seroma,20,0.00025066111870057276,3,15,2,True,False
+Aortic Valve Stenosis,20,0.00025066111870057276,3,10,7,True,False
+Myoma,20,0.00025066111870057276,0,19,1,True,False
+Vesico-Ureteral Reflux,20,0.00025066111870057276,1,15,4,True,False
+Dilation of esophagus due to disease,20,0.00025066111870057276,3,15,2,True,False
+Urine,20,0.00025066111870057276,2,14,4,True,False
+Anterior Cruciate Ligament,20,0.00025066111870057276,1,18,1,True,False
+Right occipital lobe structure,20,0.00025066111870057276,3,13,4,True,False
+Synovial Hypertrophy,20,0.00025066111870057276,0,17,3,True,False
+Coarctation,20,0.00025066111870057276,2,15,3,True,False
+Hematomediastinum,20,0.00025066111870057276,0,20,0,True,False
+Entire hilum of left lung,20,0.00025066111870057276,3,16,1,True,False
+Pelvic abscess,20,0.00025066111870057276,5,12,3,True,False
+Bronchopneumonia,20,0.00025066111870057276,1,11,8,True,False
+Occlusive thrombus,20,0.00025066111870057276,2,14,4,True,False
+Esophageal Neoplasms,20,0.00025066111870057276,4,13,3,True,False
+Venous Thrombosis,20,0.00025066111870057276,3,15,2,True,False
+Scleroderma,20,0.00025066111870057276,2,15,3,True,False
+Hydrothorax,20,0.00025066111870057276,5,11,4,True,False
+Right cerebral hemisphere,19,0.0002381280627655441,4,11,4,True,False
+Atresia,19,0.0002381280627655441,3,13,3,True,False
+Lateral displacement,19,0.0002381280627655441,2,15,2,True,False
+Structure of right external iliac artery,19,0.0002381280627655441,3,13,3,True,False
+"Pancreatitis, Chronic",19,0.0002381280627655441,3,14,2,True,False
+Anal canal,19,0.0002381280627655441,7,10,2,True,False
+Structure of right forearm,19,0.0002381280627655441,1,13,5,True,False
+Structure of femoral nerve,19,0.0002381280627655441,1,17,1,True,False
+Rotator Cuff,19,0.0002381280627655441,2,11,6,True,False
+Hypogastric region,19,0.0002381280627655441,0,17,2,True,False
+"Aneurysm, Mycotic",19,0.0002381280627655441,3,13,3,True,False
+Hernia sac,19,0.0002381280627655441,1,18,0,True,False
+Occipital bone structure,19,0.0002381280627655441,4,11,4,True,False
+Structure of vastus lateralis muscle,19,0.0002381280627655441,1,15,3,True,False
+Structure of anterior inferior iliac spine,19,0.0002381280627655441,5,10,4,True,False
+Congenital aneurysm of sinus of Valsalva,19,0.0002381280627655441,1,18,0,True,False
+Saphenous Vein,19,0.0002381280627655441,3,15,1,True,False
+Acoustic Nerve,19,0.0002381280627655441,0,18,1,True,False
+Nasal bone structure,19,0.0002381280627655441,1,16,2,True,False
+Entire second metatarsal,19,0.0002381280627655441,3,14,2,True,False
+"Pituitary Gland, Posterior",19,0.0002381280627655441,0,18,1,True,False
+Ventriculoperitoneal catheter,19,0.0002381280627655441,3,12,4,True,False
+C7 level,19,0.0002381280627655441,2,14,3,True,False
+Defibrillators,19,0.0002381280627655441,5,12,2,True,False
+Serous Membrane,19,0.0002381280627655441,3,13,3,True,False
+Dorsal funiculus,19,0.0002381280627655441,1,15,3,True,False
+Structure of quadriceps femoris muscle,19,0.0002381280627655441,1,16,2,True,False
+Right coronary sulcus,19,0.0002381280627655441,4,14,1,True,False
+Structure of mandibular canal,19,0.0002381280627655441,4,14,1,True,False
+Sacroiliac,19,0.0002381280627655441,0,16,3,True,False
+Structure of apex of left lung,19,0.0002381280627655441,2,15,2,True,False
+Structure of left hepatic vein,19,0.0002381280627655441,4,15,0,True,False
+Structure of latissimus dorsi muscle,19,0.0002381280627655441,1,11,7,True,False
+Lateral rectus muscle structure,19,0.0002381280627655441,2,15,2,True,False
+Retropharyngeal Abscess,19,0.0002381280627655441,4,12,3,True,False
+Periodontal Ligament,19,0.0002381280627655441,2,12,5,True,False
+Epigastrium,18,0.0002255950068305155,2,14,2,True,False
+Cholangiectasis,18,0.0002255950068305155,3,14,1,True,False
+Pectoralis minor muscle structure,18,0.0002255950068305155,2,15,1,True,False
+Structure of maxillary incisor tooth,18,0.0002255950068305155,3,12,3,True,False
+Intervertebral,18,0.0002255950068305155,1,14,3,True,False
+Surgical advancement - action,18,0.0002255950068305155,0,18,0,True,False
+Microvascular,18,0.0002255950068305155,1,12,5,True,False
+Esophageal Perforation,18,0.0002255950068305155,5,11,2,True,False
+Left cerebral hemisphere,18,0.0002255950068305155,4,11,3,True,False
+Invasive Ductal Breast Carcinoma,18,0.0002255950068305155,2,13,3,True,False
+Pituitary macroadenoma,18,0.0002255950068305155,1,15,2,True,False
+Mural thrombus,18,0.0002255950068305155,1,15,2,True,False
+Esophageal stent,18,0.0002255950068305155,4,13,1,True,False
+Surface region of upper chest,18,0.0002255950068305155,2,16,0,True,False
+Left basal ganglia,18,0.0002255950068305155,4,7,7,True,False
+Axillary lymph node group,18,0.0002255950068305155,2,10,6,True,False
+Cystic degeneration,18,0.0002255950068305155,2,15,1,True,False
+Intratumor route,18,0.0002255950068305155,0,17,1,True,False
+Lymph,18,0.0002255950068305155,2,14,2,True,False
+Structure of scalenus medius muscle,18,0.0002255950068305155,2,16,0,True,False
+Takotsubo Cardiomyopathy,18,0.0002255950068305155,0,14,4,True,False
+Right atrial dilatation,18,0.0002255950068305155,1,16,1,True,False
+Vasculitis,18,0.0002255950068305155,7,7,4,True,False
+Mammillary body structure,18,0.0002255950068305155,5,12,1,True,False
+Oral cavity,18,0.0002255950068305155,5,11,2,True,False
+Pulmonary artery flotation catheter,18,0.0002255950068305155,1,15,2,True,False
+Infectious Lung Disorder,18,0.0002255950068305155,1,14,3,True,False
+Leriche Syndrome,18,0.0002255950068305155,1,16,1,True,False
+Portal Venous System,18,0.0002255950068305155,2,13,3,True,False
+Malignant Rectal Neoplasm,18,0.0002255950068305155,3,13,2,True,False
+Left parietal lobe structure,18,0.0002255950068305155,1,13,4,True,False
+Structure of anterior superior iliac spine,18,0.0002255950068305155,2,13,3,True,False
+Visceral pleura,18,0.0002255950068305155,2,15,1,True,False
+Intrapleural Route of Drug Administration,18,0.0002255950068305155,4,12,2,True,False
+Therapeutic,18,0.0002255950068305155,3,14,1,True,False
+Fusiform Aneurysm,18,0.0002255950068305155,2,12,4,True,False
+Right aortic arch (disorder),18,0.0002255950068305155,3,12,3,True,False
+Synostosis,18,0.0002255950068305155,4,12,2,True,False
+Portal Hypertension,18,0.0002255950068305155,3,12,3,True,False
+Obstructive Hydrocephalus,18,0.0002255950068305155,2,16,0,True,False
+Entire anterior descending branch of left coronary artery,18,0.0002255950068305155,3,12,3,True,False
+Index finger,18,0.0002255950068305155,2,15,1,True,False
+Cuspid,18,0.0002255950068305155,2,16,0,True,False
+Structure of interventricular foramen,18,0.0002255950068305155,2,12,4,True,False
+Pulmonary Valve Insufficiency,18,0.0002255950068305155,3,13,2,True,False
+Bone structure of face,18,0.0002255950068305155,2,14,2,True,False
+Congestive heart failure,17,0.00021306195089548685,4,10,3,True,False
+Structure of left ovarian vein,17,0.00021306195089548685,4,10,3,True,False
+Entire multifidus muscle,17,0.00021306195089548685,6,8,3,True,False
+Brain Abscess,17,0.00021306195089548685,4,12,1,True,False
+Structure of internal os,17,0.00021306195089548685,1,13,3,True,False
+Entire middle phalanx (body structure),17,0.00021306195089548685,2,15,0,True,False
+Follicular,17,0.00021306195089548685,3,12,2,True,False
+Renal stone substance,17,0.00021306195089548685,1,13,3,True,False
+Meconium,17,0.00021306195089548685,0,16,1,True,False
+Ankylosis,17,0.00021306195089548685,2,12,3,True,False
+Structure of esophageal lumen,17,0.00021306195089548685,2,12,3,True,False
+Structure of medial wall of orbit,17,0.00021306195089548685,0,16,1,True,False
+Varus angulation,17,0.00021306195089548685,5,10,2,True,False
+Pelvic Diaphragm,17,0.00021306195089548685,4,10,3,True,False
+Thoracic Duct,17,0.00021306195089548685,4,10,3,True,False
+Structure of posterior cusp of aortic valve,17,0.00021306195089548685,4,10,3,True,False
+Entire left sinus of Valsalva,17,0.00021306195089548685,0,14,3,True,False
+Structure of lymph node of left axilla,17,0.00021306195089548685,7,7,3,True,False
+Cervical part of esophagus,17,0.00021306195089548685,0,16,1,True,False
+Lesser curvature of stomach,17,0.00021306195089548685,3,12,2,True,False
+Mandibular notch,17,0.00021306195089548685,1,16,0,True,False
+Pulmonary Infarction,17,0.00021306195089548685,2,10,5,True,False
+Dermoid Cyst,17,0.00021306195089548685,3,14,0,True,False
+Structure of superior left pulmonary vein,17,0.00021306195089548685,1,15,1,True,False
+Ureterocele,17,0.00021306195089548685,2,13,2,True,False
+Adrenal hemorrhage,17,0.00021306195089548685,3,10,4,True,False
+Transposition of Great Vessels,17,0.00021306195089548685,8,2,7,False,False
+Osteoma,17,0.00021306195089548685,3,10,4,True,False
+Lung cyst,17,0.00021306195089548685,3,10,4,True,False
+Serratus ventralis muscle,17,0.00021306195089548685,2,10,5,True,False
+Mesial tooth root,17,0.00021306195089548685,2,14,1,True,False
+Tetralogy of Fallot,17,0.00021306195089548685,4,10,3,True,False
+Intervertebral Disk Displacement,17,0.00021306195089548685,2,10,5,True,False
+Left iliac fossa,17,0.00021306195089548685,3,12,2,True,False
+"Lateral ventricle, occipital horn",17,0.00021306195089548685,3,10,4,True,False
+Respiratory Failure,17,0.00021306195089548685,2,13,2,True,False
+Apophysis,17,0.00021306195089548685,3,11,3,True,False
+Interferes with,17,0.00021306195089548685,4,12,1,True,False
+Plasmacytoma,17,0.00021306195089548685,0,17,0,True,False
+Compression fracture of vertebral column,17,0.00021306195089548685,4,10,3,True,False
+Structure of apex of lung,17,0.00021306195089548685,1,16,0,True,False
+Right sphenoid sinus structure,17,0.00021306195089548685,2,14,1,True,False
+Cephalometric menton point,17,0.00021306195089548685,3,10,4,True,False
+Venous system,17,0.00021306195089548685,2,12,3,True,False
+Structure of cisterna magna,17,0.00021306195089548685,5,12,0,True,False
+Inferior rectus muscle structure,17,0.00021306195089548685,0,17,0,True,False
+"Aplasia, NOS",17,0.00021306195089548685,3,12,2,True,False
+Mandibular left first premolar tooth,17,0.00021306195089548685,5,8,4,True,False
+Patella alta,17,0.00021306195089548685,0,16,1,True,False
+Structure of popliteal vein,17,0.00021306195089548685,3,12,2,True,False
+Fornix of vagina,17,0.00021306195089548685,4,12,1,True,False
+Primary hypertrophic cardiomyopathy,17,0.00021306195089548685,0,14,3,True,False
+Aortic valve vegetations,17,0.00021306195089548685,2,12,3,True,False
+Congenital diaphragmatic hernia,17,0.00021306195089548685,4,11,2,True,False
+Carcinomatosis of peritoneal cavity,17,0.00021306195089548685,2,12,3,True,False
+Parietal pleura,17,0.00021306195089548685,4,13,0,True,False
+Structure of intercostal muscle,17,0.00021306195089548685,2,11,4,True,False
+Structure of coracoid process of scapula,17,0.00021306195089548685,2,13,2,True,False
+Vascular anomaly,16,0.0002005288949604582,0,15,1,True,False
+Intervertebral Disc Degeneration,16,0.0002005288949604582,2,11,3,True,False
+Tracheal Stenosis,16,0.0002005288949604582,2,12,2,True,False
+Adrenal Cortical Adenoma,16,0.0002005288949604582,2,10,4,True,False
+Intrathecal Route of Drug Administration,16,0.0002005288949604582,2,10,4,True,False
+Mesenteric lymphadenopathy,16,0.0002005288949604582,2,12,2,True,False
+Cystic Fibrosis,16,0.0002005288949604582,0,15,1,True,False
+Surface region of lower chest,16,0.0002005288949604582,2,12,2,True,False
+Structure of centrum semiovale,16,0.0002005288949604582,2,13,1,True,False
+Soft Tissue Neoplasms,16,0.0002005288949604582,2,14,0,True,False
+Gastric band (physical object),16,0.0002005288949604582,2,11,3,True,False
+Disorder of tendon,16,0.0002005288949604582,2,11,3,True,False
+Pulmonary Stenosis,16,0.0002005288949604582,3,8,5,True,False
+Splenic cyst,16,0.0002005288949604582,5,9,2,True,False
+Sclera,16,0.0002005288949604582,5,7,4,True,False
+Impatent structure,16,0.0002005288949604582,2,11,3,True,False
+Aspergilloma,16,0.0002005288949604582,1,14,1,True,False
+"Pneumonia, Viral",16,0.0002005288949604582,5,9,2,True,False
+Structure of gluteus medius muscle,16,0.0002005288949604582,1,12,3,True,False
+Renal sinus,16,0.0002005288949604582,1,13,2,True,False
+Heart failure,16,0.0002005288949604582,2,11,3,True,False
+Aponeurosis structure,16,0.0002005288949604582,2,9,5,True,False
+Retina,16,0.0002005288949604582,5,8,3,True,False
+Zygomatic bone,16,0.0002005288949604582,3,9,4,True,False
+Congenital pulmonary arteriovenous malformation,16,0.0002005288949604582,3,10,3,True,False
+Structure of anterior tibial artery,16,0.0002005288949604582,2,11,3,True,False
+Incisional hernia,16,0.0002005288949604582,2,14,0,True,False
+Common Femoral Artery,16,0.0002005288949604582,3,12,1,True,False
+Spondylolisthesis,16,0.0002005288949604582,2,14,0,True,False
+Feeding tube,16,0.0002005288949604582,0,13,3,True,False
+Stomach Carcinoma,16,0.0002005288949604582,3,9,4,True,False
+Restenosis,16,0.0002005288949604582,2,12,2,True,False
+Hallux Valgus,16,0.0002005288949604582,5,10,1,True,False
+Structure of anulus fibrosus of tricuspid orifice,16,0.0002005288949604582,1,13,2,True,False
+Coxa valga,16,0.0002005288949604582,0,15,1,True,False
+Popliteal,16,0.0002005288949604582,2,13,1,True,False
+Teratoma,16,0.0002005288949604582,2,14,0,True,False
+Deciduous tooth,16,0.0002005288949604582,2,14,0,True,False
+Tricuspid valve vegetations,16,0.0002005288949604582,1,12,3,True,False
+Structure of articular cartilage,16,0.0002005288949604582,2,12,2,True,False
+Eyelid structure,16,0.0002005288949604582,1,12,3,True,False
+Spinal Cord Diseases,16,0.0002005288949604582,3,10,3,True,False
+Acute hemorrhage,16,0.0002005288949604582,2,11,3,True,False
+Lung Neoplasms,16,0.0002005288949604582,2,10,4,True,False
+Meniscus structure of joint,16,0.0002005288949604582,1,15,0,True,False
+Head of fibula structure,16,0.0002005288949604582,3,10,3,True,False
+Dental caries,16,0.0002005288949604582,2,11,3,True,False
+Intravenous Injections,16,0.0002005288949604582,1,13,2,True,False
+Knee joint line,16,0.0002005288949604582,1,10,5,True,False
+Entire portal vein,16,0.0002005288949604582,1,15,0,True,False
+Blood coagulation,16,0.0002005288949604582,1,12,3,True,False
+Alveolar ridge,16,0.0002005288949604582,1,13,2,True,False
+Subscapularis muscle structure,16,0.0002005288949604582,0,13,3,True,False
+Dermis,16,0.0002005288949604582,2,11,3,True,False
+Structure of left internal iliac artery,16,0.0002005288949604582,2,12,2,True,False
+Urinary catheter,16,0.0002005288949604582,1,12,3,True,False
+Sequestration,16,0.0002005288949604582,1,14,1,True,False
+Nephrocalcinosis,16,0.0002005288949604582,3,13,0,True,False
+Parietal bone structure,15,0.00018799583902542958,2,12,1,True,False
+Prostatic Urethra,15,0.00018799583902542958,4,11,0,True,False
+Multiple abscesses,15,0.00018799583902542958,2,13,0,True,False
+Muscle hematoma,15,0.00018799583902542958,2,13,0,True,False
+Adenocarcinoma of lung (disorder),15,0.00018799583902542958,1,13,1,True,False
+Bullet fragment,15,0.00018799583902542958,0,13,2,True,False
+Glandular,15,0.00018799583902542958,4,9,2,True,False
+Bladder Neoplasm,15,0.00018799583902542958,2,13,0,True,False
+Hematuria,15,0.00018799583902542958,1,13,1,True,False
+Masticator space,15,0.00018799583902542958,0,14,1,True,False
+Horseshoe Kidney,15,0.00018799583902542958,3,11,1,True,False
+Coxae malum senilis,15,0.00018799583902542958,4,9,2,True,False
+Hemopericardium,15,0.00018799583902542958,1,14,0,True,False
+Subtalar joint structure,15,0.00018799583902542958,3,11,1,True,False
+Interstitial emphysema,15,0.00018799583902542958,0,15,0,True,False
+brain tissue surgical material,15,0.00018799583902542958,4,8,3,True,False
+Level of the fourth thoracic vertebra,15,0.00018799583902542958,4,9,2,True,False
+Emphysematous,15,0.00018799583902542958,3,9,3,True,False
+Robinow Syndrome,15,0.00018799583902542958,0,15,0,True,False
+Ossification of Posterior Longitudinal Ligament,15,0.00018799583902542958,1,12,2,True,False
+Retroversion,15,0.00018799583902542958,4,10,1,True,False
+Structure of psoas major muscle,15,0.00018799583902542958,4,6,5,True,False
+Saphenous vein graft,15,0.00018799583902542958,4,9,2,True,False
+Vitreous body part,15,0.00018799583902542958,3,10,2,True,False
+Neck of tooth,15,0.00018799583902542958,1,10,4,True,False
+"Hernia, Inguinal",15,0.00018799583902542958,3,6,6,True,False
+Entire body of second lumbar vertebra,15,0.00018799583902542958,2,9,4,True,False
+Radiocarpal joint structure,15,0.00018799583902542958,2,12,1,True,False
+Nephrostomy tube,15,0.00018799583902542958,0,14,1,True,False
+Falciform ligament,15,0.00018799583902542958,3,9,3,True,False
+Structure of internal iliac vein,15,0.00018799583902542958,3,11,1,True,False
+Structure of straight sinus,15,0.00018799583902542958,1,13,1,True,False
+Chylothorax,15,0.00018799583902542958,3,11,1,True,False
+Bone structure of distal humerus,15,0.00018799583902542958,1,10,4,True,False
+Peritoneal Fluid (body substance),15,0.00018799583902542958,2,12,1,True,False
+Ewings sarcoma,15,0.00018799583902542958,0,14,1,True,False
+Synchondrosis structure,15,0.00018799583902542958,3,9,3,True,False
+Orbital fat structure,15,0.00018799583902542958,2,10,3,True,False
+Orbital Cellulitis,15,0.00018799583902542958,2,13,0,True,False
+Middle finger structure,15,0.00018799583902542958,2,12,1,True,False
+Medullary cavity of bone,15,0.00018799583902542958,1,13,1,True,False
+Anthracosis,15,0.00018799583902542958,2,10,3,True,False
+Agenesis of corpus callosum,15,0.00018799583902542958,3,11,1,True,False
+"Infarction, Lacunar",15,0.00018799583902542958,4,9,2,True,False
+Myxoid cyst,15,0.00018799583902542958,1,13,1,True,False
+Obstruction of biliary tree,15,0.00018799583902542958,1,13,1,True,False
+Congenital hemivertebra,15,0.00018799583902542958,3,9,3,True,False
+Midfoot region of foot,15,0.00018799583902542958,1,12,2,True,False
+Retroperitoneal abscess,15,0.00018799583902542958,1,14,0,True,False
+"Tuberculosis, Miliary",15,0.00018799583902542958,0,11,4,True,False
+Metatarsophalangeal joint structure,15,0.00018799583902542958,2,11,2,True,False
+Lobar Pneumonia,15,0.00018799583902542958,1,12,2,True,False
+Hepatic flexure of colon,15,0.00018799583902542958,2,11,2,True,False
+Structure of left thoracic cavity,15,0.00018799583902542958,2,11,2,True,False
+Necrotizing,15,0.00018799583902542958,2,12,1,True,False
+Intussusceptum,15,0.00018799583902542958,1,13,1,True,False
+Papillary thyroid carcinoma,15,0.00018799583902542958,2,13,0,True,False
+Belly of skeletal muscle,15,0.00018799583902542958,0,13,2,True,False
+Hemopneumothorax,15,0.00018799583902542958,1,13,1,True,False
+"Lateral ventricle, temporal horn",15,0.00018799583902542958,2,12,1,True,False
+"Arthritis, Bacterial",15,0.00018799583902542958,2,10,3,True,False
+Cylindrical Bronchiectasis,15,0.00018799583902542958,1,11,3,True,False
+Foreskin of penis,15,0.00018799583902542958,4,10,1,True,False
+Structure of olfactory bulb,15,0.00018799583902542958,5,8,2,True,False
+Consequence of,15,0.00018799583902542958,0,14,1,True,False
+Adhesives,15,0.00018799583902542958,3,9,3,True,False
+Structure of cerebral artery,15,0.00018799583902542958,4,7,4,True,False
+Structure of fatty capsule of kidney,14,0.00017546278309040094,1,7,6,True,False
+Structure of lumbar artery,14,0.00017546278309040094,2,12,0,True,False
+Common atrium,14,0.00017546278309040094,1,10,3,True,False
+Avascular Necrosis of Femur Head,14,0.00017546278309040094,2,9,3,True,False
+Stomach Volvulus,14,0.00017546278309040094,2,12,0,True,False
+Structure of wormian bone,14,0.00017546278309040094,0,14,0,True,False
+Both breasts,14,0.00017546278309040094,1,10,3,True,False
+Tuberous Sclerosis,14,0.00017546278309040094,0,13,1,True,False
+pancreatic juice,14,0.00017546278309040094,3,9,2,True,False
+"Aneurysm, Ascending Aorta",14,0.00017546278309040094,4,8,2,True,False
+Endocarditis,14,0.00017546278309040094,2,7,5,True,False
+C3 level,14,0.00017546278309040094,4,10,0,True,False
+Mucocele,14,0.00017546278309040094,1,10,3,True,False
+"Lymphangioma, Cystic",14,0.00017546278309040094,1,9,4,True,False
+Vascular calcification,14,0.00017546278309040094,1,13,0,True,False
+Lymphangioma,14,0.00017546278309040094,2,11,1,True,False
+Large blood vessel structure,14,0.00017546278309040094,5,7,2,False,False
+Left ventricular aneurysm,14,0.00017546278309040094,0,13,1,True,False
+Fibroadenoma,14,0.00017546278309040094,0,14,0,True,False
+Extraocular rectus muscle,14,0.00017546278309040094,2,11,1,True,False
+Meckel Diverticulum,14,0.00017546278309040094,6,4,4,False,False
+Mediastinal pleura,14,0.00017546278309040094,1,13,0,True,False
+Placenta Accreta,14,0.00017546278309040094,5,5,4,False,False
+Aortic stent,14,0.00017546278309040094,1,11,2,True,False
+Focal calcium deposition,14,0.00017546278309040094,1,12,1,True,False
+Both ovaries,14,0.00017546278309040094,1,11,2,True,False
+Internal obturator muscle structure,14,0.00017546278309040094,4,9,1,True,False
+Bone Tissue,14,0.00017546278309040094,3,9,2,True,False
+Umbilical hernia,14,0.00017546278309040094,2,9,3,True,False
+Dissection of proximal aorta,14,0.00017546278309040094,2,10,2,True,False
+"Angioma, Cavernous",14,0.00017546278309040094,0,14,0,True,False
+Fibrous Dysplasia,14,0.00017546278309040094,1,13,0,True,False
+Chronic Kidney Diseases,14,0.00017546278309040094,3,9,2,True,False
+Tuberculoma,14,0.00017546278309040094,1,11,2,True,False
+Right hypochondriac region structure,14,0.00017546278309040094,4,10,0,True,False
+Scoliosis of thoracic spine,14,0.00017546278309040094,1,11,2,True,False
+Lateral meniscus structure,14,0.00017546278309040094,1,12,1,True,False
+Structure of left orbital region,14,0.00017546278309040094,2,10,2,True,False
+Panniculitis,14,0.00017546278309040094,1,12,1,True,False
+"Dilatation of pulmonary artery, unspecified",14,0.00017546278309040094,2,9,3,True,False
+Mucocele of appendix,14,0.00017546278309040094,3,8,3,True,False
+Cranial Sinuses,14,0.00017546278309040094,2,7,5,True,False
+Structure of right internal iliac artery,14,0.00017546278309040094,1,13,0,True,False
+Synovial Membrane,14,0.00017546278309040094,0,14,0,True,False
+Right atrial enlargement,14,0.00017546278309040094,2,10,2,True,False
+Structure of tracheal lumen,14,0.00017546278309040094,0,11,3,True,False
+Mitral valve prosthesis,14,0.00017546278309040094,2,11,1,True,False
+Entire intrahepatic part of main portal vein,14,0.00017546278309040094,2,9,3,True,False
+Cerebral Peduncle,14,0.00017546278309040094,1,11,2,True,False
+Sequestrum,14,0.00017546278309040094,1,11,2,True,False
+Entire right sinus of Valsalva,14,0.00017546278309040094,1,13,0,True,False
+Posterior Cruciate Ligament,14,0.00017546278309040094,2,11,1,True,False
+Structure of right pleural cavity,14,0.00017546278309040094,1,9,4,True,False
+Structure of corona radiata of internal capsule,14,0.00017546278309040094,4,10,0,True,False
+Pulmonary arterial hypertension,14,0.00017546278309040094,0,11,3,True,False
+Posterior point of nasal spine,14,0.00017546278309040094,4,7,3,True,False
+Bone remodeling,14,0.00017546278309040094,1,13,0,True,False
+Anterior chamber of eye structure,14,0.00017546278309040094,1,8,5,True,False
+Multiple Sclerosis,14,0.00017546278309040094,2,12,0,True,False
+Intravenous Catheters,14,0.00017546278309040094,1,9,4,True,False
+Serous portion of pericardium,14,0.00017546278309040094,2,11,1,True,False
+Granulomatous,14,0.00017546278309040094,2,8,4,True,False
+Phlebolithiasis,14,0.00017546278309040094,0,14,0,True,False
+cervical cancer,14,0.00017546278309040094,3,10,1,True,False
+Submandibular space structure,14,0.00017546278309040094,2,8,4,True,False
+Pyelonephritis,14,0.00017546278309040094,2,11,1,True,False
+Thrombus of right atrium,14,0.00017546278309040094,4,8,2,True,False
+Structure of spine of scapula,14,0.00017546278309040094,3,10,1,True,False
+Neoplastic disease,14,0.00017546278309040094,2,12,0,True,False
+Subcutaneous nodule,14,0.00017546278309040094,0,13,1,True,False
+Accessory spleen,13,0.0001629297271553723,2,9,2,True,False
+Substantia nigra structure,13,0.0001629297271553723,0,13,0,True,False
+Structure of right carotid artery,13,0.0001629297271553723,0,12,1,True,False
+Adventitia,13,0.0001629297271553723,2,8,3,True,False
+Obstruction of pelviureteric junction,13,0.0001629297271553723,0,13,0,True,False
+Hypoplasia of corpus callosum,13,0.0001629297271553723,1,12,0,True,False
+Follicular cyst,13,0.0001629297271553723,1,11,1,True,False
+Mediastinitis,13,0.0001629297271553723,2,9,2,True,False
+Structure of suprapatellar bursa,13,0.0001629297271553723,1,11,1,True,False
+Tunica Intima,13,0.0001629297271553723,2,9,2,True,False
+Cervical canal structure,13,0.0001629297271553723,2,9,2,True,False
+Structure of waist (surface region),13,0.0001629297271553723,1,10,2,True,False
+Longus colli muscle structure,13,0.0001629297271553723,3,6,4,True,False
+Opaque foreign body,13,0.0001629297271553723,1,11,1,True,False
+Structure of prostatic artery,13,0.0001629297271553723,1,10,2,True,False
+Structure of hilum of kidney,13,0.0001629297271553723,1,10,2,True,False
+Cystadenoma,13,0.0001629297271553723,3,9,1,True,False
+Clumped,13,0.0001629297271553723,2,11,0,True,False
+Left superior vena cava,13,0.0001629297271553723,4,7,2,False,False
+Pituitary Adenoma,13,0.0001629297271553723,1,8,4,True,False
+Structure of external jugular vein,13,0.0001629297271553723,2,11,0,True,False
+External exotoses,13,0.0001629297271553723,2,10,1,True,False
+Pituitary mass,13,0.0001629297271553723,3,10,0,True,False
+Parathyroid gland,13,0.0001629297271553723,3,7,3,True,False
+Lymphocele,13,0.0001629297271553723,3,9,1,True,False
+Structure of submaxillary duct,13,0.0001629297271553723,3,8,2,True,False
+Level of the second cervical vertebra,13,0.0001629297271553723,2,9,2,True,False
+"Aneurysm, Ruptured",13,0.0001629297271553723,1,9,3,True,False
+Entire right auricular appendage,13,0.0001629297271553723,2,10,1,True,False
+Septum Pellucidum,13,0.0001629297271553723,3,9,1,True,False
+Right superior lobar bronchus,13,0.0001629297271553723,1,11,1,True,False
+C5 level,13,0.0001629297271553723,1,10,2,True,False
+Mucous Appearance,13,0.0001629297271553723,1,11,1,True,False
+Structure of vein of trunk,13,0.0001629297271553723,1,12,0,True,False
+Lip structure,13,0.0001629297271553723,4,7,2,False,False
+Distal aortic dissection,13,0.0001629297271553723,2,11,0,True,False
+Bone Cysts,13,0.0001629297271553723,3,9,1,True,False
+Colon Carcinoma,13,0.0001629297271553723,0,11,2,True,False
+Genital tuberculosis,13,0.0001629297271553723,0,13,0,True,False
+Final diagnosis (discharge),13,0.0001629297271553723,3,6,4,True,False
+Structure of right submaxillary gland,13,0.0001629297271553723,4,7,2,False,False
+Transition zone of anal mucous membrane,13,0.0001629297271553723,2,10,1,True,False
+Structure of base of heart,13,0.0001629297271553723,4,8,1,False,False
+Ganglia,13,0.0001629297271553723,0,11,2,True,False
+"Pregnancy, Tubal",13,0.0001629297271553723,1,11,1,True,False
+Left ethmoid sinus structure,13,0.0001629297271553723,2,9,2,True,False
+"Cardiomyopathy, Dilated",13,0.0001629297271553723,2,10,1,True,False
+Aspergillosis,13,0.0001629297271553723,0,13,0,True,False
+Choledochal Cyst,13,0.0001629297271553723,0,12,1,True,False
+Aneurysm of vein,13,0.0001629297271553723,1,11,1,True,False
+Stricture of ureter,13,0.0001629297271553723,0,11,2,True,False
+Inguinal canal structure,13,0.0001629297271553723,0,12,1,True,False
+Acoustic radiations structure,13,0.0001629297271553723,0,13,0,True,False
+Dentate nucleus,13,0.0001629297271553723,1,11,1,True,False
+Osteoid osteoma,13,0.0001629297271553723,1,10,2,True,False
+Ischemic stroke,13,0.0001629297271553723,3,5,5,True,False
+Entire colon,13,0.0001629297271553723,1,9,3,True,False
+Diverticular Diseases,13,0.0001629297271553723,0,13,0,True,False
+Circle of Willis,13,0.0001629297271553723,4,8,1,False,False
+Ectopic kidney,13,0.0001629297271553723,0,11,2,True,False
+Cardiomyopathies,13,0.0001629297271553723,1,11,1,True,False
+Spontaneous pneumothorax,13,0.0001629297271553723,1,12,0,True,False
+Structure of left forearm,13,0.0001629297271553723,1,9,3,True,False
+Adrenal Gland Pheochromocytoma,13,0.0001629297271553723,1,11,1,True,False
+Left sphenoid sinus structure,13,0.0001629297271553723,2,8,3,True,False
+Pelvic wall,13,0.0001629297271553723,2,9,2,True,False
+Left fallopian tube,13,0.0001629297271553723,1,10,2,True,False
+Uterus bilocularis,13,0.0001629297271553723,0,13,0,True,False
+Angiolymphoid hyperplasia,13,0.0001629297271553723,0,13,0,True,False
+Multiple calculi,13,0.0001629297271553723,1,11,1,True,False
+Calcium pyrophosphate deposition disease,13,0.0001629297271553723,4,8,1,False,False
+Subchondral Cysts,13,0.0001629297271553723,1,12,0,True,False
+Stool seat,13,0.0001629297271553723,4,8,1,False,False
+Middle mediastinum,13,0.0001629297271553723,1,10,2,True,False
+Structure of multifidus muscle,13,0.0001629297271553723,2,9,2,True,False
+Structure of carotid sheath,13,0.0001629297271553723,0,13,0,True,False
+Dental Enamel,13,0.0001629297271553723,2,10,1,True,False
+Structure of superior cerebellar artery,13,0.0001629297271553723,0,13,0,True,False
+Endotracheal Route of Drug Administration,13,0.0001629297271553723,1,11,1,True,False
+Decalcification,13,0.0001629297271553723,4,7,2,False,False
+Structure of perirenal fascia,13,0.0001629297271553723,1,11,1,True,False
+Structure of superior cerebellar peduncle,12,0.00015039667122034364,3,6,3,False,False
+Tenosynovitis,12,0.00015039667122034364,5,7,0,False,False
+Chronic Airflow Obstruction,12,0.00015039667122034364,1,10,1,True,False
+Structure of colonic haustra,12,0.00015039667122034364,0,12,0,True,False
+Right inguinal hernia,12,0.00015039667122034364,1,9,2,True,False
+Mitral Valve Stenosis,12,0.00015039667122034364,3,8,1,False,False
+Gonadal vein,12,0.00015039667122034364,1,9,2,True,False
+Acute pulmonary embolism,12,0.00015039667122034364,3,5,4,False,False
+Structure of left external iliac artery,12,0.00015039667122034364,2,8,2,True,False
+Entire leaflet of mitral valve,12,0.00015039667122034364,0,9,3,True,False
+Ophthalmic Route of Drug Administration,12,0.00015039667122034364,4,6,2,False,False
+Bulbar urethra,12,0.00015039667122034364,2,9,1,True,False
+Elbow joint structure,12,0.00015039667122034364,1,11,0,True,False
+INFECTIOUS PROCESS,12,0.00015039667122034364,2,7,3,True,False
+Infraclavicular region structure,12,0.00015039667122034364,1,10,1,True,False
+Kommerell's diverticulum,12,0.00015039667122034364,1,10,1,True,False
+Meningocele,12,0.00015039667122034364,2,8,2,True,False
+Systolic dysfunction,12,0.00015039667122034364,1,9,2,True,False
+Pericardial fluid (substance),12,0.00015039667122034364,1,8,3,True,False
+Structure of distal interphalangeal joint,12,0.00015039667122034364,4,6,2,False,False
+L3 level,12,0.00015039667122034364,2,8,2,True,False
+Left middle ear structure,12,0.00015039667122034364,1,10,1,True,False
+Aneurysm of hepatic artery,12,0.00015039667122034364,0,12,0,True,False
+Cervical rib,12,0.00015039667122034364,1,9,2,True,False
+Pituitary Neoplasms,12,0.00015039667122034364,2,7,3,True,False
+Tracheoesophageal Fistula,12,0.00015039667122034364,0,10,2,True,False
+Structure of left submaxillary gland,12,0.00015039667122034364,1,11,0,True,False
+Cardiac Arrest,12,0.00015039667122034364,0,8,4,True,False
+Extrinsic allergic alveolitis,12,0.00015039667122034364,1,10,1,True,False
+Paravertebral region,12,0.00015039667122034364,1,9,2,True,False
+Mitral valve annular calcification,12,0.00015039667122034364,5,3,4,False,False
+Structure of vastus medialis muscle,12,0.00015039667122034364,3,6,3,False,False
+Both hands,12,0.00015039667122034364,0,9,3,True,False
+Bronchiolitis,12,0.00015039667122034364,1,8,3,True,False
+Atheroma,12,0.00015039667122034364,1,11,0,True,False
+Calcification of pericardium,12,0.00015039667122034364,1,9,2,True,False
+Deglutition Disorders,12,0.00015039667122034364,0,8,4,True,False
+Entire rotator muscle,12,0.00015039667122034364,2,7,3,True,False
+Wall of artery,12,0.00015039667122034364,2,10,0,True,False
+Patient affected,12,0.00015039667122034364,2,8,2,True,False
+Achalasia,12,0.00015039667122034364,2,7,3,True,False
+Bursitis,12,0.00015039667122034364,0,12,0,True,False
+Osteitis Fibrosa Cystica,12,0.00015039667122034364,1,11,0,True,False
+Nonspecific interstitial pneumonia,12,0.00015039667122034364,0,11,1,True,False
+Structure of internal thoracic artery,12,0.00015039667122034364,1,9,2,True,False
+Structure of quadriceps tendon,12,0.00015039667122034364,1,10,1,True,False
+Right inguinal region,12,0.00015039667122034364,2,8,2,True,False
+Entire left thorax,12,0.00015039667122034364,0,12,0,True,False
+Large bowel obstruction,12,0.00015039667122034364,0,11,1,True,False
+Diffuse alveolar hemorrhage,12,0.00015039667122034364,1,9,2,True,False
+Maxillary teeth,12,0.00015039667122034364,0,11,1,True,False
+Entire viscus,12,0.00015039667122034364,0,11,1,True,False
+Skin AND subcutaneous tissue structure,12,0.00015039667122034364,0,9,3,True,False
+Mitral Valve Prolapse Syndrome,12,0.00015039667122034364,3,8,1,False,False
+Left hypochondriac region structure,12,0.00015039667122034364,3,8,1,False,False
+Structure of basilic vein,12,0.00015039667122034364,3,8,1,False,False
+Bronchopleural Fistula,12,0.00015039667122034364,3,7,2,False,False
+Central Nervous System,12,0.00015039667122034364,2,10,0,True,False
+Epiploic appendagitis,12,0.00015039667122034364,3,8,1,False,False
+Paraganglioma,12,0.00015039667122034364,2,8,2,True,False
+Structure of presacral region,12,0.00015039667122034364,1,10,1,True,False
+Entire body of fourth lumbar vertebra,12,0.00015039667122034364,3,6,3,False,False
+Septal hypertrophy,12,0.00015039667122034364,1,8,3,True,False
+Structure of choroid plexus,12,0.00015039667122034364,3,8,1,False,False
+Posterior displacement,12,0.00015039667122034364,0,11,1,True,False
+Amygdaloid structure,12,0.00015039667122034364,1,10,1,True,False
+Structure of anterior commissure,12,0.00015039667122034364,0,11,1,True,False
+Structure of pectineus muscle,11,0.00013786361528531503,5,2,4,False,False
+Leukoencephalopathy,11,0.00013786361528531503,2,7,2,False,False
+Structure of left seminal vesicle,11,0.00013786361528531503,0,11,0,True,False
+Structure of ileocolic artery,11,0.00013786361528531503,0,8,3,True,False
+Midclavicular line,11,0.00013786361528531503,3,6,2,False,False
+Entire body of fifth lumbar vertebra,11,0.00013786361528531503,2,6,3,False,False
+Atrioventricular valve,11,0.00013786361528531503,0,10,1,True,False
+Cerebellar hemorrhage,11,0.00013786361528531503,0,10,1,True,False
+Third lumbar vertebra,11,0.00013786361528531503,4,6,1,False,False
+Dentin,11,0.00013786361528531503,1,9,1,True,False
+Structure of occipital artery,11,0.00013786361528531503,0,10,1,True,False
+Acute pulmonary edema,11,0.00013786361528531503,3,8,0,False,False
+Structure of cephalic vein,11,0.00013786361528531503,3,6,2,False,False
+Structure of internal pudendal artery,11,0.00013786361528531503,0,11,0,True,False
+Structure of triangular bone,11,0.00013786361528531503,0,10,1,True,False
+Periorbital region,11,0.00013786361528531503,0,9,2,True,False
+Micrognathism,11,0.00013786361528531503,0,9,2,True,False
+Olfactory,11,0.00013786361528531503,0,9,2,True,False
+Alveolar Bone Loss,11,0.00013786361528531503,2,7,2,False,False
+Breast Carcinoma,11,0.00013786361528531503,2,9,0,False,False
+Enterocutaneous Fistula,11,0.00013786361528531503,2,5,4,False,False
+Soleus muscle structure,11,0.00013786361528531503,2,7,2,False,False
+Congenital hernia of foramen of Morgagni,11,0.00013786361528531503,1,10,0,True,False
+Ascitic Fluid,11,0.00013786361528531503,1,7,3,True,False
+Pleural plaque,11,0.00013786361528531503,0,10,1,True,False
+Neck and chest,11,0.00013786361528531503,1,10,0,True,False
+Cystic dilatation,11,0.00013786361528531503,1,9,1,True,False
+Cystic nodule,11,0.00013786361528531503,3,5,3,False,False
+Inguinal lymphadenopathy,11,0.00013786361528531503,2,3,6,False,False
+Jugular notch of sternum,11,0.00013786361528531503,3,6,2,False,False
+Malignant neoplasm of thyroid,11,0.00013786361528531503,2,7,2,False,False
+Structure of both eyes,11,0.00013786361528531503,2,7,2,False,False
+Emphysematous gastritis,11,0.00013786361528531503,1,9,1,True,False
+Parastomal hernia,11,0.00013786361528531503,2,7,2,False,False
+Pyelectasia,11,0.00013786361528531503,0,10,1,True,False
+"Tomography, Emission-Computed, Single-Photon",11,0.00013786361528531503,1,7,3,True,False
+Left ventricular systolic dysfunction,11,0.00013786361528531503,4,6,1,False,False
+Bone structure of trapezium,11,0.00013786361528531503,1,8,2,True,False
+Fibrous tissue,11,0.00013786361528531503,0,10,1,True,False
+Congenital Heart Defects,11,0.00013786361528531503,2,9,0,False,False
+Right ethmoid sinus structure,11,0.00013786361528531503,2,5,4,False,False
+Lesser Pelvis,11,0.00013786361528531503,3,8,0,False,False
+Pulmonary Thromboembolisms,11,0.00013786361528531503,1,7,3,True,False
+Fifth metatarsal structure,11,0.00013786361528531503,3,8,0,False,False
+"Hyperostosis, Diffuse Idiopathic Skeletal",11,0.00013786361528531503,4,3,4,False,False
+Pseudomeningocele,11,0.00013786361528531503,0,10,1,True,False
+Left atrial dilatation,11,0.00013786361528531503,5,5,1,False,False
+Lacrimal sac,11,0.00013786361528531503,2,6,3,False,False
+Structure of temporal fossa,11,0.00013786361528531503,2,9,0,False,False
+Pancreatic carcinoma,11,0.00013786361528531503,0,9,2,True,False
+Hemangioblastoma,11,0.00013786361528531503,2,8,1,False,False
+Adenocarcinoma of pancreas,11,0.00013786361528531503,0,9,2,True,False
+Bone structure of proximal radius,11,0.00013786361528531503,2,9,0,False,False
+Structure of left external carotid artery,11,0.00013786361528531503,0,9,2,True,False
+Periosteum,11,0.00013786361528531503,0,11,0,True,False
+Structure of medulla of kidney,11,0.00013786361528531503,3,8,0,False,False
+Pyramidal Tracts,11,0.00013786361528531503,1,10,0,True,False
+Cerebellar peduncle,11,0.00013786361528531503,2,8,1,False,False
+Subphrenic space,11,0.00013786361528531503,1,9,1,True,False
+Quadricuspid Aortic Valve,11,0.00013786361528531503,1,10,0,True,False
+Cephalometric orbitale point,11,0.00013786361528531503,3,6,2,False,False
+Porion,11,0.00013786361528531503,3,5,3,False,False
+Diffuse calcium deposition,11,0.00013786361528531503,0,9,2,True,False
+Structure of left gastric vein,11,0.00013786361528531503,0,8,3,True,False
+Spondylosis,11,0.00013786361528531503,0,8,3,True,False
+Aortopulmonary Septal Defect,11,0.00013786361528531503,0,11,0,True,False
+"Arnold-Chiari Malformation, Type I",11,0.00013786361528531503,3,8,0,False,False
+Structure of left sinus of Valsalva,11,0.00013786361528531503,0,8,3,True,False
+Structure of olecranon,11,0.00013786361528531503,3,7,1,False,False
+Body of seventh cervical vertebra,11,0.00013786361528531503,3,7,1,False,False
+Tooth Socket,11,0.00013786361528531503,2,7,2,False,False
+Duodenal Obstruction,11,0.00013786361528531503,0,10,1,True,False
+"Carcinoma, Lobular",11,0.00013786361528531503,1,7,3,True,False
+Gangrene,11,0.00013786361528531503,1,8,2,True,False
+Esophageal Stricture,11,0.00013786361528531503,0,11,0,True,False
+C4 level,11,0.00013786361528531503,2,6,3,False,False
+Hernia of cerebellar tonsil into foramen magnum,11,0.00013786361528531503,1,8,2,True,False
+Subcapsular hematoma of spleen,11,0.00013786361528531503,1,10,0,True,False
+Popliteal fossa structure,11,0.00013786361528531503,1,9,1,True,False
+Spina Bifida,11,0.00013786361528531503,1,9,1,True,False
+Internal rotation,11,0.00013786361528531503,1,9,1,True,False
+Structure of brachial vein,11,0.00013786361528531503,3,6,2,False,False
+Structure of left pleural cavity,11,0.00013786361528531503,1,9,1,True,False
+Congenital cystic kidney disease,11,0.00013786361528531503,2,9,0,False,False
+Buccal mucosa,11,0.00013786361528531503,2,7,2,False,False
+Unilocular cyst,11,0.00013786361528531503,1,10,0,True,False
+Nephrosis,11,0.00013786361528531503,3,8,0,False,False
+Herniation under falx cerebri,11,0.00013786361528531503,2,7,2,False,False
+Indwelling urethral catheter,11,0.00013786361528531503,1,10,0,True,False
+Lacrimal gland structure,11,0.00013786361528531503,3,8,0,False,False
+Superior displacement,11,0.00013786361528531503,1,9,1,True,False
+Nail plate,11,0.00013786361528531503,1,10,0,True,False
+Hemorrhagic cyst,11,0.00013786361528531503,0,10,1,True,False
+Peroneus longus muscle structure,11,0.00013786361528531503,0,10,1,True,False
+"Pneumonia, Necrotizing",11,0.00013786361528531503,0,9,2,True,False
+Structure of subcarinal lymph node,11,0.00013786361528531503,1,8,2,True,False
+Dialysis catheter,11,0.00013786361528531503,0,10,1,True,False
+Structure of lymph node of right axilla,11,0.00013786361528531503,3,3,5,False,False
+Structure of right common iliac vein,11,0.00013786361528531503,1,9,1,True,False
+Structure of apex of right lung,10,0.00012533055935028638,2,8,0,False,False
+Structure of palatine duct,10,0.00012533055935028638,3,5,2,False,False
+Structure of posterior condyle of occipital bone,10,0.00012533055935028638,1,8,1,False,False
+"Anemia, Sickle Cell",10,0.00012533055935028638,1,9,0,False,False
+Ostium secundum atrial septal defect,10,0.00012533055935028638,0,9,1,True,False
+Structure of right thoracic cavity,10,0.00012533055935028638,2,8,0,False,False
+Tympanic cavity,10,0.00012533055935028638,1,8,1,False,False
+Structure of radial nerve,10,0.00012533055935028638,2,8,0,False,False
+Demonstrable,10,0.00012533055935028638,0,9,1,True,False
+"Neoplasms, Intracranial",10,0.00012533055935028638,0,6,4,True,False
+"Myelitis, Transverse",10,0.00012533055935028638,1,6,3,False,False
+"Aortic Aneurysm, Thoracic",10,0.00012533055935028638,1,8,1,False,False
+Structure of facial artery,10,0.00012533055935028638,1,8,1,False,False
+Arterial Occlusive Diseases,10,0.00012533055935028638,3,5,2,False,False
+Bronchopulmonary Sequestration,10,0.00012533055935028638,0,9,1,True,False
+"Cystic Adenomatoid Malformation of Lung, Congenital",10,0.00012533055935028638,0,9,1,True,False
+Pelvic hematoma,10,0.00012533055935028638,1,8,1,False,False
+Structure of left posterior cerebral artery,10,0.00012533055935028638,4,6,0,False,False
+Urinary Bladder Calculi (disorder),10,0.00012533055935028638,0,10,0,True,False
+Arterial hemorrhage,10,0.00012533055935028638,0,9,1,True,False
+Placenta Previa,10,0.00012533055935028638,2,7,1,False,False
+L1 level,10,0.00012533055935028638,0,10,0,True,False
+Structure of extensor tendon,10,0.00012533055935028638,1,7,2,False,False
+Left Ventricular Function,10,0.00012533055935028638,2,5,3,False,False
+Structure of venous network,10,0.00012533055935028638,3,5,2,False,False
+Structure of common iliac vein,10,0.00012533055935028638,1,6,3,False,False
+Intussuscipiens,10,0.00012533055935028638,2,7,1,False,False
+Sepsis,10,0.00012533055935028638,2,7,1,False,False
+Iliac fascia structure,10,0.00012533055935028638,1,6,3,False,False
+Ameloblastoma,10,0.00012533055935028638,1,7,2,False,False
+Review of,10,0.00012533055935028638,1,7,2,False,False
+Myotendinous Junction,10,0.00012533055935028638,5,5,0,False,False
+Acute myocardial infarction,10,0.00012533055935028638,1,7,2,False,False
+Atherosclerosis,10,0.00012533055935028638,3,6,1,False,False
+Structure of superficial temporal artery,10,0.00012533055935028638,3,5,2,False,False
+Myelolipoma,10,0.00012533055935028638,2,7,1,False,False
+Entire descending aorta,10,0.00012533055935028638,1,7,2,False,False
+Renal pyramid structure,10,0.00012533055935028638,0,10,0,True,False
+Structure of paraumbilical vein,10,0.00012533055935028638,0,9,1,True,False
+Trapezoid bone structure,10,0.00012533055935028638,2,7,1,False,False
+Wedging of vertebra,10,0.00012533055935028638,1,8,1,False,False
+Ulcerative Colitis,10,0.00012533055935028638,0,8,2,True,False
+Lumbar hernia,10,0.00012533055935028638,0,10,0,True,False
+Both cardiac ventricles,10,0.00012533055935028638,0,10,0,True,False
+Hamartoma,10,0.00012533055935028638,0,10,0,True,False
+Autologous (qualifier value),10,0.00012533055935028638,0,8,2,True,False
+Complete atrioventricular block,10,0.00012533055935028638,5,5,0,False,False
+Thenar eminence,10,0.00012533055935028638,0,9,1,True,False
+Left iliac region,10,0.00012533055935028638,0,9,1,True,False
+Mucormycosis,10,0.00012533055935028638,1,5,4,False,False
+Structure of left buttock,10,0.00012533055935028638,0,9,1,True,False
+Upper pole of left kidney,10,0.00012533055935028638,1,8,1,False,False
+Ciliary Body,10,0.00012533055935028638,1,5,4,False,False
+Part of duodenum,10,0.00012533055935028638,1,8,1,False,False
+Corpus cavernosum structure,10,0.00012533055935028638,1,5,4,False,False
+Structure of posterior inferior cerebellar artery,10,0.00012533055935028638,0,10,0,True,False
+Preseptal cellulitis,10,0.00012533055935028638,0,10,0,True,False
+Structure of hypoglossal canal,10,0.00012533055935028638,0,9,1,True,False
+L4 level,10,0.00012533055935028638,1,8,1,False,False
+Myocardium of left ventricle,10,0.00012533055935028638,3,6,1,False,False
+ganglion of knee,10,0.00012533055935028638,1,9,0,False,False
+Jaw,10,0.00012533055935028638,0,9,1,True,False
+Right superior vena cava,10,0.00012533055935028638,3,6,1,False,False
+Single coronary artery,10,0.00012533055935028638,1,9,0,False,False
+Structure of longitudinal cerebral fissure,10,0.00012533055935028638,0,10,0,True,False
+Structure of iliopubic eminence,10,0.00012533055935028638,4,5,1,False,False
+Glioma,10,0.00012533055935028638,2,8,0,False,False
+Carotid-Cavernous Sinus Fistula,10,0.00012533055935028638,3,6,1,False,False
+Entire abdominal viscera,10,0.00012533055935028638,0,9,1,True,False
+Structure of inferior right pulmonary vein,10,0.00012533055935028638,0,10,0,True,False
+Carotid Body Paraganglioma,10,0.00012533055935028638,1,8,1,False,False
+Mucocutaneous Lymph Node Syndrome,10,0.00012533055935028638,0,9,1,True,False
+Endometrial Carcinoma,10,0.00012533055935028638,2,7,1,False,False
+Periodontitis,10,0.00012533055935028638,1,8,1,False,False
+Structure of pterygopalatine fossa,10,0.00012533055935028638,2,6,2,False,False
+Gastric Content,10,0.00012533055935028638,2,8,0,False,False
+Anaplastic large B-cell lymphoma,10,0.00012533055935028638,4,6,0,False,False
+Microdontia (disorder),10,0.00012533055935028638,0,9,1,True,False
+Sacral vertebra structure,10,0.00012533055935028638,2,6,2,False,False
+Structure of fabella,10,0.00012533055935028638,1,8,1,False,False
+Structure of maxillary artery,10,0.00012533055935028638,2,7,1,False,False
+Congenital duplication of uterus,10,0.00012533055935028638,1,7,2,False,False
+Focal Nodular Hyperplasia,10,0.00012533055935028638,1,9,0,False,False
+Structure of dorsum of nose,10,0.00012533055935028638,1,8,1,False,False
+Retroperitoneal Hemorrhage,10,0.00012533055935028638,1,7,2,False,False
+Epicardium,10,0.00012533055935028638,1,8,1,False,False
+Triceps brachii muscle structure,10,0.00012533055935028638,1,9,0,False,False
+Body of fifth cervical vertebra,10,0.00012533055935028638,2,7,1,False,False
+Endometriosis,10,0.00012533055935028638,2,7,1,False,False
+Syndesmosis structure,10,0.00012533055935028638,2,8,0,False,False
+T10 level,10,0.00012533055935028638,2,5,3,False,False
+Stomach Neoplasms,10,0.00012533055935028638,0,10,0,True,False
+Structure of posterior communicating artery,10,0.00012533055935028638,0,10,0,True,False
+Bone structure of fifth metacarpal,10,0.00012533055935028638,1,9,0,False,False
+Carpometacarpal joint structure,10,0.00012533055935028638,0,10,0,True,False
+Enthesophyte,10,0.00012533055935028638,2,7,1,False,False
+Entire tunica albuginea of testis,9,0.00011279750341525775,2,7,0,False,False
+Salivary Glands,9,0.00011279750341525775,2,7,0,False,False
+Lumbosacral Region,9,0.00011279750341525775,1,8,0,False,False
+Calcific tendinitis,9,0.00011279750341525775,0,9,0,False,False
+Nasolacrimal duct structure,9,0.00011279750341525775,3,5,1,False,False
+Structure of lateral pterygoid muscle,9,0.00011279750341525775,1,8,0,False,False
+Structure of ophthalmic artery,9,0.00011279750341525775,2,6,1,False,False
+Structure of neck of gallbladder,9,0.00011279750341525775,1,7,1,False,False
+Congenital bronchogenic cyst,9,0.00011279750341525775,0,9,0,False,False
+Contrast used,9,0.00011279750341525775,1,8,0,False,False
+Structure of chordae tendineae cordis,9,0.00011279750341525775,0,7,2,False,False
+Vagus nerve structure,9,0.00011279750341525775,1,5,3,False,False
+Bronchiolectasis,9,0.00011279750341525775,1,8,0,False,False
+Taurodontism,9,0.00011279750341525775,0,9,0,False,False
+Structure of anterior inferior cerebellar artery,9,0.00011279750341525775,0,8,1,False,False
+"Sarcoidosis, Pulmonary",9,0.00011279750341525775,1,7,1,False,False
+Upper lip structure,9,0.00011279750341525775,1,6,2,False,False
+Broad Ligament,9,0.00011279750341525775,0,9,0,False,False
+Aryepiglottic fold structure,9,0.00011279750341525775,1,7,1,False,False
+Infective endocarditis,9,0.00011279750341525775,2,2,5,False,False
+Bicornuate uterus,9,0.00011279750341525775,0,9,0,False,False
+Diagnosis,9,0.00011279750341525775,1,6,2,False,False
+Entire body of twelfth thoracic vertebra,9,0.00011279750341525775,0,9,0,False,False
+Pancreatic Intraductal Papillary Mucinous Neoplasm,9,0.00011279750341525775,1,6,2,False,False
+Maxillary left first premolar,9,0.00011279750341525775,2,6,1,False,False
+Pericardial fat,9,0.00011279750341525775,2,6,1,False,False
+Supraglottis (body part),9,0.00011279750341525775,0,9,0,False,False
+Tracheal bronchus,9,0.00011279750341525775,1,5,3,False,False
+Multiple infarcts,9,0.00011279750341525775,0,9,0,False,False
+Chronic osteomyelitis,9,0.00011279750341525775,0,7,2,False,False
+Klatskin Tumor,9,0.00011279750341525775,1,7,1,False,False
+Lipomatosis,9,0.00011279750341525775,1,7,1,False,False
+Hirschsprung Disease,9,0.00011279750341525775,1,8,0,False,False
+Adenocarcinoma of rectum,9,0.00011279750341525775,0,8,1,False,False
+Structure of saphenous nerve,9,0.00011279750341525775,2,6,1,False,False
+Malignant neoplasm of stomach,9,0.00011279750341525775,0,7,2,False,False
+Left ventricular assist device,9,0.00011279750341525775,1,8,0,False,False
+Urethral diverticulum,9,0.00011279750341525775,0,9,0,False,False
+"Back structure, including back of neck",9,0.00011279750341525775,0,8,1,False,False
+Concha of ear structure,9,0.00011279750341525775,2,6,1,False,False
+Internal capsule posterior limb structure,9,0.00011279750341525775,3,6,0,False,False
+Sialolithiasis,9,0.00011279750341525775,1,7,1,False,False
+Forefoot,9,0.00011279750341525775,2,5,2,False,False
+Fluid overload,9,0.00011279750341525775,2,4,3,False,False
+Gallbladder Carcinoma,8,0.0001002644474802291,4,3,1,False,False
+Pogonion,8,0.0001002644474802291,0,4,4,False,False
+Fibromuscular Dysplasia,8,0.0001002644474802291,1,5,2,False,False
+Structure of gastric vein,8,0.0001002644474802291,2,5,1,False,False
+Noninfiltrating Intraductal Carcinoma,8,0.0001002644474802291,1,5,2,False,False
+Entire posterior sinus of Valsalva,8,0.0001002644474802291,0,8,0,False,False
+Ventricular aneurysm,8,0.0001002644474802291,0,5,3,False,False
+Structure of perirenal fat,8,0.0001002644474802291,1,6,1,False,False
+Tumoral calcinosis,8,0.0001002644474802291,1,4,3,False,False
+Structure of lesser tuberosity of humerus,8,0.0001002644474802291,4,4,0,False,False
+Structure of intercondylar spine of tibia,8,0.0001002644474802291,0,6,2,False,False
+Dorsal pharyngeal wall structure,8,0.0001002644474802291,2,5,1,False,False
+Structure of superior right pulmonary vein,8,0.0001002644474802291,1,4,3,False,False
+Bone structure of distal ulna,8,0.0001002644474802291,0,7,1,False,False
+Tendon sheath,8,0.0001002644474802291,2,5,1,False,False
+Pulvinar structure,8,0.0001002644474802291,1,7,0,False,False
+Epidural catheter,8,0.0001002644474802291,1,7,0,False,False
+Enthesitis,8,0.0001002644474802291,0,5,3,False,False
+Venous stent,7,8.773139154520047e-05,2,4,1,False,False
+Spigelian hernia,7,8.773139154520047e-05,0,6,1,False,False
+External iliac lymph node group,7,8.773139154520047e-05,1,2,4,False,False
+Biliary Tract Hemorrhage,7,8.773139154520047e-05,0,7,0,False,False
+Structure of phrenic nerve,7,8.773139154520047e-05,0,7,0,False,False
+Primary sclerosing cholangitis,7,8.773139154520047e-05,3,3,1,False,False
+Arytenoid Cartilage,7,8.773139154520047e-05,1,6,0,False,False
+Entire tendon of subscapularis muscle,7,8.773139154520047e-05,0,7,0,False,False
+Volvulus of small intestine,7,8.773139154520047e-05,1,5,1,False,False
+Accessory kidney,7,8.773139154520047e-05,1,5,1,False,False
+"Cholangiopancreatography, Magnetic Resonance",7,8.773139154520047e-05,0,7,0,False,False
+"Leukoencephalopathy, Progressive Multifocal",7,8.773139154520047e-05,0,7,0,False,False
+Adenoidal structure,7,8.773139154520047e-05,0,6,1,False,False
+Fat necrosis,6,7.519833561017182e-05,1,2,3,False,False
+Computed tomography imaging - action,4,5.013222374011455e-05,0,4,0,False,False
+CT coronal,4,5.013222374011455e-05,1,2,1,False,False
+Chest CT,3,3.759916780508591e-05,0,2,1,False,False
+Sampling - Surgical action,3,3.759916780508591e-05,1,2,0,False,False
+Echocardiography,2,2.5066111870057275e-05,0,2,0,False,False
+Biopsy,2,2.5066111870057275e-05,0,1,1,False,False
+CT of abdomen,2,2.5066111870057275e-05,0,1,1,False,False
+Radiographic imaging procedure,1,1.2533055935028638e-05,0,1,0,False,False
+MRI venography,1,1.2533055935028638e-05,0,1,0,False,False
+Magnetic Resonance Angiography,1,1.2533055935028638e-05,0,1,0,False,False
+Computed tomography of cervical spine,1,1.2533055935028638e-05,0,1,0,False,False
+Differential Diagnosis,1,1.2533055935028638e-05,0,1,0,False,False
+CT follow-up,1,1.2533055935028638e-05,0,1,0,False,False

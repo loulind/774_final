@@ -1,0 +1,301 @@
+label,n_positive,lexicon,unsupported_rate,negated_rate,precise_words,possible_missing_rate
+X-Ray Computed Tomography,27681,"ct, scan, tomography, computed, abdomen",0.18258010910010478,0.00043351035005960767,"ct, scan, tomography, computed, abdomen",0.13393848864376268
+Plain x-ray,21549,"chest, x-ray, radiograph, lateral, anteroposterior",0.3645644809503921,0.00032484105990997263,"x-ray, radiograph, anteroposterior",0.024169428502142105
+Magnetic Resonance Imaging,12623,"mri, imaging, magnetic, resonance, sagittal",0.3110195674562307,0.0007922047056959518,"mri, magnetic, resonance",0.041240875912408756
+Ultrasonography,11348,"ventricle, atrium, ultrasound, valve, view",0.4633415579837857,0.0007049700387733521,"ultrasound, valve",0.07030505243088656
+Chest,10118,"chest, x-ray, lung, pleural, bilateral",0.18817948211108915,0.000790670092903736,,
+Anterior-Posterior,9478,"x-ray, radiograph, anteroposterior, hip, plain",0.3503903777168179,0.0005275374551593163,,
+angiogram,4758,"artery, coronary, angiography, angiogram, descending",0.3825136612021858,0.0004203446826397646,,
+Postero-Anterior,4236,"chest, x-ray, lung, radiograph, pa",0.11449480642115203,0.000708215297450425,,
+Bone structure of cranium,3904,"radiograph, mandibular, skull, maxillary, mandible",0.44236680327868855,0.0012807377049180327,,
+Abdomen,4247,"abdomen, abdominal, bowel, pelvis, colon",0.31292677183894513,0.0004709206498704968,,
+Pelvis,3647,"pelvis, pelvic, abdomen, hip, femoral",0.20948724979435152,0.0024677817384151355,,
+Lower Extremity,3197,"radiograph, hip, knee, femur, fracture",0.391304347826087,0.0015639662183296842,,
+Sagittal,2804,"lateral, radiograph, sagittal, cervical, plane",0.2835235378031384,0.0,,
+Neoplasms,1704,"tumor, tumour, tumors, neoplasm, invasion",0.013497652582159625,0.018192488262910797,,
+Vertebral column,1630,"spine, lateral, cervical, vertebral, lumbar",0.34294478527607364,0.0006134969325153375,,
+Fluid behavior,1779,"fluid, collection, recovery, inversion, levels",0.14109050028105677,0.03709949409780776,,
+Cystic,1468,"cystic, lesion, mass, solid, components",0.006811989100817439,0.006130790190735695,cystic,0.11716791979949874
+Upper Extremity,1460,"shoulder, fracture, radiograph, hand, humerus",0.3541095890410959,0.005479452054794521,,
+Liver,1241,"liver, spleen, parenchyma, hepatic, abdomen",0.015310233682514102,0.0040290088638195,,
+Heart,1287,"heart, cardiac, coronary, silhouette, ventricle",0.022533022533022532,0.008547008547008548,,
+C1266909,1077,"bone, window, bones, destruction, alveolar",0.016713091922005572,0.03064066852367688,,
+Pathological Dilatation,1084,"dilatation, dilation, duct, intrahepatic, bile",0.22324723247232472,0.017527675276752766,dilation,0.1875
+Left ventricular structure,1051,"lv, atrium, la, rv, ra",0.3206470028544244,0.0009514747859181732,,
+Pulmonary artery structure,981,"pulmonary, artery, arteries, main, trunk",0.027522935779816515,0.0020387359836901123,,
+soft tissue,990,"tissue, soft, tissues, density, soft-tissue",0.00202020202020202,0.00808080808080808,,
+Brain,1056,"resonance, magnetic, imaging, mri, matter",0.4318181818181818,0.0,,
+Pleural effusion disorder,1047,"effusion, chest, right-sided, effusions, left-sided",0.0,0.0066857688634192934,,
+Nodule,1032,"nodules, nodule, lobe, multiple, centrilobular",0.001937984496124031,0.01065891472868217,nodule,0.1829608938547486
+Aorta,924,"aorta, aortic, ao, la, atrium",0.023809523809523808,0.007575757575757576,,
+Calcinosis,924,"calcification, calcifications, punctate, foci, soft",0.015151515151515152,0.05519480519480519,"calcification, calcifications",0.10620399579390116
+Right ventricular structure,867,"rv, lv, atrium, la, ra",0.2918108419838524,0.0,rv,0.1917808219178082
+Urinary Bladder,808,"urinary, bladder, ureter, rectum, urethra",0.008663366336633664,0.006188118811881188,,
+Edema,891,"edema, oedema, surrounding, mri, marrow",0.11896745230078563,0.010101010101010102,,
+Occluded,822,"obstruction, occlusion, artery, occlusal, coronary",0.1362530413625304,0.030413625304136254,occlusal,0.08974358974358974
+Mediastinum,797,"mediastinal, mediastinum, chest, window, hilar",0.00878293601003764,0.006273525721455458,,
+Neck,808,"neck, emphysema, thyroid, subcutaneous, retropharyngeal",0.027227722772277228,0.0024752475247524753,,
+Cavitation,809,"cavity, nasal, cavities, ventricular, sinuses",0.12978986402966625,0.003708281829419036,,
+Irregular,743,"irregular, margins, mass, breast, hypoechoic",0.0026917900403768506,0.004037685060565276,irregular,0.006775067750677507
+"Stent, device",732,"stent, deployment, stents, graft, covered",0.1721311475409836,0.0,,
+Mandible,699,"mandibular, panoramic, molar, mandible, premolar",0.005722460658082976,0.001430615164520744,mandible,0.06842105263157895
+"Intestines, Small",746,"bowel, loops, intestine, dilated, small",0.006702412868632708,0.004021447721179625,,
+Thrombus,765,"thrombus, vein, artery, apical, atrium",0.0196078431372549,0.0196078431372549,thrombus,0.1640530759951749
+pathologic fistula,689,"fistula, sinus, tract, fistulous, sinuses",0.010159651669085631,0.018867924528301886,,
+Enlarged,751,"enlarged, lymph, nodes, node, silhouette",0.03462050599201065,0.006657789613848202,,
+Heart Ventricle,761,"ventricular, ventricle, lv, echocardiogram, apical",0.04467805519053877,0.003942181340341655,,
+catheter device,692,"catheter, tip, pigtail, ablation, via",0.06069364161849711,0.0,,
+Stomach structure,681,"distended, gastric, duodenum, stomach, abdomen",0.002936857562408223,0.007342143906020558,stomach,0.11563731931668857
+Positron-Emission Tomography,660,"uptake, emission, pet, positron, fdg",0.16666666666666666,0.004545454545454545,,
+Hepatic,681,"portal, hepatic, phase, venous, liver",0.09691629955947137,0.007342143906020558,,
+Femur,669,"femur, femoral, tibia, hip, anteroposterior",0.043348281016442454,0.0029895366218236174,,
+Kidney,615,"kidney, renal, kidneys, pole, ureter",0.024390243902439025,0.004878048780487805,,
+Stenosis,676,"stenosis, coronary, artery, angiography, severe",0.016272189349112426,0.03698224852071006,,
+Anterior descending branch of left coronary artery,618,"descending, coronary, anterior, artery, circumflex",0.15372168284789645,0.0,,
+Spleen,609,"spleen, splenic, liver, abdomen, hemoperitoneum",0.011494252873563218,0.006568144499178982,spleen,0.10114503816793893
+Gallbladder,601,"gallbladder, bladder, gall, wall, duct",0.0033277870216306157,0.008319467554076539,"gallbladder, gall",0.13676470588235295
+Left atrial structure,582,"la, lv, ventricle, ra, rv",0.33676975945017185,0.0,,
+Hematoma,558,"hematoma, haematoma, subcapsular, hematomas, perisplenic",0.012544802867383513,0.01971326164874552,,
+Right kidney,516,"kidney, renal, pole, hydronephrosis, perinephric",0.0,0.007751937984496124,,
+Cerebral cortex,571,"cortical, cortex, matter, gray, buccal",0.03502626970227671,0.021015761821366025,,
+Right atrial structure,571,"ra, la, rv, ventricle, lv",0.45359019264448336,0.0017513134851138354,,
+Structure of left lower lobe of lung,570,"lobe, lobes, consolidation, chest, opacities",0.0035087719298245615,0.0,,
+Compressed structure,557,"compression, cord, causing, extrinsic, spinal",0.010771992818671455,0.02333931777378815,compression,0.19940029985007496
+Nodular (qualifier value),555,"nodular, opacities, lesions, chest, lobe",0.009009009009009009,0.0036036036036036037,nodular,0.0347985347985348
+Infiltration,545,"infiltration, fat, infiltrations, diffuse, infiltrating",0.04220183486238532,0.04954128440366973,"infiltration, infiltrating",0.08811475409836066
+Aneurysm,538,"aneurysm, artery, angiogram, aneurysms, angiography",0.03345724907063197,0.0037174721189591076,,
+Implants,522,"implant, implants, placement, prosthesis, panoramic",0.32375478927203066,0.009578544061302681,,
+Vessel Positions,483,"vessels, vessel, artery, collateral, feeding",0.012422360248447204,0.002070393374741201,vessel,0.17153284671532848
+Pseudoaneurysm,504,"artery, pseudoaneurysm, angiography, angiogram, embolization",0.017857142857142856,0.015873015873015872,pseudoaneurysm,0.010752688172043012
+Heart Atrium,519,"atrial, atrium, ra, ventricular, la",0.05394990366088632,0.0038535645472061657,,
+Atrophic,520,"reduction, atrophy, volume, loss, size",0.10384615384615385,0.01730769230769231,,
+Uterus,486,"uterus, uterine, pregnancy, endometrial, transvaginal",0.02263374485596708,0.01440329218106996,uterus,0.17316017316017315
+Hemorrhage,491,"hemorrhage, bleeding, active, haemorrhage, intraparenchymal",0.06720977596741344,0.054989816700611,bleeding,0.20603015075376885
+Body tissue,479,"tissue, tissues, surrounding, fat, breast",0.014613778705636743,0.022964509394572025,,
+Duodenum,508,"duodenum, duodenal, stomach, part, gastrointestinal",0.015748031496062992,0.0,duodenum,0.13948497854077252
+Pericardial effusion,528,"transthoracic, effusion, echocardiography, echocardiogram, pe",0.015151515151515152,0.00946969696969697,,
+frontal lobe,479,"frontal, lobes, parietal, matter, brain",0.010438413361169102,0.0020876826722338203,,
+Maxilla,445,"maxillary, panoramic, canine, molar, incisor",0.1662921348314607,0.0022471910112359553,,
+Joint Capsule,460,"joint, articular, surface, joints, erosions",0.06956521739130435,0.008695652173913044,articular,0.18791946308724833
+Needle device,482,"needle, tip, approach, block, biopsy",0.056016597510373446,0.0,,
+Right lung,446,"chest, shift, field, lung, atelectasis",0.002242152466367713,0.0,,
+Respiratory Diaphragm,445,"diaphragm, diaphragmatic, under, air, above",0.060674157303370786,0.024719101123595506,diaphragm,0.08831908831908832
+Shadow,470,"shadow, shadows, high-density, chest, x-ray",0.002127659574468085,0.006382978723404255,"shadow, shadows",0.07056451612903226
+Structure of parenchyma of lung,457,"parenchyma, lung, parenchymal, window, chest",0.0262582056892779,0.02188183807439825,parenchymal,0.03496503496503497
+Inferior vena cava structure,439,"ivc, inferior, vein, filter, atrium",0.02050113895216401,0.0,,
+Screw,442,"fixation, plate, screw, postoperative, pedicle",0.16289592760180996,0.004524886877828055,screw,0.025454545454545455
+Spinal Cord,438,"spinal, cord, spine, compression, sagittal",0.02968036529680365,0.0045662100456621,,
+Necrosis,434,"necrosis, central, necrotic, areas, enhancement",0.013824884792626729,0.03225806451612903,necrotic,0.02857142857142857
+Right coronary artery structure,431,"rca, angiography, angiogram, descending, oblique",0.29698375870069604,0.0,,
+lymph nodes,419,"nodes, node, uptake, metastatic, pet",0.002386634844868735,0.02386634844868735,,
+Bilateral lungs,452,"lungs, both, opacities, lung, bilateral",0.0,0.0,,
+Left kidney,380,"pole, renal, hydronephrosis, kidneys, kidney",0.002631578947368421,0.005263157894736842,,
+Calculi,411,"stone, stones, calculus, duct, bile",0.05596107055961071,0.06082725060827251,,
+Pneumothorax,458,"emphysema, chest, right-sided, subcutaneous, pneumomediastinum",0.20087336244541484,0.002183406113537118,,
+Muscle Tissue,435,"muscle, muscles, fascia, abdominis, lumborum",0.004597701149425287,0.0022988505747126436,,
+Secondary Neoplasm,381,"metastasis, metastases, cancer, carcinoma, secondary",0.005249343832020997,0.028871391076115485,,
+Colon structure (body structure),393,"colon, colonic, flexure, abdomen, thickening",0.005089058524173028,0.002544529262086514,,
+Lymphadenopathy,408,"lymphadenopathy, lymph, nodes, node, enlarged",0.24019607843137256,0.08333333333333333,,
+Esophagus,396,"esophagus, trachea, barium, swallow, esophageal",0.10606060606060606,0.0,esophagus,0.1596009975062344
+Metastatic to,401,"disease, metastatic, lymph, node, lesions",0.004987531172069825,0.022443890274314215,metastatic,0.06585365853658537
+Calcified nodule,383,"calcified, partially, plaque, plaques, hydatid",0.005221932114882507,0.015665796344647518,calcified,0.07862407862407862
+Left lung,386,"chest, atelectasis, collapsed, pleural, shift",0.3393782383419689,0.0,,
+Structure of right lower lobe of lung,403,"lobe, consolidation, chest, lower, opacity",0.0024813895781637717,0.0,,
+effusion,392,"effusion, fluid, amount, pouch, morison",0.05357142857142857,0.4030612244897959,,
+Tooth structure,371,"tooth, teeth, panoramic, periapical, root",0.03234501347708895,0.0026954177897574125,,
+Complete obstruction,367,"occlusion, complete, artery, total, angiography",0.10626702997275204,0.0027247956403269754,,
+Trachea,353,"trachea, esophagus, tracheal, neck, mediastinum",0.014164305949008499,0.0028328611898017,trachea,0.02824858757062147
+Acute abscess,350,"abscess, formation, abscesses, collection, cellulitis",0.0,0.03142857142857143,,
+Lung field,358,"fields, field, both, chest, lower",0.0,0.0,,
+Structure of right upper lobe of lung,371,"chest, lobe, upper, consolidation, cavitary",0.013477088948787063,0.0,,
+Common bile duct structure,349,"common, cholangiopancreatography, bile, biliary, intrahepatic",0.0028653295128939827,0.0028653295128939827,,
+Mesentery,364,"mesenteric, bowel, fat, vessels, small",0.18681318681318682,0.0027472527472527475,,
+Bone plates,350,"plate, fixation, screws, screw, end",0.12285714285714286,0.0,,
+Caudal,352,"caudal, cranial, oblique, circumflex, coronary",0.05397727272727273,0.002840909090909091,caudal,0.09418282548476455
+Veins,332,"veins, vein, draining, collateral, venous",0.0,0.006024096385542169,,
+Ascites,312,"ascites, peritoneal, abdomen, amount, abdominal",0.003205128205128205,0.019230769230769232,ascites,0.035830618892508145
+Tooth root structure,333,"root, roots, resorption, molar, mandibular",0.006006006006006006,0.006006006006006006,,
+Mitral Valve,314,"valve, leaflet, lv, ventricle, la",0.15605095541401273,0.0,,
+Head of femur,335,"head, hip, femoral, acetabular, heads",0.005970149253731343,0.0,,
+Right lobe of liver,295,"liver, hepatic, lobe, subcapsular, lesion",0.0,0.0,,
+Cervical spine,331,"spine, vertebrae, c2, c5, cord",0.027190332326283987,0.0,,
+Thyroid Gland,331,"gland, lobe, nodule, neck, parathyroid",0.16012084592145015,0.006042296072507553,,
+Bone structure of ilium,293,"iliac, bone, wing, pelvis, sacrum",0.10921501706484642,0.0034129692832764505,,
+Intestines,319,"bowel, intestinal, intestine, loops, loop",0.08463949843260188,0.02821316614420063,,
+Inflammatory disorder,315,"changes, surrounding, inflammatory, stranding, thickening",0.0031746031746031746,0.012698412698412698,inflammatory,0.10029498525073746
+Cor bovinum (disorder),312,"congestion, pulmonary, chest, x-ray, effusions",0.09935897435897435,0.003205128205128205,,
+Retroperitoneal Space,285,"retroperitoneal, space, abdomen, kidney, adenopathy",0.12280701754385964,0.017543859649122806,,
+Portal vein structure,292,"pv, main, thrombosis, hepatic, portal",0.00684931506849315,0.003424657534246575,,
+Entire left atrium,308,"ra, lv, rv, ventricle, ao",0.07467532467532467,0.0,,
+Head of pancreas,304,"pancreatic, pancreas, head, duct, duodenum",0.0,0.0,,
+Mediastinal Emphysema,304,"emphysema, subcutaneous, pneumothorax, chest, pneumopericardium",0.1875,0.003289473684210526,,
+Bronchi,281,"bronchus, airway, bronchial, intermedius, main",0.18505338078291814,0.0035587188612099642,,
+Sigmoid colon,277,"colon, sigmoid, enema, rectum, diverticulitis",0.007220216606498195,0.0,,
+Infarction,307,"infarction, infarct, infarcts, acute, cerebral",0.05537459283387622,0.009771986970684038,,
+Axis vertebra,340,"axis, angle, line, perpendicular, vertical",0.06764705882352941,0.0,,
+Pancreas,290,"pancreatic, pancreas, pancreatitis, peripancreatic, tail",0.041379310344827586,0.0034482758620689655,,
+Abscess,274,"abscess, abscesses, formation, subperiosteal, rim-enhancing",0.0072992700729927005,0.025547445255474453,,
+Pulmonary Embolism,332,"embolism, emboli, embolus, pulmonary, angiogram",0.045180722891566265,0.018072289156626505,,
+Subcutaneous Emphysema,254,"pneumomediastinum, pneumothorax, chest, extensive, neck",0.14566929133858267,0.003937007874015748,,
+Collateral branch of vessel,255,"collateral, vessels, collaterals, vein, veins",0.0,0.011764705882352941,collaterals,0.023255813953488372
+Thrombosis,281,"vein, thrombosis, portal, sinus, superior",0.017793594306049824,0.014234875444839857,,
+Aortic valve structure,281,"transesophageal, av, axis, vegetation, la",0.35587188612099646,0.0035587188612099642,,
+Body of vertebra,273,"bodies, body, spine, endplate, spinal",0.003663003663003663,0.0,,
+Rectum,257,"rectum, bladder, rectal, enema, prostate",0.01556420233463035,0.0,rectum,0.052434456928838954
+Structure of left upper lobe of lung,258,"chest, upper, lobe, lung, consolidation",0.007751937984496124,0.0,,
+C0747635,285,"effusions, effusion, chest, pulmonary, pericardial",0.0,0.0,,
+Atelectasis,290,"atelectasis, lung, pleural, chest, effusion",0.0,0.006896551724137931,atelectasis,0.07011070110701106
+Bone structure of humerus,245,"humerus, humeral, proximal, shoulder, lytic",0.0163265306122449,0.0,humerus,0.19678714859437751
+Ocular orbit,249,"orbit, orbital, orbits, optic, globe",0.008032128514056224,0.0,"orbit, orbits",0.08955223880597014
+C0333307,241,"erosion, joint, bone, interphalangeal, space",0.08298755186721991,0.029045643153526972,erosion,0.0913978494623656
+Carotid Arteries,243,"artery, internal, arteries, jugular, ca",0.1728395061728395,0.0,,
+Aortic arch structure,241,"aortic, arch, aorta, subclavian, coarctation",0.0,0.0,,
+Sacral Region,253,"sacral, sacrum, lumbar, incidence, tilt",0.023715415019762844,0.003952569169960474,sacrum,0.017543859649122806
+Cerebral white matter structure,244,"subcortical, brain, flair, matter, periventricular",0.00819672131147541,0.0,,
+Inflammation,253,"inflammation, swollen, appendix, surrounding, pancreas",0.0,0.02766798418972332,,
+Entire right atrium,251,"rv, la, lv, ventricle, tricuspid",0.08366533864541832,0.0,,
+Pneumonia,275,"pneumonia, pneumonitis, multifocal, chest, opacities",0.01090909090909091,0.007272727272727273,,
+Dissecting hemorrhage,233,"flap, dissection, artery, descending, coronary",0.017167381974248927,0.02145922746781116,,
+Localized Edema,259,"effect, midline, shift, brain, frontal",0.023166023166023165,0.04633204633204633,,
+Lumbar Region,233,"lumbar, l4, spine, vertebral, l3",0.017167381974248927,0.0,,
+Left coronary artery structure,218,"main, circumflex, descending, coronary, lad",0.0045871559633027525,0.0,,
+Cecum,217,"ileum, colon, terminal, ascending, cecum",0.37327188940092165,0.0,cecum,0.027522935779816515
+Hydronephrosis,203,"kidney, ureter, renal, ureteral, hydroureter",0.31527093596059114,0.0049261083743842365,,
+Tail of pancreas,219,"pancreas, pancreatic, tail, body, cystic",0.0091324200913242,0.0,,
+Tumor tissue sample,215,"tumor, tumors, diameter, cm, infratemporal",0.023255813953488372,0.009302325581395349,,
+Right hip region structure,205,"femoral, anteroposterior, fracture, radiograph, joint",0.33658536585365856,0.0,,
+Right pulmonary artery,188,"main, mpa, lpa, rpa, trunk",0.5,0.0,rpa,0.17777777777777778
+Ventricular septum,210,"interventricular, ventricular, lv, ventricle, parasternal",0.014285714285714285,0.0,,
+Ascending aorta structure,214,"aortic, ao, descending, dissection, aa",0.40654205607476634,0.004672897196261682,,
+Occipital lobe,198,"occipital, lobes, parietal, brain, subcortical",0.13131313131313133,0.0,,
+Structure of circumflex branch of left coronary artery,209,"coronary, descending, anterior, lcx, lad",0.12440191387559808,0.004784688995215311,,
+Structure of left hip,196,"femoral, anteroposterior, hemiarthroplasty, acetabular, radiograph",0.37755102040816324,0.0,,
+Superior vena cava structure,224,"svc, atrium, azygos, vein, ra",0.35267857142857145,0.0,,
+Jejunum,203,"jejunal, proximal, duodenum, bowel, intussusception",0.3497536945812808,0.0,,
+Bone structure of clavicle,190,"clavicle, clavicular, clavicles, ribs, medial",0.042105263157894736,0.010526315789473684,"clavicle, clavicles",0.18974358974358974
+Hilar lymph node,202,"nodes, lymph, hilar, mediastinal, subcarinal",0.04455445544554455,0.01485148514851485,,
+permanent premolar tooth,172,"mandibular, second, premolar, panoramic, first",0.046511627906976744,0.0,premolar,0.06382978723404255
+PET/CT scan,208,"positron, emission, pet, tomography-computed, pet-ct",0.02403846153846154,0.0,,
+Chest wall structure,180,"chest, wall, thoracic, rib, emphysema",0.005555555555555556,0.005555555555555556,,
+Lumbar spine structure,206,"lumbar, spine, l4, sagittal, l3",0.009708737864077669,0.0,,
+Skin,196,"skin, distance, breast, surface, parallel",0.030612244897959183,0.01020408163265306,,
+COVID19 (disease),261,"ground-glass, coronavirus, rt-pcr, covid-19, opacities",0.034482758620689655,0.0038314176245210726,,
+C0006826,182,"cancer, malignancy, suspicious, highly, pet",0.027472527472527472,0.016483516483516484,malignancy,0.06666666666666667
+Uterine cavity,168,"uterine, endometrial, uterus, cavity, fallopian",0.0,0.0,,
+ileum,179,"ileum, ileal, distal, bowel, intestinal",0.0335195530726257,0.0,,
+Structure of cortex of kidney,176,"cortical, cortex, renal, kidney, thinning",0.005681818181818182,0.028409090909090908,,
+Probes,235,"mhz, using, ultrasound, linear, sector",0.3872340425531915,0.00425531914893617,,
+Superior mesenteric artery structure,201,"sma, mesenteric, aorta, lrv, celiac",0.009950248756218905,0.0,,
+Descending aorta,163,"ascending, aortic, aorta, mpa, arch",0.0,0.0,,
+Spinal Canal,169,"spinal, cord, vertebral, spine, canal",0.005917159763313609,0.0,,
+Communicable Diseases,208,"infection, covid-19, sars-cov-2, infections, virus",0.02403846153846154,0.014423076923076924,,
+Appendix,199,"inflamed, appendicitis, stranding, appendix, periappendiceal",0.010050251256281407,0.010050251256281407,appendix,0.0625
+Abdominal wall structure,177,"ultrasonogram, mhz, ds, vt, ventral",0.8361581920903954,0.0,,
+Breast,209,"breast, invasive, mediolateral, mammogram, craniocaudal",0.15311004784688995,0.0,mammogram,0.10909090909090909
+Pulmonary Edema,173,"edema, chest, cardiomegaly, pulmonary, x-ray",0.005780346820809248,0.0,,
+Structure of hemidiaphragm,164,"elevation, elevated, chest, raised, right",0.12195121951219512,0.0,,
+Right thorax structure,172,"hemithorax, chest, opacity, opacification, shift",0.023255813953488372,0.0,,
+Maxillary Sinus,162,"sinus, sinuses, ethmoid, antrum, floor",0.0,0.0,,
+Hypertrophy,157,"hypertrophy, hypertrophic, non-union, caudate, septum",0.19745222929936307,0.025477707006369428,,
+C0008034,160,"tube, pneumothorax, drain, tubes, emphysema",0.01875,0.0,,
+Ascending colon,169,"ascending, colon, flexure, cecum, thickening",0.0,0.0,,
+Internal jugular vein structure,171,"vein, carotid, ijv, neck, catheter",0.04093567251461988,0.0,,
+Urethra,145,"urethra, urethral, bladder, cystourethrogram, penile",0.0,0.013793103448275862,urethra,0.17333333333333334
+Sclerosis,146,"sclerosis, subchondral, hyperostosis, femoral, skull",0.0410958904109589,0.0,,
+Osteolysis,147,"osteolytic, osteolysis, lesion, acro-osteolysis, expansile",0.0,0.034013605442176874,,
+Structure of left knee region,144,"tibial, lateral, tibiofibular, proton, ligament",0.5902777777777778,0.0,,
+peritoneal,160,"peritoneal, ascites, intra-peritoneal, omental, seeding",0.05,0.09375,,
+Medulla Oblongata,148,"medullary, medulla, sagittal, cervicomedullary, cortical",0.10135135135135136,0.0,medulla,0.15789473684210525
+Pneumoperitoneum,163,"air, intraperitoneal, abdomen, emphysema, pneumatosis",0.44785276073619634,0.09202453987730061,,
+Tricuspid valve structure,166,"tv, atrium, ventricle, ra, rv",0.39759036144578314,0.0,,
+Adrenal Glands,161,"glands, adrenal, gland, adenoma, adrenals",0.006211180124223602,0.0,adrenals,0.09090909090909091
+Left lobe of liver,162,"liver, hepatic, lobe, abdomen, portal",0.006172839506172839,0.0,,
+peripheral blood,142,"blood, supply, bright, return, ventricle",0.1056338028169014,0.02112676056338028,,
+Air bubble,143,"bubbles, bubble, air, gastric, resuscitation",0.006993006993006993,0.04895104895104895,,
+Drain device,151,"drain, drains, percutaneous, cholangiogram, drainage",0.0,0.006622516556291391,,
+Structure of middle lobe of right lung,162,"chest, lingular, lung, consolidation, opacity",0.14814814814814814,0.0,,
+Prosthesis,145,"prosthesis, hybrid, notching, radiograph, construction",0.04827586206896552,0.0,,
+Structure of right knee region,159,"patella, lateral, patellar, tendon, alta",0.5471698113207547,0.0,,
+Transverse colon,147,"enema, flexure, ascending, transverse, colonic",0.006802721088435374,0.0,,
+Internal carotid artery structure,155,"ica, carotid, internal, artery, subtraction",0.0,0.0,,
+Bile duct structure,147,"bile, ducts, duct, biliary, cholangiography",0.0,0.006802721088435374,,
+Structure of neck of femur,150,"femoral, neck, hip, femur, coxa",0.0,0.0,,
+Shoulder,153,"shoulder, humeral, reverse, glenoid, scapular",0.0784313725490196,0.006535947712418301,,
+Structure of upper lobe of lung,146,"lobes, lobe, lung, centrilobular, opacities",0.0,0.0,,
+Tendon structure,160,"tendon, tendons, supraspinatus, achilles, tear",0.05,0.00625,,
+Biliary calculi,166,"gallbladder, gallstone, duct, gallstones, impacted",0.006024096385542169,0.006024096385542169,"gallstone, gallstones",0.04054054054054054
+Prostate,152,"prostate, prostatic, rectum, gland, seminal",0.0,0.013157894736842105,,
+Sclerotic (qualifier value),153,"lytic, lesion, bone, margins, margin",0.3333333333333333,0.006535947712418301,,
+Left pulmonary artery,147,"main, lpa, rpa, mpa, ctpa",0.40816326530612246,0.006802721088435374,,
+Entire hepatic duct,140,"duct, ducts, bile, cholangiogram, cholangiopancreatography",0.05714285714285714,0.007142857142857143,,
+Structure of right shoulder region,145,"glenoid, humerus, humeral, shoulder, scapula",0.0,0.0,,
+Parietal Lobe,137,"parietal, brain, lobes, region, frontal",0.17518248175182483,0.0,,
+Bronchiectasis,152,"bronchiectasis, lobe, centrilobular, lung, high-resolution",0.013157894736842105,0.006578947368421052,,
+Cerebrospinal Fluid,130,"cerebrospinal, fluid, csf, t2-weighted, spaces",0.0,0.023076923076923078,"cerebrospinal, csf",0.08955223880597014
+Wall of bladder,132,"thickening, urinary, wall, inward, bladder",0.0,0.0,,
+Cervix Uteri,128,"cervix, uterine, uterus, cervical, vagina",0.015625,0.0078125,cervix,0.1092436974789916
+Bone structure of acetabulum,131,"acetabular, hip, femoral, acetabulum, head",0.015267175572519083,0.0,acetabulum,0.007874015748031496
+Thalamic structure,134,"nucleus, caudate, thalamic, thalamus, brain",0.022388059701492536,0.0,"thalamic, thalamus",0.022388059701492536
+Anastomosis,125,"anastomosis, patent, site, leakage, anastomoses",0.024,0.016,anastomoses,0.1
+Thoracic spine structure,137,"cord, spinal, spine, vertebral, t5",0.0072992700729927005,0.0,,
+Cerebellum,124,"brainstem, brain, cerebellum, cerebellar, pons",0.0,0.0,cerebellum,0.023809523809523808
+Arteries,127,"artery, lad, angiogram, arteries, variation",0.07874015748031496,0.0,,
+Obstructed,122,"obstructive, obstructed, obstruction, completely, rpa",0.04918032786885246,0.06557377049180328,obstructed,0.016129032258064516
+Penetration,130,"penetrating, filter, foreign, ulcer, knife",0.4230769230769231,0.007692307692307693,penetrating,0.0625
+Left thorax structure,129,"hemithorax, opacification, chest, hemidiaphragm, mediastinal",0.031007751937984496,0.007751937984496124,,
+Temporal Lobe,128,"temporal, lobe, lobes, brain, flair",0.0,0.0,,
+Structure of left subclavian artery,121,"arch, carotid, brachiocephalic, aortic, aberrant",0.5371900826446281,0.0,,
+Pericardial body location,129,"pericardial, effusion, effusions, pleural, pericardium",0.03875968992248062,0.05426356589147287,,
+Ruptured behavior,116,"ruptured, hydatid, tunica, luteal, hepatocellular",0.0,0.0,ruptured,0.18439716312056736
+Trunk structure,118,"trunk, main, artery, common, branch",0.15254237288135594,0.0,,
+Pericardial sac structure,124,"pericardial, myocardium, thickened, heart, epicardial",0.47580645161290325,0.0,,
+Hepatic artery,123,"pseudoaneurysm, replaced, gastroduodenal, celiac, branch",0.5121951219512195,0.0,,
+Ankle region,115,"ankle, talus, talar, tibia, subtalar",0.09565217391304348,0.0,,
+Cicatrix,119,"scar, cesarean, pregnancy, gestational, sac",0.1092436974789916,0.0,,
+Shunt Device,121,"shunt, portal, venogram, vein, coiled",0.03305785123966942,0.05785123966942149,,
+Articular space,126,"narrowing, space, erosions, hip, subchondral",0.03968253968253968,0.0,,
+Structure of left shoulder region,126,"humeral, humerus, scapular, glenoid, subacromial",0.5476190476190477,0.0,,
+Coronary sinus structure,114,"cs, lead, atrium, catheter, ablation",0.2719298245614035,0.0,,
+Aortic Root,123,"ao, valve, atrium, valsalva, parasternal",0.44715447154471544,0.0,,
+Osteopenia,120,"loss, bone, generalized, teeth, hands",0.19166666666666668,0.058333333333333334,,
+Cartilage,114,"cartilage, pd-weighted, cap, subchondral, condyle",0.19298245614035087,0.0,,
+Interatrial septum,119,"interatrial, atrial, atrium, ra, attached",0.03361344537815126,0.0,,
+Abdominal aorta structure,124,"arteries, celiac, renal, cava, vena",0.6129032258064516,0.0,,
+Sacroiliac joint structure,126,"joint, sacroiliac, joints, sacroiliitis, pubic",0.0,0.0,sacroiliac,0.1357142857142857
+Pancreatic duct,125,"cholangiopancreatography, bile, common, endoscopic, duct",0.016,0.008,,
+Pathological accumulation of air in tissues,117,"emphysema, emphysematous, changes, lobe, pneumomediastinum",0.0,0.008547008547008548,,
+Mucous Membrane,133,"mucosal, thickening, hyperenhancement, sinuses, wall",0.015037593984962405,0.0,mucosal,0.04477611940298507
+Stifle bone,110,"patella, patellar, knee, pole, quadriceps",0.08181818181818182,0.0,,
+Upper abdomen structure,111,"upper, myelolipoma, liver, contrast-enhanced, stomach",0.02702702702702703,0.0,,
+Valve (physical object),123,"valve, valves, ssfp, leaflets, aortic",0.056910569105691054,0.0,,
+Periventricular white matter,123,"matter, brain, flair, white, subcortical",0.1951219512195122,0.0,,
+Brain Stem,103,"brainstem, cerebellum, stem, brain, cerebellar",0.0,0.0,brainstem,0.09195402298850575
+Subcutaneous Tissue,106,"subcutaneous, tissue, tissues, fascia, sc",0.05660377358490566,0.0,,
+Right breast,129,"mammogram, quadrant, circumscribed, hypoechoic, palpable",0.5116279069767442,0.007751937984496124,,
+Structure of splenic artery,94,"celiac, pseudoaneurysm, splenic, aneurysms, trunk",0.010638297872340425,0.0,,
+Structure of condyle,105,"condyle, condyles, ramus, medial, tibial",0.01904761904761905,0.0,,
+Fibula,110,"fibula, tibia, fibular, talus, ankle",0.02727272727272727,0.00909090909090909,,
+Structure of wisdom tooth,111,"molar, molars, mandibular, panoramic, third",0.018018018018018018,0.0,,
+Celiac Artery,125,"celiac, trunk, artery, axis, origin",0.008,0.0,,
+Base of skull structure,100,"skull, base, hyperostosis, calvaria, mandible",0.03,0.01,,
+Left breast,118,"nipple, hypoechoic, circumscribed, clock, isoechoic",0.652542372881356,0.0,,
+Sternum,119,"sternal, sternum, manubrium, reticulum, costal",0.05042016806722689,0.0,sternum,0.07142857142857142
+Right frontal lobe structure,113,"lobe, brain, flair, edema, vasogenic",0.26548672566371684,0.0,,
+Structure of psoas muscle,127,"muscle, muscles, retroperitoneal, ps, erector",0.0,0.007874015748031496,,
+Entire pulmonary vein,104,"veins, vein, atrium, pv, la",0.0,0.0,,
+Bone structure of pubis,109,"pubic, ramus, pubis, diastasis, symphysis",0.045871559633027525,0.009174311926605505,,
+Face,115,"facial, face, maxillary, soft, korean",0.0,0.0,,
+Wrist,110,"wrist, hand, ulna, radius, radial",0.05454545454545454,0.0,,
+Structure of left renal vein,95,"ivc, cava, vena, sma, inferior",0.5684210526315789,0.0,,
+Stomach wall structure,110,"gastric, stomach, thickening, wall, endoscopic",0.0,0.00909090909090909,,
+Biliary tract structure,102,"tree, tract, intrahepatic, dilatation, duct",0.0392156862745098,0.0,,
+Structure of head of humerus,125,"glenoid, shoulder, humeral, glenohumeral, humerus",0.0,0.0,,
+Intracranial,101,"extension, intracranial, extracranial, masticator, carotid",0.0,0.18811881188118812,,
+Scrotum,106,"scrotal, testicle, testicular, testis, hydrocele",0.39622641509433965,0.0,scrotal,0.22807017543859648
+Bronchial,103,"bronchial, thickening, bronchiectasis, wall, tree",0.05825242718446602,0.009708737864077669,,
+C0494165,102,"metastases, metastasis, liver, hepatic, multiple",0.0,0.0,,
+Hypoplasia,103,"hypoplasia, dysplasia, vermian, callosal, msec",0.02912621359223301,0.038834951456310676,,
+Pontine structure,107,"pons, pontine, brain, midbrain, cerebellum",0.018691588785046728,0.009345794392523364,pons,0.11827956989247312
+Axilla,122,"axillary, axilla, nodes, shoulder, lymph",0.040983606557377046,0.00819672131147541,,
+Leaking,90,"leak, gastrografin, contrast, site, gastric",0.07777777777777778,0.12222222222222222,,
+Left temporal lobe structure,97,"lobe, temporal, brain, contusions, encephalitis",0.0,0.0,,

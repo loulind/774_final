@@ -1,6 +1,6 @@
 # Analysis report
 
-spatial_anndata data, 13,620 samples; full mode; plan by the llm planner; LLM: claude-opus-5-5, 3 calls, $0.79; 2026-11-02 16:51:51.
+spatial_anndata data, 13,620 samples; full mode; plan by the llm planner; LLM: claude-opus-5-5, 3 calls, $0.79 (3 replayed from the run's transcript at no new cost); 2026-11-02 18:51:15.
 
 ## Objective
 
@@ -225,8 +225,8 @@ No revision was run, so the original results stand. The depth miss is small. Pea
 
 ## Reproducibility
 
-- Seed 774; full budgets; device mps; Python 3.12.14; run time 635 s.
-- Planner: llm; LLM calls 3 (0 from cache); replay with `--replay` on this run's directory or transcript.
+- Seed 774; full budgets; device mps; Python 3.12.14; run time 503 s.
+- Planner: llm; LLM calls 3 (3 from cache); replay with `--replay` on this run's directory or transcript.
 - Files: profile.json, objective.json, challenge_register.(json|md), analysis_plan.(json|md), evaluation.json, decision_log.json, methods_summary.md, 24 tables in tables/, 6 figures in figures/, 4 result files in results/.
 
 ## Numbers not found in the outputs

@@ -125,7 +125,7 @@ def test_triggers_suggest_valid_revisions(setup):
     assert {"groups_confined", "k_at_edge", "markers_one_replicate"} <= set(kinds)
     rev = kinds["groups_confined"].suggestion
     assert rev.step == "batch_correct" and rev.params == {"within_outer": "no"}
-    assert validate_revision(rev, plan)[0] is not None
+    assert validate_revision(rev, plan, allow_report=True)[0] is not None   # as critique() checks triggers
     assert kinds["k_at_edge"].suggestion.params == {"k_max": 18}
     assert {"validate_label", "enrichment", "markers"} <= set(downstream(plan, "domains"))
     assert "domains" in downstream(plan, "batch_correct")
@@ -144,6 +144,13 @@ def test_revisions_must_be_judged_on_label_free_criteria(setup):
     unrelated = Revision(action="set_params", step="svg", params={"min_fraction": 0.05}, criterion_step="domains",
                          criterion="stability", goal="max")
     assert validate_revision(unrelated, plan)[0] is None            # domains do not depend on svg
+    undirected = Revision(action="set_params", step="domains", params={"k_max": 8}, criterion_step="domains",
+                          criterion="cramers_v_groups", goal="min")
+    assert validate_revision(undirected, plan)[0] is None           # declared report-only: no direction
+    assert validate_revision(undirected, plan, allow_report=True)[0] is not None   # a trigger may choose one
+    reversed_ = Revision(action="set_params", step="domains", params={"k_max": 8}, criterion_step="domains",
+                         criterion="stability", goal="min")
+    assert validate_revision(reversed_, plan)[0] is None            # stability is declared 'max'
 
 
 def test_critic_uses_the_llm_choice_or_the_rule(setup, tmp_path):

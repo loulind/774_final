@@ -7,9 +7,11 @@ least one block), and confirmed by 256-bit hashes within ``wide_hash_max_distanc
 on greyscale medical images unrelated pictures often agree at 64 bits (a check of 300 such
 pairs found 1% near-identical), while the same relative tolerance at 256 bits keeps copies
 and drops look-alikes. Representation level: pairs of mutual nearest neighbours whose embedding
-cosine is at least as high as that of the pixel-level duplicates (the 5th percentile of
-their cosines), catching crops, overlays and re-scaled copies the hash misses; without
-enough pixel-level pairs to calibrate it, the threshold falls back to ``fallback_cosine``.
+cosine is at least as high as that of a typical pixel-level duplicate (the median of their
+cosines, ``calibration_quantile``), catching crops, overlays and re-scaled copies the hash
+misses. A low quantile admits look-alikes: on a full radiology set the 5th percentile (0.78)
+put 31% of images into duplicate clusters, the median (0.95) 8%. Without enough pixel-level
+pairs to calibrate it, the threshold falls back to ``fallback_cosine``.
 Hashes of near-uniform images carry no information and are skipped. Pairs from either
 method are joined into clusters (connected components), which later steps can use as
 cross-validation groups. Clusters spanning splits are leakage; clusters spanning groups
@@ -133,6 +135,9 @@ class DuplicateParams(ToolParams):
     min_calibration_pairs: int = Field(20, ge=5, le=10_000, description="pixel-level pairs needed to set the "
                                                                          "embedding threshold")
     fallback_cosine: float = Field(0.98, ge=0.8, le=0.9999, description="embedding threshold without them")
+    calibration_quantile: float = Field(0.5, ge=0.05, le=0.95, description="quantile of the pixel-level "
+                                                                           "duplicates' embedding cosine used as "
+                                                                           "the threshold")
     max_pairs_reported: int = Field(200, ge=10, le=10_000)
 
 
@@ -150,8 +155,9 @@ def _run_duplicates(ctx, inputs, p: DuplicateParams) -> StepResult:
         if len(hp):
             cos_h = np.einsum("ij,ij->i", E[hp[:, 0]], E[hp[:, 1]])
         if cos_h is not None and len(cos_h) >= p.min_calibration_pairs:
-            tau, how = float(np.quantile(cos_h, 0.05)), (f"the 5th percentile of the embedding cosine of the "
-                                                          f"{len(cos_h)} pixel-level duplicate pairs")
+            tau = float(np.quantile(cos_h, p.calibration_quantile))
+            how = (f"quantile {p.calibration_quantile:g} of the embedding cosine of the {len(cos_h)} pixel-level "
+                   "duplicate pairs")
         else:
             tau, how = p.fallback_cosine, (f"fallback {p.fallback_cosine:g}: only "
                                            f"{0 if cos_h is None else len(cos_h)} pixel-level pairs to calibrate on")

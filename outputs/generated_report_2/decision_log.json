@@ -1,0 +1,865 @@
+[
+  {
+    "step": "system",
+    "decision": "hardware",
+    "chosen": "mps",
+    "rationale": "{'device': 'mps', 'device_name': 'Apple GPU (MPS) on arm64', 'cpu': 'arm', 'n_cpu': 10, 'memory_gb': 17.2, 'disk_free_gb': 22.7, 'torch_version': '2.15.0'}; full budgets",
+    "alternatives_rejected": [],
+    "evidence": {},
+    "source": "system"
+  },
+  {
+    "step": "objective",
+    "decision": "question: predictive_modelling",
+    "chosen": "Determine which clinical concepts can be reliably predicted from images",
+    "rationale": "cue 'predicted'; targets features: images.image_path; labels: multilabel.concepts; reference: multilabel.concepts_manual",
+    "alternatives_rejected": [],
+    "evidence": {
+      "targets": {
+        "features": [
+          "images.image_path"
+        ],
+        "labels": [
+          "multilabel.concepts"
+        ],
+        "reference": [
+          "multilabel.concepts_manual"
+        ]
+      },
+      "challenges": []
+    },
+    "source": "heuristic"
+  },
+  {
+    "step": "objective",
+    "decision": "question: data_quality_audit",
+    "chosen": "identify data-quality issues such as class imbalance, near-duplicates, and noisy captions",
+    "rationale": "cue 'data-quality'; targets images: images.image_path; text: text.caption; labels: multilabel.concepts, multilabel.concepts_manual; named challenges class_imbalance, near_duplicates, text_noise, label_noise",
+    "alternatives_rejected": [],
+    "evidence": {
+      "targets": {
+        "images": [
+          "images.image_path"
+        ],
+        "text": [
+          "text.caption"
+        ],
+        "labels": [
+          "multilabel.concepts",
+          "multilabel.concepts_manual"
+        ]
+      },
+      "challenges": [
+        "class_imbalance",
+        "near_duplicates",
+        "text_noise",
+        "label_noise"
+      ]
+    },
+    "source": "heuristic"
+  },
+  {
+    "step": "objective",
+    "decision": "question: visualization",
+    "chosen": "implied",
+    "rationale": "every report shows maps; targets features: images.image_path",
+    "alternatives_rejected": [],
+    "evidence": {
+      "targets": {
+        "features": [
+          "images.image_path"
+        ]
+      },
+      "challenges": []
+    },
+    "source": "heuristic"
+  },
+  {
+    "step": "objective",
+    "decision": "constraint: reliability_rule",
+    "chosen": ">= 20 positive evaluation samples, lower 95% DeLong bound of AUROC >= 0.8, BH-adjusted p < 0.05 against AUROC 0.5; fewer positives: too rare to assess",
+    "rationale": "fixed before any result is seen",
+    "alternatives_rejected": [],
+    "evidence": {},
+    "source": "heuristic"
+  },
+  {
+    "step": "challenges",
+    "decision": "challenge register",
+    "chosen": "11 relevant challenges, 4 high",
+    "rationale": "class_imbalance:multilabel.concepts; class_imbalance:multilabel.concepts_manual; split_leakage:groups.article,split.split; multiple_testing",
+    "alternatives_rejected": [],
+    "evidence": {
+      "detected": [
+        "nested_sampling:groups.article",
+        "class_imbalance:multilabel.concepts",
+        "class_imbalance:multilabel.concepts_manual",
+        "label_noise:multilabel.concepts,multilabel.concepts_manual",
+        "near_duplicates:images.image_path",
+        "split_leakage:groups.article,split.split",
+        "split_leakage:images.image_path,split.split",
+        "text_noise:text.caption",
+        "image_heterogeneity:images.image_path",
+        "multiple_testing",
+        "compute"
+      ]
+    },
+    "source": "heuristic"
+  },
+  {
+    "step": "plan",
+    "decision": "data-quality audits",
+    "chosen": "class_imbalance, image_heterogeneity, label_noise, near_duplicates, split_leakage, text_noise",
+    "rationale": "The challenges the objective names (class_imbalance, label_noise, near_duplicates, text_noise) and every relevant challenge the profile detected.",
+    "alternatives_rejected": [],
+    "evidence": {},
+    "source": "heuristic"
+  },
+  {
+    "step": "plan",
+    "decision": "prediction target and features",
+    "chosen": "'concepts' from images",
+    "rationale": "Named by the objective; 'concepts_manual' defines some of the same labels and serves as the reference for label noise.",
+    "alternatives_rejected": [
+      {
+        "option": "predict 'concepts_manual'",
+        "reason": "a reference source, used to estimate noise"
+      }
+    ],
+    "evidence": {},
+    "source": "heuristic"
+  },
+  {
+    "step": "plan",
+    "decision": "cross-validation groups",
+    "chosen": "article + near-duplicate clusters",
+    "rationale": "Samples share articles (68% of them); near-copies link samples too, so folds and the test separation keep linked samples together.",
+    "alternatives_rejected": [
+      {
+        "option": "random folds",
+        "reason": "related samples leak"
+      }
+    ],
+    "evidence": {},
+    "source": "heuristic"
+  },
+  {
+    "step": "plan",
+    "decision": "reliably predicted",
+    "chosen": "configured rule",
+    "rationale": ">= 20 positive evaluation samples, lower 95% DeLong bound of AUROC >= 0.8, BH-adjusted p < 0.05 against AUROC 0.5; fewer positives: too rare to assess",
+    "alternatives_rejected": [
+      {
+        "option": "rank targets by AUROC",
+        "reason": "a ranking does not say which are reliable"
+      }
+    ],
+    "evidence": {},
+    "source": "heuristic"
+  },
+  {
+    "step": "plan",
+    "decision": "challenge handling",
+    "chosen": "10 of 11 relevant challenges handled by steps; 0 accepted",
+    "rationale": "Each relevant challenge is matched to the steps whose tool addresses its type and whose inputs derive from its data; every high-severity one (4) must be handled or accepted.",
+    "alternatives_rejected": [],
+    "evidence": {
+      "handled_by": {
+        "nested_sampling:groups.article": [
+          "predict"
+        ],
+        "class_imbalance:multilabel.concepts": [
+          "imbalance_concepts",
+          "predict"
+        ],
+        "class_imbalance:multilabel.concepts_manual": [
+          "imbalance_concepts_manual"
+        ],
+        "label_noise:multilabel.concepts,multilabel.concepts_manual": [
+          "label_sources",
+          "caption_labels"
+        ],
+        "near_duplicates:images.image_path": [
+          "duplicates",
+          "predict"
+        ],
+        "split_leakage:groups.article,split.split": [
+          "duplicates",
+          "predict"
+        ],
+        "split_leakage:images.image_path,split.split": [
+          "duplicates",
+          "predict"
+        ],
+        "text_noise:text.caption": [
+          "text_qc",
+          "caption_labels",
+          "image_text"
+        ],
+        "image_heterogeneity:images.image_path": [
+          "image_qc",
+          "features",
+          "atypical"
+        ],
+        "multiple_testing": [
+          "predict"
+        ],
+        "compute": []
+      }
+    },
+    "source": "heuristic"
+  },
+  {
+    "step": "predict_manual",
+    "decision": "Add a second prediction step on 'concepts_manual'",
+    "chosen": "predict_targets on multilabel.concepts_manual with article groups and duplicate clusters",
+    "rationale": "The objective reading lists concepts_manual as the reference for predictive_modelling. On its 18 shared labels, 'concepts' has precision 0.937 (recall 1.0). That label noise could push a concept's lower DeLong bound below 0.8. 17 of the 18 manual labels can be assessed. The step costs about 67 s against 10,800 s.",
+    "alternatives_rejected": [
+      {
+        "option": "predict 'concepts' only",
+        "reason": "it cannot tell a concept that is hard to see in the image from one whose labels are noisy"
+      }
+    ],
+    "evidence": {},
+    "source": "llm"
+  },
+  {
+    "step": "image_text",
+    "decision": "Bind groups.article to multimodal_agreement",
+    "chosen": "groups: groups.article",
+    "rationale": "68% of samples share an article (1.77 per article). Captions repeat across splits too: 27.6% of the duplicate captions cross the split. If article-mates are not kept together, cross-fitted alignment and the random-partner baseline are inflated.",
+    "alternatives_rejected": [
+      {
+        "option": "split only",
+        "reason": "64% of val/test share an article with another split"
+      }
+    ],
+    "evidence": {},
+    "source": "llm"
+  },
+  {
+    "step": "plan",
+    "decision": "planner used",
+    "chosen": "llm",
+    "rationale": "LLM revised the rule-based plan: added step predict_manual (predict_targets); image_text.inputs: {'image': '@features.image_features', 'text': '@features.text_features', 'split': 'split.split'} -> {'image': '@features.image_features', 'text': '@features.text_features', 'split': 'split.split', 'groups': 'groups.article'}",
+    "alternatives_rejected": [],
+    "evidence": {
+      "llm_model": "claude-opus-5-5",
+      "n_changes": 2,
+      "changes": [
+        "added step predict_manual (predict_targets)",
+        "image_text.inputs: {'image': '@features.image_features', 'text': '@features.text_features', 'split': 'split.split'} -> {'image': '@features.image_features', 'text': '@features.text_features', 'split': 'split.split', 'groups': 'groups.article'}"
+      ]
+    },
+    "source": "llm"
+  },
+  {
+    "step": "image_qc",
+    "decision": "image QC rules",
+    "chosen": "unreadable, shorter side < 32px, aspect > 5, thumbnail grey s.d. < 2",
+    "rationale": "Images that cannot be decoded, are too small to show structure, are strips or are blank cannot be encoded meaningfully.",
+    "alternatives_rejected": [
+      {
+        "option": "keep every image",
+        "reason": "degenerate inputs give meaningless features"
+      }
+    ],
+    "evidence": {
+      "unreadable": 0,
+      "tiny": 0,
+      "extreme_aspect": 5,
+      "blank": 0
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "text_qc",
+    "decision": "texts removed",
+    "chosen": "empty, too_short",
+    "rationale": "Empty and very short texts carry no description to align with or learn from; repeated, boilerplate and panel-referencing texts are kept and reported, because they are still informative but noisy.",
+    "alternatives_rejected": [
+      {
+        "option": "duplicate",
+        "reason": "reported, not removed"
+      },
+      {
+        "option": "boilerplate",
+        "reason": "reported, not removed"
+      },
+      {
+        "option": "panel_reference",
+        "reason": "reported, not removed"
+      }
+    ],
+    "evidence": {
+      "empty": 0,
+      "too_short": 741,
+      "duplicate": 1468,
+      "boilerplate": 388,
+      "panel_reference": 956
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "features",
+    "decision": "image domain",
+    "chosen": "greyscale_imaging",
+    "rationale": "75% of sampled images greyscale; 3% of tissue pixels with a stain hue",
+    "alternatives_rejected": [],
+    "evidence": {
+      "n_sampled": 240,
+      "domain_hint": "greyscale_imaging",
+      "greyscale_fraction": 0.7541666666666667,
+      "stain_hue_fraction": 0.025982797910654602,
+      "colour_between_group_share": null,
+      "width_median": 290.5,
+      "height_median": 256.0
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "features",
+    "decision": "colour normalisation",
+    "chosen": "none",
+    "rationale": "mostly greyscale images: there is no stain colour to normalise",
+    "alternatives_rejected": [],
+    "evidence": {
+      "colour_between_group_share": null
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "features",
+    "decision": "image encoder",
+    "chosen": "biomedclip_image",
+    "rationale": "Highest alignment_recall_at_10 on 500 held-out screening samples, the predefined split (train fits, val selects; test unused): 0.955 (chance 0.020). Pretrained on: PMC-15M: 15M figure-caption pairs from PubMed Central.",
+    "alternatives_rejected": [
+      {
+        "option": "clip_b16_image",
+        "reason": "alignment_recall_at_10 0.564"
+      },
+      {
+        "option": "dinov2_base",
+        "reason": "alignment_recall_at_10 0.474"
+      }
+    ],
+    "evidence": {
+      "n_train": 2000,
+      "n_val": 500,
+      "metric": "alignment_recall_at_10",
+      "chance": 0.02,
+      "clearly_above_chance": true
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "features",
+    "decision": "text encoder",
+    "chosen": "biomedclip_text",
+    "rationale": "Best partner of biomedclip_image: alignment_recall_at_10 0.955.",
+    "alternatives_rejected": [
+      {
+        "option": "pubmedbert",
+        "reason": "alignment_recall_at_10 0.669 with biomedclip_image"
+      },
+      {
+        "option": "clip_b16_text",
+        "reason": "alignment_recall_at_10 0.643 with biomedclip_image"
+      }
+    ],
+    "evidence": {},
+    "source": "subagent"
+  },
+  {
+    "step": "imbalance_concepts",
+    "decision": "labels assessable",
+    "chosen": "221 of 1,947",
+    "rationale": "A label needs >= 10 training positives to be modelled and >= 20 test positives to be judged; the others are reported as too rare to assess.",
+    "alternatives_rejected": [],
+    "evidence": {
+      "imbalance_ratio": 27798.0,
+      "gini": 0.8127542208090018
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "imbalance_concepts_manual",
+    "decision": "labels assessable",
+    "chosen": "17 of 18",
+    "rationale": "A label needs >= 10 training positives to be modelled and >= 20 test positives to be judged; the others are reported as too rare to assess.",
+    "alternatives_rejected": [],
+    "evidence": {
+      "imbalance_ratio": 544.0588235294117,
+      "gini": 0.5716271370265719
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "duplicates",
+    "decision": "embedding duplicate threshold",
+    "chosen": "cosine >= 0.9473",
+    "rationale": "Mutual nearest neighbours whose cosine reaches quantile 0.5 of the embedding cosine of the 217 pixel-level duplicate pairs.",
+    "alternatives_rejected": [
+      {
+        "option": "a fixed threshold for every encoder",
+        "reason": "cosine scales differ by encoder"
+      }
+    ],
+    "evidence": {
+      "n_hash_pairs": 217,
+      "threshold": 0.9472596645355225
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "duplicates",
+    "decision": "near-duplicate clusters",
+    "chosen": "3,373 clusters, 6,782 images",
+    "rationale": "Pairs within 4 bits of difference hash or mutual nearest neighbours above the embedding threshold are joined into connected components.",
+    "alternatives_rejected": [
+      {
+        "option": "exact file duplicates only",
+        "reason": "re-encoded and resized copies would be missed"
+      }
+    ],
+    "evidence": {
+      "n_hash_pairs": 217,
+      "n_embedding_pairs": 3311,
+      "n_clusters": 3373
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "label_sources",
+    "decision": "label noise estimate",
+    "chosen": "kappa 0.96 on 18 shared labels",
+    "rationale": "'multilabel.concepts' is compared with 'multilabel.concepts_manual' on the 79,061 samples both annotate; precision and recall treat the second source as the reference.",
+    "alternatives_rejected": [],
+    "evidence": {},
+    "source": "subagent"
+  },
+  {
+    "step": "caption_labels",
+    "decision": "labels checked",
+    "chosen": "300 of 1947",
+    "rationale": "Labels need at least 20 positive training texts to learn which words indicate them, and at least one word with association z >= 3.",
+    "alternatives_rejected": [
+      {
+        "option": "check every label",
+        "reason": "a lexicon learned from a handful of texts is noise"
+      }
+    ],
+    "evidence": {
+      "with_support": 300,
+      "with_lexicon": 300,
+      "vocabulary": 8382
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "image_text",
+    "decision": "alignment training / validation pairs",
+    "chosen": "the predefined split (train fits, val selects; test unused)",
+    "rationale": "Alignments are fitted on training pairs and compared on validation pairs; no pair is scored by a model trained on it.",
+    "alternatives_rejected": [],
+    "evidence": {
+      "n_train": 59368,
+      "n_val": 9824
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "image_text",
+    "decision": "contrastive head and training",
+    "chosen": "embed_dim=256, hidden=512, n_layers=2, dropout=0.1, residual=True, lr=0.001, weight_decay=0.0001, batch_size=512, max_epochs=300, patience=15, seconds=240.0",
+    "rationale": "about 59,368 training pairs: identity-initialised (residual) heads in the encoders' shared space, batch 512 (511 negatives per positive), early stopping on validation recall@10 (patience 15) and a 240s cap per fit",
+    "alternatives_rejected": [],
+    "evidence": {},
+    "source": "subagent"
+  },
+  {
+    "step": "image_text",
+    "decision": "image-text alignment",
+    "chosen": "zero_shot",
+    "rationale": "Highest validation recall@10 on 2000 held-out pairs: 0.887 (chance 0.005).",
+    "alternatives_rejected": [
+      {
+        "option": "cca",
+        "reason": "validation recall@10 0.772"
+      },
+      {
+        "option": "contrastive",
+        "reason": "validation recall@10 0.887"
+      }
+    ],
+    "evidence": {
+      "comparison": [
+        {
+          "aligner": "zero_shot",
+          "val_recall_at_10": 0.88725
+        },
+        {
+          "aligner": "cca",
+          "val_recall_at_10": 0.772,
+          "k": 32
+        },
+        {
+          "aligner": "contrastive",
+          "val_recall_at_10": 0.88725,
+          "best_epoch": 0,
+          "epochs_run": 15,
+          "stopped_because": "no validation improvement for 15 epochs"
+        }
+      ]
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "atypical",
+    "decision": "density fit / validation samples",
+    "chosen": "the predefined split ('split.split': train fits, val selects)",
+    "rationale": "The projection and the density are fitted on training samples and compared on validation samples. Every sample is then scored by a model that was not fitted on it (training samples by 2-fold cross-fitting) and judged against that model's own validation scores.",
+    "alternatives_rejected": [
+      {
+        "option": "score every sample with one model",
+        "reason": "the samples a model was fitted on look more typical than new ones (most of all in many dimensions), so flags would differ between splits for no reason"
+      }
+    ],
+    "evidence": {
+      "n_train": 59957,
+      "n_val": 9902
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "atypical",
+    "decision": "density space",
+    "chosen": "57 principal components, standardised",
+    "rationale": "57 principal components hold 90% of the variance",
+    "alternatives_rejected": [
+      {
+        "option": "all dimensions",
+        "reason": "512 dimensions: too many for a full-rank flow"
+      }
+    ],
+    "evidence": {
+      "k": 57,
+      "input_dims": 512
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "atypical",
+    "decision": "flow hyperparameters",
+    "chosen": "n_blocks=5, hidden_dim=256, noise_std=0.0, lr=0.001, batch_size=256, max_epochs=300, weight_decay=1e-05",
+    "rationale": "n_blocks=5, hidden_dim=256 (8 x p, in [32, 256]); noise_std=0.0",
+    "alternatives_rejected": [],
+    "evidence": {
+      "n_train": 59957,
+      "dim": 57,
+      "near_duplicate_fraction": 0.0
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "atypical",
+    "decision": "density model",
+    "chosen": "MAF",
+    "rationale": "held-out mean log-likelihood: MAF -54.704, Gaussian -81.719 per sample",
+    "alternatives_rejected": [
+      {
+        "option": "Gaussian",
+        "reason": "lower held-out log-likelihood"
+      }
+    ],
+    "evidence": {
+      "val_loglik_maf": -54.704402923583984,
+      "val_loglik_gaussian": -81.71885681152344
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "predict",
+    "decision": "targets modelled",
+    "chosen": "300 of 1947",
+    "rationale": "Targets need at least 10 positive and negative training samples to fit and tune a model; at most the 300 most frequent are modelled.",
+    "alternatives_rejected": [
+      {
+        "option": "model every target",
+        "reason": "too few positives to estimate anything"
+      }
+    ],
+    "evidence": {
+      "too_rare_to_train": 1647
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "predict",
+    "decision": "prediction model",
+    "chosen": "ridge",
+    "rationale": "300 targets: closed-form ridge fits all targets from one eigendecomposition per fold; Platt scaling on out-of-fold scores gives probabilities.",
+    "alternatives_rejected": [
+      {
+        "option": "logistic",
+        "reason": "300 separate tuned fits per fold exceed the compute budget"
+      }
+    ],
+    "evidence": {
+      "n_targets": 300,
+      "n_train": 61938,
+      "dims": 512
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "predict",
+    "decision": "fit / test separation",
+    "chosen": "7,921 fitting samples set aside",
+    "rationale": "7,921 of 69,859 non-test samples (11.3%) share a article / near_duplicate_cluster group with test samples (65.5% of the test samples have such a group-mate). They are left out of fitting, so every test sample is scored by a model that never saw its group; a second fit that keeps them measures how much the leak would inflate AUROC.",
+    "alternatives_rejected": [
+      {
+        "option": "keep them",
+        "reason": "test scores would partly measure recognition of related samples"
+      },
+      {
+        "option": "score only the test samples without group-mates",
+        "reason": "drops 66% of the evaluation set"
+      }
+    ],
+    "evidence": {
+      "n_set_aside": 7921,
+      "test_with_group_mates_fraction": 0.6552141057934509
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "predict",
+    "decision": "evaluation design",
+    "chosen": "fit on the non-test splits, scored once on the test split",
+    "rationale": "Folds keep every article / near_duplicate_cluster group whole (samples linked by any grouping stay together); penalties are chosen by 3-fold inner cross-validation on training samples only.",
+    "alternatives_rejected": [
+      {
+        "option": "random folds",
+        "reason": "related samples on both sides would inflate the scores"
+      }
+    ],
+    "evidence": {
+      "has_test_split": true,
+      "groupings": [
+        "article",
+        "near_duplicate_cluster"
+      ]
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "predict",
+    "decision": "reliability rule",
+    "chosen": "176 of 214 assessable targets reliable",
+    "rationale": "Fixed before any result: >= 20 positives in the evaluation set, lower 95% DeLong bound of AUROC >= 0.8, and BH-adjusted one-sided p (AUROC > 0.5) < 0.05 across the 214 assessable targets.",
+    "alternatives_rejected": [],
+    "evidence": {
+      "too_rare_to_assess": 86
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "predict_manual",
+    "decision": "targets modelled",
+    "chosen": "18 of 18",
+    "rationale": "Targets need at least 10 positive and negative training samples to fit and tune a model; at most the 300 most frequent are modelled.",
+    "alternatives_rejected": [
+      {
+        "option": "model every target",
+        "reason": "too few positives to estimate anything"
+      }
+    ],
+    "evidence": {
+      "too_rare_to_train": 0
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "predict_manual",
+    "decision": "prediction model",
+    "chosen": "logistic",
+    "rationale": "18 targets: per-target logistic regression is affordable.",
+    "alternatives_rejected": [
+      {
+        "option": "ridge",
+        "reason": "unnecessary approximation"
+      }
+    ],
+    "evidence": {
+      "n_targets": 18,
+      "n_train": 61425,
+      "dims": 512
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "predict_manual",
+    "decision": "fit / test separation",
+    "chosen": "7,811 fitting samples set aside",
+    "rationale": "7,811 of 69,236 non-test samples (11.3%) share a article / near_duplicate_cluster group with test samples (65.3% of the test samples have such a group-mate). They are left out of fitting, so every test sample is scored by a model that never saw its group; a second fit that keeps them measures how much the leak would inflate AUROC.",
+    "alternatives_rejected": [
+      {
+        "option": "keep them",
+        "reason": "test scores would partly measure recognition of related samples"
+      },
+      {
+        "option": "score only the test samples without group-mates",
+        "reason": "drops 65% of the evaluation set"
+      }
+    ],
+    "evidence": {
+      "n_set_aside": 7811,
+      "test_with_group_mates_fraction": 0.6526476578411405
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "predict_manual",
+    "decision": "evaluation design",
+    "chosen": "fit on the non-test splits, scored once on the test split",
+    "rationale": "Folds keep every article / near_duplicate_cluster group whole (samples linked by any grouping stay together); penalties are chosen by 3-fold inner cross-validation on training samples only.",
+    "alternatives_rejected": [
+      {
+        "option": "random folds",
+        "reason": "related samples on both sides would inflate the scores"
+      }
+    ],
+    "evidence": {
+      "has_test_split": true,
+      "groupings": [
+        "article",
+        "near_duplicate_cluster"
+      ]
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "predict_manual",
+    "decision": "reliability rule",
+    "chosen": "17 of 17 assessable targets reliable",
+    "rationale": "Fixed before any result: >= 20 positives in the evaluation set, lower 95% DeLong bound of AUROC >= 0.8, and BH-adjusted one-sided p (AUROC > 0.5) < 0.05 across the 17 assessable targets.",
+    "alternatives_rejected": [],
+    "evidence": {
+      "too_rare_to_assess": 1
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "map",
+    "decision": "reduce before mapping",
+    "chosen": "PCA to 50 dimensions",
+    "rationale": "The input has 512 dimensions; neighbour searches and embeddings are faster and less noisy on leading principal components.",
+    "alternatives_rejected": [
+      {
+        "option": "map the full input",
+        "reason": "slower, and noise dimensions blur neighbourhoods"
+      }
+    ],
+    "evidence": {
+      "input_dims": 512
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "map",
+    "decision": "2-D map method",
+    "chosen": "umap",
+    "rationale": "highest mean of trustworthiness and continuity at k=10 (0.974) among maps with seed stability >= 0.5: trustworthiness 0.977, continuity 0.972, stability 0.53.",
+    "alternatives_rejected": [
+      {
+        "option": "pca",
+        "reason": "trustworthiness 0.795, continuity 0.931, stability 1.00"
+      },
+      {
+        "option": "tsne",
+        "reason": "needs n <= 50,000 but the input has 79,784 samples"
+      },
+      {
+        "option": "diffusion_map",
+        "reason": "needs n <= 5,000 but the input has 79,784 samples"
+      },
+      {
+        "option": "laplacian_eigenmaps",
+        "reason": "needs n <= 20,000 but the input has 79,784 samples"
+      },
+      {
+        "option": "isomap",
+        "reason": "needs n <= 6,000 but the input has 79,784 samples"
+      }
+    ],
+    "evidence": {
+      "umap": {
+        "trustworthiness@10": 0.9766687999106495,
+        "continuity@10": 0.971785447031887,
+        "knn_overlap@10": 0.3527666666666667,
+        "distance_spearman": 0.35262124252564814,
+        "kruskal_stress": 0.4178857207298279,
+        "stability": 0.53252
+      },
+      "pca": {
+        "trustworthiness@10": 0.7953148712793879,
+        "continuity@10": 0.9307519740883453,
+        "knn_overlap@10": 0.06383333333333333,
+        "distance_spearman": 0.48596440438464333,
+        "kruskal_stress": 0.4034291207790375,
+        "stability": 1.0
+      }
+    },
+    "source": "subagent"
+  },
+  {
+    "step": "critic",
+    "decision": "triggers",
+    "chosen": "0 found",
+    "rationale": "No trigger fired.",
+    "alternatives_rejected": [],
+    "evidence": {
+      "triggers": []
+    },
+    "source": "critic"
+  },
+  {
+    "step": "critic",
+    "decision": "assessment",
+    "chosen": "no revision",
+    "rationale": "The results answer the objective. On the noisy 'concepts' labels, 176 of the 214 assessable concepts are reliably predictable (test median AUROC 0.940, CV 0.943). All 17 assessable manual concepts are reliable (AUROC 0.996). Leakage gaps are negligible (\u22640.0005), so the grouped and duplicate-aware design holds. The data-quality audit is thorough: severe imbalance (Gini 0.81, 1726 of 1947 labels below support), 8.5% of images in near-duplicate clusters (28% of clusters cross splits, 6.4% of test images have a training duplicate), label precision of 0.937 against manual labels, and 20% of positive labels with no support in their caption. Points to note in the report: the encoder's zero-shot recall@10 of 0.955 may mean the images overlap its pretraining data. The two duplicate-detection methods agree poorly (Jaccard 0.027). The image-caption check was not cross-fitted, and the map's stability (0.53) only just passes. None of these is a strong enough reason to revise.",
+    "alternatives_rejected": [
+      {
+        "option": "Switch 'predict' from ridge to logistic (logistic_max_targets=300), judged by cv_auroc_median (max)",
+        "reason": "CV AUROC is already 0.943 with a negligible leakage gap. Any gain would be small next to the label noise (precision 0.937), and fitting 300 logistic models costs much more compute."
+      },
+      {
+        "option": "Raise max_targets in 'predict' to cover more of the long tail",
+        "reason": "The extra labels are rare. They would likely lower the median CV AUROC, so that criterion cannot reward the change, and most of them still could not be assessed on the test split."
+      },
+      {
+        "option": "Raise n_neighbors in the map to improve its stability",
+        "reason": "Stability is already above its 0.5 threshold and trustworthiness is 0.977. The map is only for the report and does not affect any conclusion."
+      },
+      {
+        "option": "Lower calibration_quantile in the duplicate step to catch more embedding-level duplicates",
+        "reason": "No step declares a label-free max/min criterion for duplicates, so a revision could not be judged. The poor agreement between methods is better reported as a caveat."
+      }
+    ],
+    "evidence": {},
+    "source": "llm"
+  },
+  {
+    "step": "writer",
+    "decision": "report prose",
+    "chosen": "LLM (claude-opus-5-5)",
+    "rationale": "196 numbers in the prose checked against the computed outputs; 0 not found.",
+    "alternatives_rejected": [],
+    "evidence": {
+      "n_checked": 196,
+      "n_unmatched": 0
+    },
+    "source": "system"
+  }
+]

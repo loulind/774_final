@@ -1,0 +1,332 @@
+{
+ "n_samples": 79789,
+ "format": "table",
+ "modalities": [
+  {
+   "name": "image",
+   "kind": "image",
+   "n_present": 79789,
+   "missing_fraction": 0.0,
+   "source": "column 'image_path'"
+  },
+  {
+   "name": "text",
+   "kind": "text",
+   "n_present": 79788,
+   "missing_fraction": 1.2533055935071147e-05,
+   "source": "column 'caption'"
+  }
+ ],
+ "roles": {
+  "image_path": "image_path",
+  "caption": "text",
+  "split": "split",
+  "concepts": "multilabel",
+  "concepts_manual": "multilabel",
+  "article": "group"
+ },
+ "artifacts": [
+  {
+   "name": "images.image_path",
+   "kind": "images",
+   "n": 79789,
+   "detail": {
+    "source_kind": "files"
+   }
+  },
+  {
+   "name": "text.caption",
+   "kind": "text",
+   "n": 79788,
+   "detail": {}
+  },
+  {
+   "name": "split.split",
+   "kind": "split",
+   "n": 79789,
+   "detail": {
+    "column": "split",
+    "levels": [
+     "test",
+     "train",
+     "val"
+    ]
+   }
+  },
+  {
+   "name": "multilabel.concepts",
+   "kind": "multilabel",
+   "n": 79789,
+   "detail": {
+    "column": "concepts",
+    "n_labels": 1947,
+    "external": true
+   }
+  },
+  {
+   "name": "multilabel.concepts_manual",
+   "kind": "multilabel",
+   "n": 79789,
+   "detail": {
+    "column": "concepts_manual",
+    "n_labels": 18,
+    "external": true
+   }
+  },
+  {
+   "name": "groups.article",
+   "kind": "groups",
+   "n": 79789,
+   "detail": {
+    "column": "article",
+    "role": "group",
+    "n_levels": 44975
+   }
+  }
+ ],
+ "matrices": [],
+ "group_structure": [],
+ "spatial": [],
+ "images": [
+  {
+   "artifact": "images.image_path",
+   "source_kind": "files",
+   "n_images": 79789,
+   "n_measured": 79789,
+   "unusable_fraction": 6.266527967514319e-05,
+   "flag_counts": {
+    "unreadable": 0,
+    "tiny": 0,
+    "extreme_aspect": 5,
+    "blank": 0
+   },
+   "width_median": 294.0,
+   "height_median": 256.0,
+   "size_iqr_ratio": 1.0,
+   "n_colour_sampled": 240,
+   "domain_hint": "greyscale_imaging",
+   "greyscale_fraction": 0.7416666666666667,
+   "stain_hue_fraction": 0.025039870195180933,
+   "colour_group": null,
+   "colour_between_group_share": null,
+   "n_hashed": 79785,
+   "n_hash_candidates": 57627,
+   "duplicate_fraction": 0.004524660023814,
+   "n_duplicate_pairs": 217,
+   "cross_split_duplicate_pairs": 57,
+   "measured_on": "every image; duplicates: 64-bit difference hashes within 4 bits confirmed by 256-bit hashes within 16 bits; colour on 240 thumbnails"
+  }
+ ],
+ "texts": [
+  {
+   "artifact": "text.caption",
+   "n_texts": 79788,
+   "flag_fractions": {
+    "empty": 0.0,
+    "too_short": 0.0092871108437359,
+    "duplicate": 0.018398756705268964,
+    "boilerplate": 0.004862886649621497,
+    "panel_reference": 0.011981751641850905
+   },
+   "flagged_fraction": 0.035794856369378854,
+   "words_median": 17.0,
+   "words_p95": 49.0,
+   "cross_split_duplicate_fraction": 0.27613412228796846
+  }
+ ],
+ "tabular": [],
+ "labels": [
+  {
+   "artifact": "multilabel.concepts",
+   "column": "concepts",
+   "kind": "multilabel",
+   "n_annotated": 79789,
+   "annotated_fraction": 1.0,
+   "n_classes": 1947,
+   "imbalance_ratio": 27798.0,
+   "largest": {
+    "X-Ray Computed Tomography": 27798,
+    "Plain x-ray": 21998,
+    "Magnetic Resonance Imaging": 12671,
+    "Ultrasonography": 11430,
+    "Chest": 10233,
+    "Anterior-Posterior": 9605,
+    "angiogram": 4799,
+    "Postero-Anterior": 4303,
+    "Abdomen": 4283,
+    "Bone structure of cranium": 4112
+   },
+   "smallest": {
+    "MRI venography": 1,
+    "Magnetic Resonance Angiography": 1,
+    "Computed tomography of cervical spine": 1,
+    "Differential Diagnosis": 1,
+    "CT follow-up": 1
+   },
+   "labels_per_sample_median": 3.0,
+   "gini": 0.8127542208090018,
+   "n_modelable": 1721,
+   "n_assessable": 221,
+   "too_rare_fraction": 0.8864920390344119,
+   "annotated_groups": {
+    "groups.article": [
+     44975,
+     44975
+    ]
+   },
+   "cramers_v": {},
+   "variance_share": {}
+  },
+  {
+   "artifact": "multilabel.concepts_manual",
+   "column": "concepts_manual",
+   "kind": "multilabel",
+   "n_annotated": 79061,
+   "annotated_fraction": 0.9908759352792992,
+   "n_classes": 18,
+   "imbalance_ratio": 544.0588235294117,
+   "largest": {
+    "X-Ray Computed Tomography": 27747,
+    "Plain x-ray": 21997,
+    "Magnetic Resonance Imaging": 12657,
+    "Ultrasonography": 11429,
+    "Anterior-Posterior": 9605,
+    "Chest": 7388,
+    "angiogram": 4799,
+    "Postero-Anterior": 4303,
+    "Bone structure of cranium": 3973,
+    "Lower Extremity": 3167
+   },
+   "smallest": {
+    "Upper Extremity": 1478,
+    "Vertebral column": 1363,
+    "Positron-Emission Tomography": 432,
+    "Breast": 102,
+    "Transverse - anatomical location": 51
+   },
+   "labels_per_sample_median": 1.0,
+   "gini": 0.5716271370265719,
+   "n_modelable": 18,
+   "n_assessable": 17,
+   "too_rare_fraction": 0.05555555555555558,
+   "annotated_groups": {
+    "groups.article": [
+     44633,
+     44975
+    ]
+   },
+   "cramers_v": {},
+   "variance_share": {}
+  }
+ ],
+ "label_agreement": [
+  {
+   "first": "multilabel.concepts",
+   "second": "multilabel.concepts_manual",
+   "n_samples_both": 79061,
+   "n_shared_labels": 18,
+   "kappa_micro": 0.9643390667187545,
+   "precision_micro": 0.9367856197511851,
+   "recall_micro": 1.0,
+   "first_source_coverage": 0.4683833446668144
+  }
+ ],
+ "groups": [
+  {
+   "artifact": "groups.article",
+   "column": "article",
+   "role": "group",
+   "n_levels": 44975,
+   "size_min": 1,
+   "size_median": 1.0,
+   "size_max": 28,
+   "samples_per_level": 1.7740744858254587,
+   "shared_fraction": 0.6762836982541454,
+   "nested_in": [],
+   "split_overlap": {
+    "test": 0.6389644404150298,
+    "train": 0.0,
+    "val": 0.6449919224555735
+   }
+  }
+ ],
+ "split": {
+  "artifact": "split.split",
+  "counts": {
+   "train": 59958,
+   "test": 9927,
+   "val": 9904
+  }
+ },
+ "pairing": {
+  "image|text": 79788
+ },
+ "compute": {
+  "device": "mps",
+  "step_seconds": 3600.0,
+  "total_seconds": 10800.0,
+  "estimates": [
+   {
+    "tool": "multimodal_features",
+    "inputs": {
+     "images": "images.image_path"
+    },
+    "seconds": 3521.56
+   },
+   {
+    "tool": "generative_density",
+    "inputs": {
+     "features": "a 50-dimensional representation"
+    },
+    "seconds": 741.96835
+   },
+   {
+    "tool": "multimodal_agreement",
+    "inputs": {
+     "image": "a 50-dimensional representation",
+     "text": "a 50-dimensional representation"
+    },
+    "seconds": 737.9789
+   },
+   {
+    "tool": "near_duplicates",
+    "inputs": {
+     "images": "images.image_path"
+    },
+    "seconds": 321.1808682989102
+   },
+   {
+    "tool": "qc_images",
+    "inputs": {
+     "images": "images.image_path"
+    },
+    "seconds": 321.156
+   },
+   {
+    "tool": "dimreduce_map",
+    "inputs": {
+     "embedding": "a 50-dimensional representation"
+    },
+    "seconds": 212.573389
+   },
+   {
+    "tool": "cluster",
+    "inputs": {
+     "embedding": "a 50-dimensional representation"
+    },
+    "seconds": 140.43752999999998
+   },
+   {
+    "tool": "predict_targets",
+    "inputs": {
+     "features": "a 50-dimensional representation",
+     "target": "multilabel.concepts"
+    },
+    "seconds": 66.836475
+   }
+  ]
+ },
+ "seed": 774,
+ "seconds": 13.893792417016812,
+ "notes": []
+}

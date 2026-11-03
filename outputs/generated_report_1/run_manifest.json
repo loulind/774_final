@@ -1,6 +1,6 @@
 {
- "created": "2026-11-02 16:51:51",
- "seconds": 635.1,
+ "created": "2026-11-02 18:51:15",
+ "seconds": 503.0,
  "python": "3.12.14",
  "platform": "macOS-27.0.1-arm64-arm-64bit",
  "packages": {
@@ -26,7 +26,7 @@
   "cpu": "arm",
   "n_cpu": 10,
   "memory_gb": 17.2,
-  "disk_free_gb": 24.2,
+  "disk_free_gb": 22.7,
   "torch_version": "2.15.0"
  },
  "seed": 774,
@@ -56,21 +56,22 @@
   "reliable_min_auroc_lower": 0.8
  },
  "llm": {
-  "backend": "claude_cli",
+  "backend": "offline",
   "model_requested": "claude-opus-5-5",
   "models_used": [
    "claude-opus-5-5"
   ],
-  "replay_from": null,
+  "replay_from": "/private/tmp/claude-501/-Users-loulindsley-Projects-774-Projects/7ff2d4be-088b-4a2f-87d9-99d8d29208c4/scratchpad/replay_report_1/llm_transcript.json",
   "n_calls": 3,
-  "n_from_cache": 0,
-  "total_cost_usd": 0.785,
+  "n_from_cache": 3,
+  "total_cost_usd": 0,
   "max_budget_usd": 3.0,
+  "recorded_cost_usd": 0.785,
   "disabled": null,
   "notes": [],
   "calls": 3
  },
  "planner": "llm",
  "n_samples_used": null,
- "command": "/Users/loulindsley/Projects/774_Projects/774_final/.venv/bin/bioagent run --data data/stimage_her2 --objective Characterize spatial tissue heterogeneity: identify spatial domains, relate them to histology, find marker genes, and assess slide-level batch effects. --out outputs/generated_report_1"
+ "command": "/Users/loulindsley/Projects/774_Projects/774_final/.venv/bin/bioagent run --data data/stimage_her2 --objective Characterize spatial tissue heterogeneity: identify spatial domains, relate them to histology, find marker genes, and assess slide-level batch effects. --replay /private/tmp/claude-501/-Users-loulindsley-Projects-774-Projects/7ff2d4be-088b-4a2f-87d9-99d8d29208c4/scratchpad/replay_report_1/llm_transcript.json --out outputs/generated_report_1"
 }

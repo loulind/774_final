@@ -1,0 +1,31 @@
+row,label,flag,text
+1,Ultrasonography,unsupported,Acquired renal cysts in end-stage renal failure: 16-year-old girl with Alport syndrome and peritoneal dialysis from the age of 2 years
+3,angiogram,unsupported,Lateral view of the sacrum showing the low contrast between bone and soft tissue.
+4,Chest,unsupported,Thoracic CT scan showing perihilar pulmonary lymphadenomegaly
+4,Lymphadenopathy,unsupported,Thoracic CT scan showing perihilar pulmonary lymphadenomegaly
+5,X-Ray Computed Tomography,unsupported,5.1 cm x 3.4 cm x 4 cm multiloculated hepatic abscess in the inferior posterior aspect of the right lobe
+18,Ultrasonography,unsupported,Low set ears.
+19,Ultrasonography,unsupported,Atrial septal defect.
+20,Ultrasonography,unsupported,Single umbilical artery seen on axial section.
+21,Pelvis,unsupported,"Abdominopelvic ultrasound scan showed ectopic kidneys at the hemi-pelvis, fused in their upper poles, normal size and texture of the kidneys with normal cortico"
+21,Calculi,negated,"Abdominopelvic ultrasound scan showed ectopic kidneys at the hemi-pelvis, fused in their upper poles, normal size and texture of the kidneys with normal cortico"
+21,Obstructed,negated,"Abdominopelvic ultrasound scan showed ectopic kidneys at the hemi-pelvis, fused in their upper poles, normal size and texture of the kidneys with normal cortico"
+28,X-Ray Computed Tomography,unsupported,Coronal view of the intra-nasal foreign body.
+29,X-Ray Computed Tomography,unsupported,Sagittal view of the calcified nasal packing.
+30,X-Ray Computed Tomography,unsupported,Transverse view of the calcified foreign body. Extensive sinusitis of the right and left maxillary sinuses is evident.
+35,angiogram,unsupported,After administration of IV nitrates and resolution of the narrowing in the LAD.
+35,Anterior descending branch of left coronary artery,unsupported,After administration of IV nitrates and resolution of the narrowing in the LAD.
+42,X-Ray Computed Tomography,unsupported,Sigmoid colon cancer invading to the retroperitoneum at the time of initial diagnosis.
+42,Retroperitoneal Space,unsupported,Sigmoid colon cancer invading to the retroperitoneum at the time of initial diagnosis.
+43,X-Ray Computed Tomography,unsupported,Retroperitoneal abscess adjacent to the sigmoid colon tumor.
+44,X-Ray Computed Tomography,unsupported,Abnormal air accumulation in the subcutaneous space of the left thigh.
+47,Ultrasonography,unsupported,Carpentier type 3B: restrictive leaflet motion—systole (closure): ischaemic mitral regurgitation.
+48,Plain x-ray,unsupported,FB (cutlery handle) in the DII
+48,Postero-Anterior,unsupported,FB (cutlery handle) in the DII
+48,Abdomen,unsupported,FB (cutlery handle) in the DII
+53,X-Ray Computed Tomography,unsupported,A 5.5 cm AAA in close relation with a 17 cm left renal cyst (one out of many).
+54,X-Ray Computed Tomography,unsupported,Left ureteral catheter in close proximity to the aortic bifurcation.
+57,Pericardial sac structure,unsupported,Chest computed tomography (axial view) with cystic lesion in the pericardium (arrows).
+58,Ultrasonography,unsupported,Transthoracic 4 chamber echocardiogram poorly defined pericardial mass overlying right atrial border (arrow) [18]
+59,Magnetic Resonance Imaging,unsupported,Time-of-flight MRA Obtained One Month After Initial ImagingTime-of-flight MR angiogram (MRA) one month after the patient was initially noted to be unresponsive 
+61,Right atrial structure,unsupported,"Computed tomography; Transverse section: 6 cm defect involving the right atrium and the right inferior pulmonary vein, which appears markedly enlarged"

@@ -300,6 +300,7 @@ class LLMClient:
                 "replay_from": str(self.replay_from) if self.replay_from else None,
                 "n_calls": len(self.calls), "n_from_cache": sum(c["cached"] for c in self.calls),
                 "total_cost_usd": round(self.spent_usd, 4), "max_budget_usd": self.max_budget_usd,
+                "recorded_cost_usd": round(sum(c.get("cost_usd") or 0.0 for c in self.calls), 4),
                 "disabled": self.disabled, "notes": self.notes, "calls": self.calls}
 
 

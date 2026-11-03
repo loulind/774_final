@@ -1,0 +1,1670 @@
+{
+ "record": {
+  "objective": "Determine which clinical concepts can be reliably predicted from images, and identify data-quality issues such as class imbalance, near-duplicates, and noisy captions.",
+  "mode": "full",
+  "questions": [
+   {
+    "type": "predictive_modelling",
+    "phrase": "Determine which clinical concepts can be reliably predicted from images",
+    "implied": false,
+    "targets": {
+     "features": [
+      "images.image_path"
+     ],
+     "labels": [
+      "multilabel.concepts"
+     ],
+     "reference": [
+      "multilabel.concepts_manual"
+     ]
+    }
+   },
+   {
+    "type": "data_quality_audit",
+    "phrase": "identify data-quality issues such as class imbalance, near-duplicates, and noisy captions",
+    "implied": false,
+    "targets": {
+     "images": [
+      "images.image_path"
+     ],
+     "text": [
+      "text.caption"
+     ],
+     "labels": [
+      "multilabel.concepts",
+      "multilabel.concepts_manual"
+     ]
+    }
+   },
+   {
+    "type": "visualization",
+    "phrase": "(maps for the report)",
+    "implied": true,
+    "targets": {
+     "features": [
+      "images.image_path"
+     ]
+    }
+   }
+  ],
+  "constraints": {
+   "reliability_rule": ">= 20 positive evaluation samples, lower 95% DeLong bound of AUROC >= 0.8, BH-adjusted p < 0.05 against AUROC 0.5; fewer positives: too rare to assess"
+  },
+  "data": {
+   "n_samples": 79789,
+   "n_used": null,
+   "format": "table",
+   "modalities": [
+    {
+     "name": "image",
+     "kind": "image",
+     "n_present": 79789,
+     "missing_fraction": 0.0,
+     "source": "column 'image_path'"
+    },
+    {
+     "name": "text",
+     "kind": "text",
+     "n_present": 79788,
+     "missing_fraction": 1.2533055935071147e-05,
+     "source": "column 'caption'"
+    }
+   ],
+   "groups": [
+    {
+     "column": "article",
+     "n_levels": 44975,
+     "samples_per_level": 1.7740744858254587,
+     "nested_in": []
+    }
+   ],
+   "split": {
+    "train": 59958,
+    "test": 9927,
+    "val": 9904
+   }
+  },
+  "challenges": [
+   {
+    "id": "nested_sampling:groups.article",
+    "severity": "low",
+    "relevant": true,
+    "stage": "profile",
+    "summary": "The 79,789 samples come from 44,975 article levels (1.77 per level); 68% of samples share their article with others, so the independent unit is the article.",
+    "evidence": [
+     {
+      "metric": "samples per independent unit (coarsest grouping)",
+      "value": 1.7740744858254587
+     },
+     {
+      "metric": "article levels",
+      "value": 44975
+     },
+     {
+      "metric": "share of samples sharing their article",
+      "value": 0.6762836982541454
+     }
+    ],
+    "handled_by": [
+     "predict",
+     "predict_manual"
+    ],
+    "handling": "predict (predict_targets): model ridge, n reliable 176, n assessed 214; predict_manual (predict_targets): model logistic, n reliable 17, n assessed 17",
+    "residual_risk": "folds and comparisons keep the independent unit whole"
+   },
+   {
+    "id": "class_imbalance:multilabel.concepts",
+    "severity": "high",
+    "relevant": true,
+    "stage": "profile",
+    "summary": "'concepts' has 1,947 labels, the largest 27,798 times the smallest; 221 have the support to be modelled and judged (89% are too rare to assess).",
+    "evidence": [
+     {
+      "metric": "largest / smallest class size",
+      "value": 27798.0
+     },
+     {
+      "metric": "share of labels too rare to assess",
+      "value": 0.8864920390344119
+     },
+     {
+      "metric": "labels with support to model and judge",
+      "value": 221
+     },
+     {
+      "metric": "Gini of label frequencies",
+      "value": 0.8127542208090018
+     }
+    ],
+    "handled_by": [
+     "imbalance_concepts",
+     "predict"
+    ],
+    "handling": "imbalance_concepts (label_imbalance): n labels used 1,947, imbalance ratio 27,798, gini 0.813; predict (predict_targets): model ridge, n reliable 176, n assessed 214",
+    "residual_risk": "86 modelled targets too rare to assess"
+   },
+   {
+    "id": "class_imbalance:multilabel.concepts_manual",
+    "severity": "high",
+    "relevant": true,
+    "stage": "profile",
+    "summary": "'concepts_manual' has 18 labels, the largest 544 times the smallest; 17 have the support to be modelled and judged (6% are too rare to assess).",
+    "evidence": [
+     {
+      "metric": "largest / smallest class size",
+      "value": 544.0588235294117
+     },
+     {
+      "metric": "share of labels too rare to assess",
+      "value": 0.05555555555555558
+     },
+     {
+      "metric": "labels with support to model and judge",
+      "value": 17
+     },
+     {
+      "metric": "Gini of label frequencies",
+      "value": 0.5716271370265719
+     }
+    ],
+    "handled_by": [
+     "imbalance_concepts_manual",
+     "predict_manual"
+    ],
+    "handling": "imbalance_concepts_manual (label_imbalance): n labels used 18, imbalance ratio 544, gini 0.572; predict_manual (predict_targets): model logistic, n reliable 17, n assessed 17",
+    "residual_risk": "1 modelled targets too rare to assess"
+   },
+   {
+    "id": "label_noise:multilabel.concepts,multilabel.concepts_manual",
+    "severity": "low",
+    "relevant": true,
+    "stage": "profile",
+    "summary": "multilabel.concepts and multilabel.concepts_manual agree with kappa 0.964 on 18 shared labels (precision 0.937, recall 1); those labels hold 47% of multilabel.concepts's assignments, so the rest is unmeasured.",
+    "evidence": [
+     {
+      "metric": "Cohen's kappa between label sources",
+      "value": 0.9643390667187545
+     },
+     {
+      "metric": "share of the first source's assignments on shared labels",
+      "value": 0.4683833446668144
+     }
+    ],
+    "handled_by": [
+     "label_sources",
+     "caption_labels"
+    ],
+    "handling": "label_sources (label_agreement): kappa micro 0.964, n shared labels 18, precision micro 0.937; caption_labels (caption_label_consistency): n labels checked 300, unsupported rate 0.203, negated rate 0.00562",
+    "residual_risk": "kappa between sources 0.964; the rest is unmeasured"
+   },
+   {
+    "id": "near_duplicates:images.image_path",
+    "severity": "medium",
+    "relevant": true,
+    "stage": "profile",
+    "summary": "0.5% of the 79,785 hashed images in images.image_path have a near-copy (217 pairs: 64-bit difference-hash matches confirmed at 256 bits, of 57,627 64-bit matches); 57 pairs cross the predefined split.",
+    "evidence": [
+     {
+      "metric": "share of images in a near-duplicate pair",
+      "value": 0.004524660023814
+     },
+     {
+      "metric": "near-duplicate pairs crossing the split",
+      "value": 57
+     },
+     {
+      "metric": "64-bit hash matches before confirmation",
+      "value": 57627
+     }
+    ],
+    "handled_by": [
+     "duplicates",
+     "predict",
+     "predict_manual"
+    ],
+    "handling": "duplicates (near_duplicates): n clusters 3,373, fraction in clusters 0.085, n hash pairs 217; predict (predict_targets): model ridge, n reliable 176, n assessed 214; predict_manual (predict_targets): model logistic, n reliable 17, n assessed 17",
+    "residual_risk": "0.085 of images in duplicate clusters, kept together in folds and splits"
+   },
+   {
+    "id": "split_leakage:groups.article,split.split",
+    "severity": "high",
+    "relevant": true,
+    "stage": "profile",
+    "summary": "64% of the test split shares its article with another split; 64% of the val split shares its article with another split.",
+    "evidence": [
+     {
+      "metric": "share of the test split whose article occurs in another split",
+      "value": 0.6389644404150298
+     },
+     {
+      "metric": "share of the val split whose article occurs in another split",
+      "value": 0.6449919224555735
+     }
+    ],
+    "handled_by": [
+     "duplicates",
+     "predict",
+     "predict_manual"
+    ],
+    "handling": "duplicates (near_duplicates): n clusters 3,373, fraction in clusters 0.085, n hash pairs 217; predict (predict_targets): model ridge, n reliable 176, n assessed 214; predict_manual (predict_targets): model logistic, n reliable 17, n assessed 17",
+    "residual_risk": "7921 fitting samples set aside; a fit with them gains 0.000541 median AUROC"
+   },
+   {
+    "id": "split_leakage:images.image_path,split.split",
+    "severity": "medium",
+    "relevant": true,
+    "stage": "profile",
+    "summary": "57 near-duplicate image pairs lie on different sides of the split.",
+    "evidence": [
+     {
+      "metric": "near-duplicate pairs crossing the split",
+      "value": 57
+     }
+    ],
+    "handled_by": [
+     "duplicates",
+     "predict",
+     "predict_manual"
+    ],
+    "handling": "duplicates (near_duplicates): n clusters 3,373, fraction in clusters 0.085, n hash pairs 217; predict (predict_targets): model ridge, n reliable 176, n assessed 214; predict_manual (predict_targets): model logistic, n reliable 17, n assessed 17",
+    "residual_risk": "7921 fitting samples set aside; a fit with them gains 0.000541 median AUROC"
+   },
+   {
+    "id": "text_noise:text.caption",
+    "severity": "low",
+    "relevant": true,
+    "stage": "profile",
+    "summary": "3.6% of text.caption are flagged (too short 0.9%, duplicate 1.8%, boilerplate 0.5%, panel reference 1.2%); median 17 words.",
+    "evidence": [
+     {
+      "metric": "share of texts empty, very short, repeated, boilerplate or referring to panels",
+      "value": 0.035794856369378854
+     },
+     {
+      "metric": "share empty",
+      "value": 0.0
+     },
+     {
+      "metric": "share too short",
+      "value": 0.0092871108437359
+     },
+     {
+      "metric": "share duplicate",
+      "value": 0.018398756705268964
+     }
+    ],
+    "handled_by": [
+     "text_qc",
+     "caption_labels",
+     "image_text"
+    ],
+    "handling": "text_qc (qc_text): fraction removed 0.00929, fraction duplicate 0.0184, fraction panel reference 0.012; caption_labels (caption_label_consistency): n labels checked 300, unsupported rate 0.203, negated rate 0.00562; image_text (multimodal_agreement): aligner zero_shot, val recall at 10 0.887, flagged fraction 0.000177",
+    "residual_risk": "handled; see the steps' results"
+   },
+   {
+    "id": "image_heterogeneity:images.image_path",
+    "severity": "medium",
+    "relevant": true,
+    "stage": "profile",
+    "summary": "In images.image_path sizes are uniform (median 294 x 256 px) and 74% of 240 sampled images are greyscale, the rest colour.",
+    "evidence": [
+     {
+      "metric": "Q3 / Q1 of the shorter image side",
+      "value": 1.0
+     },
+     {
+      "metric": "share of the minority colour mode (greyscale vs colour)",
+      "value": 0.2583333333333333
+     }
+    ],
+    "handled_by": [
+     "image_qc",
+     "features",
+     "atypical"
+    ],
+    "handling": "image_qc (qc_images): n removed 5, fraction removed 6.27e-05; features (multimodal_features): image encoder biomedclip_image, text encoder biomedclip_text, screen score 0.955; atypical (generative_density): model maf, val loglik gain 27, flagged fraction 0.00818",
+    "residual_risk": "handled; see the steps' results"
+   },
+   {
+    "id": "multiple_testing",
+    "severity": "high",
+    "relevant": true,
+    "stage": "profile",
+    "summary": "1,721 targets modelled: without error control, false positives are expected among them.",
+    "evidence": [
+     {
+      "metric": "hypotheses the questions imply: targets modelled",
+      "value": 1721
+     }
+    ],
+    "handled_by": [
+     "predict",
+     "predict_manual"
+    ],
+    "handling": "predict (predict_targets): model ridge, n reliable 176, n assessed 214; predict_manual (predict_targets): model logistic, n reliable 17, n assessed 17",
+    "residual_risk": "low: Benjamini-Hochberg FDR within every family of tests"
+   },
+   {
+    "id": "compute",
+    "severity": "medium",
+    "relevant": true,
+    "stage": "profile",
+    "summary": "The most expensive tool on these data, multimodal_features, is estimated at 3,522 s, 98% of the 3,600 s step budget on mps.",
+    "evidence": [
+     {
+      "metric": "largest declared tool cost / step budget",
+      "value": 0.9782111111111111
+     },
+     {
+      "metric": "estimated seconds: multimodal_features",
+      "value": 3521.6
+     },
+     {
+      "metric": "estimated seconds: generative_density",
+      "value": 742.0
+     },
+     {
+      "metric": "estimated seconds: multimodal_agreement",
+      "value": 738.0
+     }
+    ],
+    "handled_by": [],
+    "handling": null,
+    "residual_risk": "not handled: no step of the plan applies"
+   },
+   {
+    "id": "pretraining_overlap:features",
+    "severity": "medium",
+    "relevant": true,
+    "stage": "execution",
+    "summary": "Zero-shot retrieval reaches recall@10 0.95 on held-out pairs: the encoder may have been pretrained on these or very similar pairs.",
+    "evidence": [
+     {
+      "metric": "zero-shot recall@10 on held-out pairs",
+      "value": 0.955
+     }
+    ],
+    "handled_by": [],
+    "handling": null,
+    "residual_risk": "zero-shot and retrieval scores may be optimistic"
+   }
+  ],
+  "plan": {
+   "source": "llm",
+   "steps": [
+    {
+     "id": "image_qc",
+     "tool": "qc_images",
+     "purpose": "Flag and remove unreadable, tiny, strip-shaped and blank images; the pass also hashes every image for the duplicate audit.",
+     "params": {},
+     "handles": [
+      "image_heterogeneity:images.image_path"
+     ],
+     "validation_only": false
+    },
+    {
+     "id": "text_qc",
+     "tool": "qc_text",
+     "purpose": "Remove empty and very short captions; flag repeated, boilerplate and panel-referencing ones.",
+     "params": {},
+     "handles": [
+      "text_noise:text.caption"
+     ],
+     "validation_only": false
+    },
+    {
+     "id": "features",
+     "tool": "multimodal_features",
+     "purpose": "Screen pretrained encoders on held-out pairs (label-free) and extract image and caption features.",
+     "params": {},
+     "handles": [
+      "image_heterogeneity:images.image_path"
+     ],
+     "validation_only": false
+    },
+    {
+     "id": "imbalance_concepts",
+     "tool": "label_imbalance",
+     "purpose": "Frequency audit of 'concepts': imbalance, long tail and how many labels have the support to be judged.",
+     "params": {},
+     "handles": [
+      "class_imbalance:multilabel.concepts"
+     ],
+     "validation_only": false
+    },
+    {
+     "id": "imbalance_concepts_manual",
+     "tool": "label_imbalance",
+     "purpose": "Frequency audit of 'concepts_manual': imbalance, long tail and how many labels have the support to be judged.",
+     "params": {},
+     "handles": [
+      "class_imbalance:multilabel.concepts_manual"
+     ],
+     "validation_only": false
+    },
+    {
+     "id": "duplicates",
+     "tool": "near_duplicates",
+     "purpose": "Find near-duplicate images (confirmed hashes, calibrated embedding cosine); clusters crossing splits or articles are leakage.",
+     "params": {},
+     "handles": [
+      "near_duplicates:images.image_path",
+      "split_leakage:groups.article,split.split",
+      "split_leakage:images.image_path,split.split"
+     ],
+     "validation_only": false
+    },
+    {
+     "id": "label_sources",
+     "tool": "label_agreement",
+     "purpose": "Agreement of 'concepts' with 'concepts_manual' per shared label: an estimate of label noise.",
+     "params": {},
+     "handles": [
+      "label_noise:multilabel.concepts,multilabel.concepts_manual"
+     ],
+     "validation_only": false
+    },
+    {
+     "id": "caption_labels",
+     "tool": "caption_label_consistency",
+     "purpose": "Flag labels their caption does not support or negates, and captions naming a label the sample lacks.",
+     "params": {},
+     "handles": [
+      "label_noise:multilabel.concepts,multilabel.concepts_manual",
+      "text_noise:text.caption"
+     ],
+     "validation_only": false
+    },
+    {
+     "id": "image_text",
+     "tool": "multimodal_agreement",
+     "purpose": "Flag image-caption pairs that match worse than random partners (noisy or mismatched captions), with articles kept together in cross-fitting.",
+     "params": {},
+     "handles": [
+      "text_noise:text.caption"
+     ],
+     "validation_only": false
+    },
+    {
+     "id": "atypical",
+     "tool": "generative_density",
+     "purpose": "Score how atypical every image is under a cross-fitted density model, as a quality signal next to the QC flags.",
+     "params": {},
+     "handles": [
+      "image_heterogeneity:images.image_path"
+     ],
+     "validation_only": false
+    },
+    {
+     "id": "predict",
+     "tool": "predict_targets",
+     "purpose": "Predict 'concepts' from image features with article- and duplicate-grouped folds, a single test evaluation, BH control and the configured reliability rule.",
+     "params": {},
+     "handles": [
+      "nested_sampling:groups.article",
+      "class_imbalance:multilabel.concepts",
+      "near_duplicates:images.image_path",
+      "split_leakage:groups.article,split.split",
+      "split_leakage:images.image_path,split.split",
+      "multiple_testing"
+     ],
+     "validation_only": false
+    },
+    {
+     "id": "predict_manual",
+     "tool": "predict_targets",
+     "purpose": "Predict the 18 manually curated concepts from image features under the same leakage-safe design, to check reliability verdicts against cleaner labels.",
+     "params": {},
+     "handles": [
+      "nested_sampling:groups.article",
+      "class_imbalance:multilabel.concepts_manual",
+      "near_duplicates:images.image_path",
+      "split_leakage:groups.article,split.split",
+      "split_leakage:images.image_path,split.split",
+      "multiple_testing"
+     ],
+     "validation_only": false
+    },
+    {
+     "id": "map",
+     "tool": "dimreduce_map",
+     "purpose": "A two-dimensional map of the image features for the report.",
+     "params": {},
+     "handles": [],
+     "validation_only": false
+    }
+   ],
+   "accepted": []
+  },
+  "decisions": [
+   {
+    "step": "system",
+    "decision": "hardware",
+    "chosen": "mps",
+    "rationale": "{'device': 'mps', 'device_name': 'Apple GPU (MPS) on arm64', 'cpu': 'arm', 'n_cpu': 10, 'memory_gb': 17.2, 'disk_free_gb': 22.7, 'torch_version': '2.15.0'}; full budgets",
+    "source": "system"
+   },
+   {
+    "step": "objective",
+    "decision": "question: predictive_modelling",
+    "chosen": "Determine which clinical concepts can be reliably predicted from images",
+    "rationale": "cue 'predicted'; targets features: images.image_path; labels: multilabel.concepts; reference: multilabel.concepts_manual",
+    "source": "heuristic"
+   },
+   {
+    "step": "objective",
+    "decision": "question: data_quality_audit",
+    "chosen": "identify data-quality issues such as class imbalance, near-duplicates, and noisy captions",
+    "rationale": "cue 'data-quality'; targets images: images.image_path; text: text.caption; labels: multilabel.concepts, multilabel.concepts_manual; named challenges class_imbalance, near_duplicates, text_noise, label_noise",
+    "source": "heuristic"
+   },
+   {
+    "step": "objective",
+    "decision": "question: visualization",
+    "chosen": "implied",
+    "rationale": "every report shows maps; targets features: images.image_path",
+    "source": "heuristic"
+   },
+   {
+    "step": "objective",
+    "decision": "constraint: reliability_rule",
+    "chosen": ">= 20 positive evaluation samples, lower 95% DeLong bound of AUROC >= 0.8, BH-adjusted p < 0.05 against AUROC 0.5; fewer positives: too rare to assess",
+    "rationale": "fixed before any result is seen",
+    "source": "heuristic"
+   },
+   {
+    "step": "challenges",
+    "decision": "challenge register",
+    "chosen": "11 relevant challenges, 4 high",
+    "rationale": "class_imbalance:multilabel.concepts; class_imbalance:multilabel.concepts_manual; split_leakage:groups.article,split.split; multiple_testing",
+    "source": "heuristic"
+   },
+   {
+    "step": "plan",
+    "decision": "data-quality audits",
+    "chosen": "class_imbalance, image_heterogeneity, label_noise, near_duplicates, split_leakage, text_noise",
+    "rationale": "The challenges the objective names (class_imbalance, label_noise, near_duplicates, text_noise) and every relevant challenge the profile detected.",
+    "source": "heuristic"
+   },
+   {
+    "step": "plan",
+    "decision": "prediction target and features",
+    "chosen": "'concepts' from images",
+    "rationale": "Named by the objective; 'concepts_manual' defines some of the same labels and serves as the reference for label noise.",
+    "source": "heuristic"
+   },
+   {
+    "step": "plan",
+    "decision": "cross-validation groups",
+    "chosen": "article + near-duplicate clusters",
+    "rationale": "Samples share articles (68% of them); near-copies link samples too, so folds and the test separation keep linked samples together.",
+    "source": "heuristic"
+   },
+   {
+    "step": "plan",
+    "decision": "reliably predicted",
+    "chosen": "configured rule",
+    "rationale": ">= 20 positive evaluation samples, lower 95% DeLong bound of AUROC >= 0.8, BH-adjusted p < 0.05 against AUROC 0.5; fewer positives: too rare to assess",
+    "source": "heuristic"
+   },
+   {
+    "step": "plan",
+    "decision": "challenge handling",
+    "chosen": "10 of 11 relevant challenges handled by steps; 0 accepted",
+    "rationale": "Each relevant challenge is matched to the steps whose tool addresses its type and whose inputs derive from its data; every high-severity one (4) must be handled or accepted.",
+    "source": "heuristic"
+   },
+   {
+    "step": "predict_manual",
+    "decision": "Add a second prediction step on 'concepts_manual'",
+    "chosen": "predict_targets on multilabel.concepts_manual with article groups and duplicate clusters",
+    "rationale": "The objective reading lists concepts_manual as the reference for predictive_modelling. On its 18 shared labels, 'concepts' has precision 0.937 (recall 1.0). That label noise could push a concept's lower DeLong bound below 0.8. 17 of the 18 manual labels can be assessed. The step costs about 67 s against 10,800 s.",
+    "source": "llm"
+   },
+   {
+    "step": "image_text",
+    "decision": "Bind groups.article to multimodal_agreement",
+    "chosen": "groups: groups.article",
+    "rationale": "68% of samples share an article (1.77 per article). Captions repeat across splits too: 27.6% of the duplicate captions cross the split. If article-mates are not kept together, cross-fitted alignment and the random-partner baseline are inflated.",
+    "source": "llm"
+   },
+   {
+    "step": "plan",
+    "decision": "planner used",
+    "chosen": "llm",
+    "rationale": "LLM revised the rule-based plan: added step predict_manual (predict_targets); image_text.inputs: {'image': '@features.image_features', 'text': '@features.text_features', 'split': 'split.split'} -> {'image': '@features.image_features', 'text': '@features.text_features', 'split': 'split.split', 'groups': 'groups.article'}",
+    "source": "llm"
+   },
+   {
+    "step": "image_qc",
+    "decision": "image QC rules",
+    "chosen": "unreadable, shorter side < 32px, aspect > 5, thumbnail grey s.d. < 2",
+    "rationale": "Images that cannot be decoded, are too small to show structure, are strips or are blank cannot be encoded meaningfully.",
+    "source": "subagent"
+   },
+   {
+    "step": "text_qc",
+    "decision": "texts removed",
+    "chosen": "empty, too_short",
+    "rationale": "Empty and very short texts carry no description to align with or learn from; repeated, boilerplate and panel-referencing texts are kept and reported, because they are still informative but noisy.",
+    "source": "subagent"
+   },
+   {
+    "step": "features",
+    "decision": "image domain",
+    "chosen": "greyscale_imaging",
+    "rationale": "75% of sampled images greyscale; 3% of tissue pixels with a stain hue",
+    "source": "subagent"
+   },
+   {
+    "step": "features",
+    "decision": "colour normalisation",
+    "chosen": "none",
+    "rationale": "mostly greyscale images: there is no stain colour to normalise",
+    "source": "subagent"
+   },
+   {
+    "step": "features",
+    "decision": "image encoder",
+    "chosen": "biomedclip_image",
+    "rationale": "Highest alignment_recall_at_10 on 500 held-out screening samples, the predefined split (train fits, val selects; test unused): 0.955 (chance 0.020). Pretrained on: PMC-15M: 15M figure-caption pairs from PubMed Central.",
+    "source": "subagent"
+   },
+   {
+    "step": "features",
+    "decision": "text encoder",
+    "chosen": "biomedclip_text",
+    "rationale": "Best partner of biomedclip_image: alignment_recall_at_10 0.955.",
+    "source": "subagent"
+   },
+   {
+    "step": "imbalance_concepts",
+    "decision": "labels assessable",
+    "chosen": "221 of 1,947",
+    "rationale": "A label needs >= 10 training positives to be modelled and >= 20 test positives to be judged; the others are reported as too rare to assess.",
+    "source": "subagent"
+   },
+   {
+    "step": "imbalance_concepts_manual",
+    "decision": "labels assessable",
+    "chosen": "17 of 18",
+    "rationale": "A label needs >= 10 training positives to be modelled and >= 20 test positives to be judged; the others are reported as too rare to assess.",
+    "source": "subagent"
+   },
+   {
+    "step": "duplicates",
+    "decision": "embedding duplicate threshold",
+    "chosen": "cosine >= 0.9473",
+    "rationale": "Mutual nearest neighbours whose cosine reaches quantile 0.5 of the embedding cosine of the 217 pixel-level duplicate pairs.",
+    "source": "subagent"
+   },
+   {
+    "step": "duplicates",
+    "decision": "near-duplicate clusters",
+    "chosen": "3,373 clusters, 6,782 images",
+    "rationale": "Pairs within 4 bits of difference hash or mutual nearest neighbours above the embedding threshold are joined into connected components.",
+    "source": "subagent"
+   },
+   {
+    "step": "label_sources",
+    "decision": "label noise estimate",
+    "chosen": "kappa 0.96 on 18 shared labels",
+    "rationale": "'multilabel.concepts' is compared with 'multilabel.concepts_manual' on the 79,061 samples both annotate; precision and recall treat the second source as the reference.",
+    "source": "subagent"
+   },
+   {
+    "step": "caption_labels",
+    "decision": "labels checked",
+    "chosen": "300 of 1947",
+    "rationale": "Labels need at least 20 positive training texts to learn which words indicate them, and at least one word with association z >= 3.",
+    "source": "subagent"
+   },
+   {
+    "step": "image_text",
+    "decision": "alignment training / validation pairs",
+    "chosen": "the predefined split (train fits, val selects; test unused)",
+    "rationale": "Alignments are fitted on training pairs and compared on validation pairs; no pair is scored by a model trained on it.",
+    "source": "subagent"
+   },
+   {
+    "step": "image_text",
+    "decision": "contrastive head and training",
+    "chosen": "embed_dim=256, hidden=512, n_layers=2, dropout=0.1, residual=True, lr=0.001, weight_decay=0.0001, batch_size=512, max_epochs=300, patience=15, seconds=240.0",
+    "rationale": "about 59,368 training pairs: identity-initialised (residual) heads in the encoders' shared space, batch 512 (511 negatives per positive), early stopping on validation recall@10 (patience 15) and a 240s cap per fit",
+    "source": "subagent"
+   },
+   {
+    "step": "image_text",
+    "decision": "image-text alignment",
+    "chosen": "zero_shot",
+    "rationale": "Highest validation recall@10 on 2000 held-out pairs: 0.887 (chance 0.005).",
+    "source": "subagent"
+   },
+   {
+    "step": "atypical",
+    "decision": "density fit / validation samples",
+    "chosen": "the predefined split ('split.split': train fits, val selects)",
+    "rationale": "The projection and the density are fitted on training samples and compared on validation samples. Every sample is then scored by a model that was not fitted on it (training samples by 2-fold cross-fitting) and judged against that model's own validation scores.",
+    "source": "subagent"
+   },
+   {
+    "step": "atypical",
+    "decision": "density space",
+    "chosen": "57 principal components, standardised",
+    "rationale": "57 principal components hold 90% of the variance",
+    "source": "subagent"
+   },
+   {
+    "step": "atypical",
+    "decision": "flow hyperparameters",
+    "chosen": "n_blocks=5, hidden_dim=256, noise_std=0.0, lr=0.001, batch_size=256, max_epochs=300, weight_decay=1e-05",
+    "rationale": "n_blocks=5, hidden_dim=256 (8 x p, in [32, 256]); noise_std=0.0",
+    "source": "subagent"
+   },
+   {
+    "step": "atypical",
+    "decision": "density model",
+    "chosen": "MAF",
+    "rationale": "held-out mean log-likelihood: MAF -54.704, Gaussian -81.719 per sample",
+    "source": "subagent"
+   },
+   {
+    "step": "predict",
+    "decision": "targets modelled",
+    "chosen": "300 of 1947",
+    "rationale": "Targets need at least 10 positive and negative training samples to fit and tune a model; at most the 300 most frequent are modelled.",
+    "source": "subagent"
+   },
+   {
+    "step": "predict",
+    "decision": "prediction model",
+    "chosen": "ridge",
+    "rationale": "300 targets: closed-form ridge fits all targets from one eigendecomposition per fold; Platt scaling on out-of-fold scores gives probabilities.",
+    "source": "subagent"
+   },
+   {
+    "step": "predict",
+    "decision": "fit / test separation",
+    "chosen": "7,921 fitting samples set aside",
+    "rationale": "7,921 of 69,859 non-test samples (11.3%) share a article / near_duplicate_cluster group with test samples (65.5% of the test samples have such a group-mate). They are left out of fitting, so every test sample is scored by a model that never saw its group; a second fit that keeps them measures how much the leak would inflate AUROC.",
+    "source": "subagent"
+   },
+   {
+    "step": "predict",
+    "decision": "evaluation design",
+    "chosen": "fit on the non-test splits, scored once on the test split",
+    "rationale": "Folds keep every article / near_duplicate_cluster group whole (samples linked by any grouping stay together); penalties are chosen by 3-fold inner cross-validation on training samples only.",
+    "source": "subagent"
+   },
+   {
+    "step": "predict",
+    "decision": "reliability rule",
+    "chosen": "176 of 214 assessable targets reliable",
+    "rationale": "Fixed before any result: >= 20 positives in the evaluation set, lower 95% DeLong bound of AUROC >= 0.8, and BH-adjusted one-sided p (AUROC > 0.5) < 0.05 across the 214 assessable targets.",
+    "source": "subagent"
+   },
+   {
+    "step": "predict_manual",
+    "decision": "targets modelled",
+    "chosen": "18 of 18",
+    "rationale": "Targets need at least 10 positive and negative training samples to fit and tune a model; at most the 300 most frequent are modelled.",
+    "source": "subagent"
+   },
+   {
+    "step": "predict_manual",
+    "decision": "prediction model",
+    "chosen": "logistic",
+    "rationale": "18 targets: per-target logistic regression is affordable.",
+    "source": "subagent"
+   },
+   {
+    "step": "predict_manual",
+    "decision": "fit / test separation",
+    "chosen": "7,811 fitting samples set aside",
+    "rationale": "7,811 of 69,236 non-test samples (11.3%) share a article / near_duplicate_cluster group with test samples (65.3% of the test samples have such a group-mate). They are left out of fitting, so every test sample is scored by a model that never saw its group; a second fit that keeps them measures how much the leak would inflate AUROC.",
+    "source": "subagent"
+   },
+   {
+    "step": "predict_manual",
+    "decision": "evaluation design",
+    "chosen": "fit on the non-test splits, scored once on the test split",
+    "rationale": "Folds keep every article / near_duplicate_cluster group whole (samples linked by any grouping stay together); penalties are chosen by 3-fold inner cross-validation on training samples only.",
+    "source": "subagent"
+   },
+   {
+    "step": "predict_manual",
+    "decision": "reliability rule",
+    "chosen": "17 of 17 assessable targets reliable",
+    "rationale": "Fixed before any result: >= 20 positives in the evaluation set, lower 95% DeLong bound of AUROC >= 0.8, and BH-adjusted one-sided p (AUROC > 0.5) < 0.05 across the 17 assessable targets.",
+    "source": "subagent"
+   },
+   {
+    "step": "map",
+    "decision": "reduce before mapping",
+    "chosen": "PCA to 50 dimensions",
+    "rationale": "The input has 512 dimensions; neighbour searches and embeddings are faster and less noisy on leading principal components.",
+    "source": "subagent"
+   },
+   {
+    "step": "map",
+    "decision": "2-D map method",
+    "chosen": "umap",
+    "rationale": "highest mean of trustworthiness and continuity at k=10 (0.974) among maps with seed stability >= 0.5: trustworthiness 0.977, continuity 0.972, stability 0.53.",
+    "source": "subagent"
+   },
+   {
+    "step": "critic",
+    "decision": "triggers",
+    "chosen": "0 found",
+    "rationale": "No trigger fired.",
+    "source": "critic"
+   },
+   {
+    "step": "critic",
+    "decision": "assessment",
+    "chosen": "no revision",
+    "rationale": "The results answer the objective. On the noisy 'concepts' labels, 176 of the 214 assessable concepts are reliably predictable (test median AUROC 0.940, CV 0.943). All 17 assessable manual concepts are reliable (AUROC 0.996). Leakage gaps are negligible (\u22640.0005), so the grouped and duplicate-aware design holds. The data-quality audit is thorough: severe imbalance (Gini 0.81, 1726 of 1947 labels below support), 8.5% of images in near-duplicate clusters (28% of clusters cross splits, 6.4% of test ",
+    "source": "llm"
+   }
+  ],
+  "results": {
+   "image_qc": {
+    "tool": "qc_images",
+    "answers": [
+     "data_quality_audit"
+    ],
+    "metrics": {
+     "n_input": 79789,
+     "n_removed": 5,
+     "fraction_removed": 6.266527967514319e-05,
+     "max_group_fraction_removed": 0.00020193861066235866,
+     "n_unreadable": 0,
+     "n_tiny": 0,
+     "n_extreme_aspect": 5,
+     "n_blank": 0,
+     "width_median": 294.0,
+     "height_median": 256.0,
+     "size_iqr_ratio": 1.0
+    },
+    "error": null,
+    "skipped": null,
+    "criteria": [
+     {
+      "metric": "fraction_removed",
+      "goal": "min",
+      "threshold": 0.1,
+      "value": 6.266527967514319e-05,
+      "passed": true,
+      "selection": true
+     },
+     {
+      "metric": "max_group_fraction_removed",
+      "goal": "min",
+      "threshold": 0.5,
+      "value": 0.00020193861066235866,
+      "passed": true,
+      "selection": true
+     },
+     {
+      "metric": "size_iqr_ratio",
+      "goal": "report",
+      "threshold": null,
+      "value": 1.0,
+      "passed": null,
+      "selection": true
+     }
+    ]
+   },
+   "text_qc": {
+    "tool": "qc_text",
+    "answers": [
+     "data_quality_audit"
+    ],
+    "metrics": {
+     "n_input": 79788,
+     "fraction_removed": 0.0092871108437359,
+     "fraction_empty": 0.0,
+     "fraction_too_short": 0.0092871108437359,
+     "fraction_duplicate": 0.018398756705268964,
+     "fraction_boilerplate": 0.004862886649621497,
+     "fraction_panel_reference": 0.011981751641850905,
+     "words_median": 17.0,
+     "words_p95": 49.0,
+     "cross_split_duplicate_fraction": 0.27613412228796846,
+     "n_boilerplate_texts": 34
+    },
+    "error": null,
+    "skipped": null,
+    "criteria": [
+     {
+      "metric": "fraction_removed",
+      "goal": "min",
+      "threshold": 0.1,
+      "value": 0.0092871108437359,
+      "passed": true,
+      "selection": true
+     },
+     {
+      "metric": "fraction_duplicate",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.018398756705268964,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "fraction_panel_reference",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.011981751641850905,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "cross_split_duplicate_fraction",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.27613412228796846,
+      "passed": null,
+      "selection": true
+     }
+    ]
+   },
+   "features": {
+    "tool": "multimodal_features",
+    "answers": [],
+    "metrics": {
+     "image_encoder": "biomedclip_image",
+     "text_encoder": "biomedclip_text",
+     "domain": "greyscale_imaging",
+     "rank_by": "alignment",
+     "greyscale_fraction": 0.7541666666666667,
+     "stain_hue_fraction": 0.025982797910654602,
+     "colour_between_group_share": null,
+     "colour_normalised": false,
+     "n_candidates": 6,
+     "n_failed": 0,
+     "n_images": 79784,
+     "screen_metric": "alignment_recall_at_10",
+     "screen_score": 0.955,
+     "screen_chance": 0.02,
+     "screen_clear_of_chance": true,
+     "screen_recall_at_10": 0.955,
+     "zero_shot_recall_at_10": 0.955,
+     "n_screen_train": 2000,
+     "n_screen_val": 500
+    },
+    "error": null,
+    "skipped": null,
+    "criteria": [
+     {
+      "metric": "screen_recall_at_10",
+      "goal": "max",
+      "threshold": null,
+      "value": 0.955,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "zero_shot_recall_at_10",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.955,
+      "passed": null,
+      "selection": true
+     }
+    ]
+   },
+   "imbalance_concepts": {
+    "tool": "label_imbalance",
+    "answers": [
+     "data_quality_audit"
+    ],
+    "metrics": {
+     "n_samples": 79789,
+     "n_labels": 1947,
+     "n_labels_used": 1947,
+     "imbalance_ratio": 27798.0,
+     "gini": 0.8127542208090018,
+     "effective_labels": 208.1159063271181,
+     "top10pct_share": 0.7690746950025549,
+     "n_assessable": 221,
+     "n_below_support": 1726,
+     "labels_per_sample_median": 3.0,
+     "unannotated_fraction": 0.0,
+     "multilabel": true,
+     "n_modelable": 1721
+    },
+    "error": null,
+    "skipped": null,
+    "criteria": [
+     {
+      "metric": "imbalance_ratio",
+      "goal": "report",
+      "threshold": null,
+      "value": 27798.0,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "gini",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.8127542208090018,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "n_assessable",
+      "goal": "report",
+      "threshold": null,
+      "value": 221,
+      "passed": null,
+      "selection": true
+     }
+    ]
+   },
+   "imbalance_concepts_manual": {
+    "tool": "label_imbalance",
+    "answers": [
+     "data_quality_audit"
+    ],
+    "metrics": {
+     "n_samples": 79061,
+     "n_labels": 18,
+     "n_labels_used": 18,
+     "imbalance_ratio": 544.0588235294117,
+     "gini": 0.5716271370265719,
+     "effective_labels": 10.208191554339312,
+     "top10pct_share": 0.2375802722835859,
+     "n_assessable": 17,
+     "n_below_support": 1,
+     "labels_per_sample_median": 1.0,
+     "unannotated_fraction": 0.00912406472070082,
+     "multilabel": true,
+     "n_modelable": 18
+    },
+    "error": null,
+    "skipped": null,
+    "criteria": [
+     {
+      "metric": "imbalance_ratio",
+      "goal": "report",
+      "threshold": null,
+      "value": 544.0588235294117,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "gini",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.5716271370265719,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "n_assessable",
+      "goal": "report",
+      "threshold": null,
+      "value": 17,
+      "passed": null,
+      "selection": true
+     }
+    ]
+   },
+   "duplicates": {
+    "tool": "near_duplicates",
+    "answers": [
+     "data_quality_audit"
+    ],
+    "metrics": {
+     "n_images": 79784,
+     "n_hash_informative": 79780,
+     "n_hash_candidates": 57627,
+     "n_hash_pairs": 217,
+     "n_embedding_pairs": 3311,
+     "n_pairs_both": 92,
+     "pair_agreement": 0.02677532013969732,
+     "embedding_threshold": 0.9472596645355225,
+     "n_clusters": 3373,
+     "n_in_clusters": 6782,
+     "fraction_in_clusters": 0.08500451218289382,
+     "largest_cluster": 6,
+     "skipped_hash_buckets": 0,
+     "hash_pair_median_cosine": 0.9472596645355225,
+     "cross_split_clusters": 949,
+     "cross_split_cluster_fraction": 0.2813519122442929,
+     "test_with_train_duplicate_fraction": 0.06387909319899245,
+     "cross_group_cluster_fraction": 0.5757485917580789
+    },
+    "error": null,
+    "skipped": null,
+    "criteria": [
+     {
+      "metric": "fraction_in_clusters",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.08500451218289382,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "test_with_train_duplicate_fraction",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.06387909319899245,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "pair_agreement",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.02677532013969732,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "cross_group_cluster_fraction",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.5757485917580789,
+      "passed": null,
+      "selection": true
+     }
+    ]
+   },
+   "label_sources": {
+    "tool": "label_agreement",
+    "answers": [
+     "data_quality_audit"
+    ],
+    "metrics": {
+     "n_samples_both": 79061,
+     "n_shared_labels": 18,
+     "kappa_micro": 0.9643390667187545,
+     "kappa_median": 1.0,
+     "precision_micro": 0.9367856197511851,
+     "recall_micro": 1.0,
+     "disagreement_rate": 0.005537917978944528,
+     "first_source_coverage": 0.4683833446668144
+    },
+    "error": null,
+    "skipped": null,
+    "criteria": [
+     {
+      "metric": "kappa_micro",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.9643390667187545,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "kappa_median",
+      "goal": "report",
+      "threshold": null,
+      "value": 1.0,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "precision_micro",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.9367856197511851,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "recall_micro",
+      "goal": "report",
+      "threshold": null,
+      "value": 1.0,
+      "passed": null,
+      "selection": true
+     }
+    ]
+   },
+   "caption_labels": {
+    "tool": "caption_label_consistency",
+    "answers": [
+     "data_quality_audit"
+    ],
+    "metrics": {
+     "n_texts": 79047,
+     "n_texts_without_words": 12,
+     "n_labels_checked": 300,
+     "unsupported_rate": 0.20345141612399836,
+     "negated_rate": 0.005624224895775653,
+     "n_labels_checked_for_missing": 70,
+     "possible_missing_rate": 0.0012114423155476035,
+     "texts_with_flag_fraction": 0.45464090983845057,
+     "unsupported_rate_heldout": 0.19656082716139914,
+     "reference_absent_given_flagged": 0.02297319340982002,
+     "reference_absent_given_supported": 0.08134596915101654,
+     "n_reference_labels": 17
+    },
+    "error": null,
+    "skipped": null,
+    "criteria": [
+     {
+      "metric": "unsupported_rate",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.20345141612399836,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "negated_rate",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.005624224895775653,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "reference_absent_given_flagged",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.02297319340982002,
+      "passed": null,
+      "selection": false
+     },
+     {
+      "metric": "reference_absent_given_supported",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.08134596915101654,
+      "passed": null,
+      "selection": false
+     }
+    ]
+   },
+   "image_text": {
+    "tool": "multimodal_agreement",
+    "answers": [
+     "data_quality_audit"
+    ],
+    "metrics": {
+     "aligner": "zero_shot",
+     "val_recall_at_10": 0.88725,
+     "chance_recall_at_10": 0.005,
+     "cross_fitted": false,
+     "n_pairs": 79042,
+     "n_flagged": 14,
+     "flagged_fraction": 0.00017712102426558032,
+     "median_percentile": 1.0,
+     "flagged_fraction_test": 0.0006091370558375635,
+     "flagged_fraction_train": 8.422045546422316e-05,
+     "flagged_fraction_val": 0.0003053745928338762
+    },
+    "error": null,
+    "skipped": null,
+    "criteria": [
+     {
+      "metric": "val_recall_at_10",
+      "goal": "max",
+      "threshold": null,
+      "value": 0.88725,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "flagged_fraction",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.00017712102426558032,
+      "passed": null,
+      "selection": true
+     }
+    ]
+   },
+   "atypical": {
+    "tool": "generative_density",
+    "answers": [
+     "data_quality_audit"
+    ],
+    "metrics": {
+     "model": "maf",
+     "dim": 57,
+     "val_loglik": -54.704402923583984,
+     "val_loglik_gaussian": -81.71885681152344,
+     "val_loglik_gain": 27.014453887939453,
+     "flag_threshold": 84.72789001464844,
+     "cross_fitted": true,
+     "flagged_fraction": 0.00818459841572245,
+     "n_flagged": 653,
+     "epochs_run": 63,
+     "stopped_because": "early_stop",
+     "flagged_fraction_test": 0.01017632241813602,
+     "flagged_fraction_train": 0.007538736094200844,
+     "flagged_fraction_val": 0.010098969905069683
+    },
+    "error": null,
+    "skipped": null,
+    "criteria": [
+     {
+      "metric": "val_loglik_gain",
+      "goal": "max",
+      "threshold": 0.0,
+      "value": 27.014453887939453,
+      "passed": true,
+      "selection": true
+     },
+     {
+      "metric": "flagged_fraction",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.00818459841572245,
+      "passed": null,
+      "selection": true
+     }
+    ]
+   },
+   "predict": {
+    "tool": "predict_targets",
+    "answers": [
+     "predictive_modelling"
+    ],
+    "metrics": {
+     "model": "ridge",
+     "evaluation": "test split",
+     "n_train": 61938,
+     "n_eval": 9925,
+     "n_targets": 300,
+     "n_too_rare_to_train": 1647,
+     "n_assessed": 214,
+     "n_reliable": 176,
+     "n_not_reliable": 38,
+     "n_too_rare_to_assess": 86,
+     "median_auroc": 0.9402292088824996,
+     "cv_auroc_median": 0.9425610561675439,
+     "median_auprc_lift": 20.97086439047886,
+     "median_brier_skill": 0.0461122727519116,
+     "n_set_aside": 7921,
+     "test_with_group_mates_fraction": 0.6552141057934509,
+     "leakage_gap_median": 0.0005407248323893166
+    },
+    "error": null,
+    "skipped": null,
+    "criteria": [
+     {
+      "metric": "cv_auroc_median",
+      "goal": "max",
+      "threshold": null,
+      "value": 0.9425610561675439,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "n_reliable",
+      "goal": "report",
+      "threshold": null,
+      "value": 176,
+      "passed": null,
+      "selection": false
+     },
+     {
+      "metric": "median_auroc",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.9402292088824996,
+      "passed": null,
+      "selection": false
+     },
+     {
+      "metric": "leakage_gap_median",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.0005407248323893166,
+      "passed": null,
+      "selection": false
+     }
+    ]
+   },
+   "predict_manual": {
+    "tool": "predict_targets",
+    "answers": [
+     "predictive_modelling"
+    ],
+    "metrics": {
+     "model": "logistic",
+     "evaluation": "test split",
+     "n_train": 61425,
+     "n_eval": 9820,
+     "n_targets": 18,
+     "n_too_rare_to_train": 0,
+     "n_assessed": 17,
+     "n_reliable": 17,
+     "n_not_reliable": 0,
+     "n_too_rare_to_assess": 1,
+     "median_auroc": 0.9963814589665652,
+     "cv_auroc_median": 0.995668859089559,
+     "median_auprc_lift": 21.609388592970713,
+     "median_brier_skill": 0.7735514153116416,
+     "n_set_aside": 7811,
+     "test_with_group_mates_fraction": 0.6526476578411405,
+     "leakage_gap_median": 0.00010474906367041736
+    },
+    "error": null,
+    "skipped": null,
+    "criteria": [
+     {
+      "metric": "cv_auroc_median",
+      "goal": "max",
+      "threshold": null,
+      "value": 0.995668859089559,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "n_reliable",
+      "goal": "report",
+      "threshold": null,
+      "value": 17,
+      "passed": null,
+      "selection": false
+     },
+     {
+      "metric": "median_auroc",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.9963814589665652,
+      "passed": null,
+      "selection": false
+     },
+     {
+      "metric": "leakage_gap_median",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.00010474906367041736,
+      "passed": null,
+      "selection": false
+     }
+    ]
+   },
+   "map": {
+    "tool": "dimreduce_map",
+    "answers": [
+     "visualization"
+    ],
+    "metrics": {
+     "method": "umap",
+     "n_candidates": 2,
+     "trustworthiness@10": 0.9766687999106495,
+     "continuity@10": 0.971785447031887,
+     "distance_spearman": 0.35262124252564814,
+     "stability": 0.53252
+    },
+    "error": null,
+    "skipped": null,
+    "criteria": [
+     {
+      "metric": "trustworthiness@10",
+      "goal": "max",
+      "threshold": 0.8,
+      "value": 0.9766687999106495,
+      "passed": true,
+      "selection": true
+     },
+     {
+      "metric": "continuity@10",
+      "goal": "max",
+      "threshold": null,
+      "value": 0.971785447031887,
+      "passed": null,
+      "selection": true
+     },
+     {
+      "metric": "stability",
+      "goal": "max",
+      "threshold": 0.5,
+      "value": 0.53252,
+      "passed": true,
+      "selection": true
+     },
+     {
+      "metric": "distance_spearman",
+      "goal": "report",
+      "threshold": null,
+      "value": 0.35262124252564814,
+      "passed": null,
+      "selection": true
+     }
+    ]
+   }
+  },
+  "critic": {
+   "triggers": [],
+   "revision": null,
+   "summary": "0 trigger(s) (none); no revision was tried."
+  },
+  "counts": {
+   "questions": 2,
+   "steps": 13,
+   "relevant_challenges": 12,
+   "high_challenges": 4,
+   "not_completed": 0
+  }
+ },
+ "prose_source": "LLM (claude-opus-5-5)",
+ "number_check": {
+  "n_checked": 196,
+  "n_unmatched": 0,
+  "unmatched": []
+ },
+ "figures": {
+  "challenges": {
+   "path": "figures/challenges.png",
+   "step": null,
+   "caption": "Relevant challenges by severity."
+  },
+  "imbalance": {
+   "path": "figures/imbalance.png",
+   "step": "imbalance_concepts",
+   "caption": "Rank-frequency of labels; the dashed line marks the assessable ones."
+  },
+  "predictability": {
+   "path": "figures/predictability.png",
+   "step": "predict",
+   "caption": "Test AUROC with DeLong intervals for the assessable targets (at most the 20 highest and 20 lowest)."
+  },
+  "predictability_predict_manual": {
+   "path": "figures/predictability_predict_manual.png",
+   "step": "predict_manual",
+   "caption": "Test AUROC with DeLong intervals for the assessable targets (at most the 20 highest and 20 lowest)."
+  },
+  "map": {
+   "path": "figures/map.png",
+   "step": "map",
+   "caption": "Two-dimensional map of the main representation."
+  }
+ },
+ "tables": {
+  "image_qc__image_qc_by_split": {
+   "path": "tables/image_qc__image_qc_by_split.csv",
+   "rows": 3,
+   "truncated": false
+  },
+  "image_qc__image_qc_flagged": {
+   "path": "tables/image_qc__image_qc_flagged.csv",
+   "rows": 5,
+   "truncated": false
+  },
+  "text_qc__text_repeated": {
+   "path": "tables/text_qc__text_repeated.csv",
+   "rows": 20,
+   "truncated": false
+  },
+  "text_qc__text_qc_by_split": {
+   "path": "tables/text_qc__text_qc_by_split.csv",
+   "rows": 3,
+   "truncated": false
+  },
+  "features__encoder_screening": {
+   "path": "tables/features__encoder_screening.csv",
+   "rows": 9,
+   "truncated": false
+  },
+  "imbalance_concepts__label_frequencies": {
+   "path": "tables/imbalance_concepts__label_frequencies.csv",
+   "rows": 1947,
+   "truncated": false
+  },
+  "imbalance_concepts_manual__label_frequencies": {
+   "path": "tables/imbalance_concepts_manual__label_frequencies.csv",
+   "rows": 18,
+   "truncated": false
+  },
+  "duplicates__duplicate_pairs": {
+   "path": "tables/duplicates__duplicate_pairs.csv",
+   "rows": 200,
+   "truncated": false
+  },
+  "label_sources__label_agreement": {
+   "path": "tables/label_sources__label_agreement.csv",
+   "rows": 18,
+   "truncated": false
+  },
+  "caption_labels__label_lexicons": {
+   "path": "tables/caption_labels__label_lexicons.csv",
+   "rows": 300,
+   "truncated": false
+  },
+  "caption_labels__consistency_examples": {
+   "path": "tables/caption_labels__consistency_examples.csv",
+   "rows": 30,
+   "truncated": false
+  },
+  "image_text__aligner_comparison": {
+   "path": "tables/image_text__aligner_comparison.csv",
+   "rows": 3,
+   "truncated": false
+  },
+  "predict__target_predictability": {
+   "path": "tables/predict__target_predictability.csv",
+   "rows": 300,
+   "truncated": false
+  },
+  "predict_manual__target_predictability": {
+   "path": "tables/predict_manual__target_predictability.csv",
+   "rows": 18,
+   "truncated": false
+  },
+  "map__map_methods": {
+   "path": "tables/map__map_methods.csv",
+   "rows": 2,
+   "truncated": false
+  }
+ },
+ "exports": {
+  "image_qc_removed": "results/image_qc_removed.csv",
+  "text_qc_removed": "results/text_qc_removed.csv",
+  "duplicates_clusters": "results/duplicates_clusters.csv",
+  "predict_targets": "results/predict_targets.csv",
+  "predict_manual_targets": "results/predict_manual_targets.csv"
+ }
+}

@@ -1,0 +1,21 @@
+text,count,n_splits
+initial panoramic radiograph,46,3
+chest x ray,46,3
+final panoramic radiograph,40,3
+chest radiograph,18,3
+chest x ray on admission,16,3
+panoramic radiograph,13,3
+preoperative radiograph,13,3
+pretreatment panoramic radiograph,12,3
+preoperative ct scan,11,1
+preoperative panoramic radiograph,11,2
+postoperative radiograph,10,2
+ct scan,10,2
+month followup rvg,10,1
+x ray,9,1
+obturation,8,1
+postoperative x ray,8,2
+panoramic view,8,1
+post treatment panoramic radiograph,7,3
+preoperative chest x ray,7,2
+chest x ray of the patient,7,2
