@@ -3,10 +3,10 @@
     bioagent run --data data/<dataset> --objective "..." --out outputs/generated_report_1
     bioagent run ... --quick          # smoke test: small subsample, seconds per step
     bioagent run ... --no-llm         # rule-based planner, critic and writer (no Claude CLI needed)
-    bioagent run ... --replay runs/<run>/llm_cache   # reproduce LLM decisions from cache
+    bioagent run ... --replay outputs/generated_report_1   # reproduce a run's LLM decisions, no new calls
     bioagent profile --data data/<dataset> [--out DIR]   # measure the data, list its challenges
     bioagent plan --data data/<dataset> --objective "..." [--out DIR]   # dry run: the validated plan
-    bioagent schema [--write]         # JSON schemas of the profile and the challenge register
+    bioagent schema [--write]         # JSON schemas: profile, register, objective, plan, LLM replies
     bioagent hardware                 # report detected device, disk and budgets
     bioagent tools [--json | --name TOOL]            # the tool registry: the planner's menu
 """

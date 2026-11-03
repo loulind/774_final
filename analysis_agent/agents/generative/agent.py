@@ -26,7 +26,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
-from .registry import MAX_FLOW_DIM, REGISTRY, clip_hyperparameters
+from .registry import MAX_FLOW_DIM, clip_hyperparameters
 
 # A deep encoder-decoder below this many samples mostly memorises; linear corrections
 # (Harmony, ComBat) remain the better tools there.

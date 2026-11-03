@@ -28,7 +28,7 @@ import numpy as np
 import pandas as pd
 from pydantic import Field
 
-from .base import Artifact, Criterion, Port, StepResult, ToolParams, ToolSpec, check_time, dense, values_on
+from .base import Artifact, Criterion, Port, StepResult, ToolParams, ToolSpec, check_time, dense
 from .registry import register
 from .stats import cramers_v, knn_preservation, mixing_entropy, nested_shares, silhouette, variance_share
 
